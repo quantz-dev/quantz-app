@@ -31,7 +31,7 @@ jobs:
         ADMOB_UNITS_CONFIG: ${{ secrets.ADMOB_UNITS_CONFIG }}
     - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '2.0.3'
+        flutter-version: '2.0.1'
     - run: flutter pub get
     - run: flutter build apk --release --build-name=${GITHUB_REF#refs/*/} --build-number=$GITHUB_RUN_NUMBER
     - run: flutter build appbundle --release --build-name=${GITHUB_REF#refs/*/} --build-number=$GITHUB_RUN_NUMBER
