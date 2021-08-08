@@ -12,11 +12,11 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
-  firebase_core: 1.2.1
-  firebase_messaging: 10.0.1
-  google_sign_in: 5.0.4
-  google_mobile_ads: 0.13.2
-  
+  firebase_core: 1.4.0
+  firebase_messaging: 10.0.4
+  google_sign_in: 5.0.7
+  google_mobile_ads: 0.13.3
+
   momentum: 2.0.0
   shared_preferences: 2.0.5
   fluttertoast: 8.0.1-nullsafety.0
