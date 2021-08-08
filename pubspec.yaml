@@ -16,6 +16,7 @@ dependencies:
   firebase_messaging: 10.0.4
   google_sign_in: 5.0.7
   google_mobile_ads: 0.13.3
+  in_app_purchase: 1.0.6
 
   momentum: 2.0.0
   shared_preferences: 2.0.5
