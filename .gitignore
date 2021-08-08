@@ -53,3 +53,6 @@ key.jks
 *.ignore.*
 android/app/src/main/AndroidManifest.xml
 ./personal/
+pepk.jar
+private_key.pepk
+quantz_key.zip
