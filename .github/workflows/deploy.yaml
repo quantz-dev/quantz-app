@@ -1,0 +1,45 @@
+name: deploy
+
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - run: echo $ANDROID_MANIFEST | base64 -d > android/app/src/main/AndroidManifest.xml
+      env:
+        ANDROID_MANIFEST: ${{ secrets.ANDROID_MANIFEST }}
+    - run: echo $GOOGLE_SERVICES | base64 -d > android/app/google-services.json
+      env:
+        GOOGLE_SERVICES: ${{ secrets.GOOGLE_SERVICES }}
+    - run: echo $SIGNING_KEY | base64 -d > android/app/key.jks
+      env:
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+    - run: echo $SIGNING_PROPERTIES | base64 -d > android/key.properties
+      env:
+        SIGNING_PROPERTIES: ${{ secrets.SIGNING_PROPERTIES }}
+    - run: echo $ADMOB_UNITS_CONFIG | base64 -d > lib/src/core/admob_units.dart
+      env:
+        ADMOB_UNITS_CONFIG: ${{ secrets.ADMOB_UNITS_CONFIG }}
+    - uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '2.0.3'
+    - run: flutter pub get
+    - run: flutter build apk --release --build-name=${GITHUB_REF#refs/*/} --build-number=$GITHUB_RUN_NUMBER
+    - run: flutter build appbundle --release --build-name=${GITHUB_REF#refs/*/} --build-number=$GITHUB_RUN_NUMBER
+    - run: mv "build/app/outputs/apk/release/app-release.apk" "build/app/outputs/apk/release/quantz.${GITHUB_REF#refs/*/}.apk"
+    - run: mv "build/app/outputs/bundle/release/app-release.aab" "build/app/outputs/bundle/release/quantz.${GITHUB_REF#refs/*/}.aab"
+    - name: Upload APK/s
+      uses: ncipollo/release-action@v1.8.3
+      with:
+        artifacts: "build/app/outputs/apk/release/*.apk,build/app/outputs/bundle/release/*.aab"
+        bodyFile: RELEASE_NOTES.md
+        token: ${{ secrets.GITHUB_TOKEN  }}
