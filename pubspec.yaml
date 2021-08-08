@@ -1,0 +1,50 @@
+name: quantz
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+dev
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+  firebase_core: 1.2.1
+  firebase_messaging: 10.0.1
+  google_sign_in: 5.0.4
+  google_mobile_ads: 0.13.2
+  
+  momentum: 2.0.0
+  shared_preferences: 2.0.5
+  fluttertoast: 8.0.1-nullsafety.0
+  flutter_fgbg: 0.1.0
+  flutter_local_notifications: 5.0.0
+  dio: 4.0.0-prev3
+  timeago: 3.0.2
+  url_launcher: 6.0.4
+  jwt_decoder: 2.0.1
+  cached_network_image: 3.0.0
+  uni_links: 0.5.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_launcher_icons: 0.9.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - 'assets/'
+    - 'assets/news-icons/'
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
+  remove_alpha_ios: true
