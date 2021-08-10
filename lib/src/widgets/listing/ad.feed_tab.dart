@@ -4,26 +4,26 @@ import 'package:momentum/momentum.dart';
 
 import '../../components/admob/index.dart';
 
-class AdAnimeList extends StatefulWidget {
-  AdAnimeList({Key? key}) : super(key: key);
+class AdFeedTab extends StatefulWidget {
+  AdFeedTab({Key? key}) : super(key: key);
 
   @override
-  _AdAnimeListState createState() => _AdAnimeListState();
+  _AdFeedTabState createState() => _AdFeedTabState();
 }
 
-class _AdAnimeListState extends State<AdAnimeList> {
+class _AdFeedTabState extends State<AdFeedTab> {
   AdmobController? _admobController;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _admobController = admobCtrl(context)..loadAnimeListAd();
+    _admobController = admobCtrl(context)..loadFeedTabAd();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _admobController?.disposeAnimeListAd();
+    _admobController?.disposeFeedTabAd();
   }
 
   @override
@@ -32,13 +32,13 @@ class _AdAnimeListState extends State<AdAnimeList> {
       controllers: [AdmobController],
       builder: (context, snapshot) {
         final admob = snapshot<AdmobModel>();
-        if (!admob.showAnimeListAd) {
+        if (!admob.showFeedTabAd) {
           return SizedBox();
         } else {
           return SizedBox(
             height: 50,
             child: AdWidget(
-              ad: admob.animeListAd,
+              ad: admob.feedTabAd,
             ),
           );
         }

@@ -249,7 +249,7 @@ class _MainContent extends StatelessWidget {
                       ],
                     ),
                   ),
-                  AdAnimeList(),
+                  AdLibraryTab(),
                 ],
               );
       },
