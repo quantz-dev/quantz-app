@@ -1,1 +1,2 @@
 - Refactor and code cleanup.
+- Added Feed page for news.
