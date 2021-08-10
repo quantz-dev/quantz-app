@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../index.dart';
 import '../tabview.dart';
 import 'index.dart';
+import 'page.feed.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
               child: TabviewWidget(
                 views: [
                   LibraryPage(),
+                  FeedPage(),
                   NewsPage(),
                   MorePage(),
                 ],
@@ -47,9 +49,14 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
                     text: 'Library',
                   ),
                   Tab(
-                    icon: Icon(Icons.new_releases),
+                    icon: Icon(Icons.rss_feed),
                     iconMargin: EdgeInsets.zero,
-                    text: 'News',
+                    text: 'Feed',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.source),
+                    iconMargin: EdgeInsets.zero,
+                    text: 'Sources',
                   ),
                   Tab(
                     icon: Icon(Icons.more_horiz),

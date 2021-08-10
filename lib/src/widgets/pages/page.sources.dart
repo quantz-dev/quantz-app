@@ -13,7 +13,7 @@ class NewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('News'),
+        title: Text('Sources'),
         backgroundColor: secondaryBackground,
         elevation: 0.80,
         actions: [
@@ -54,7 +54,7 @@ class NewsPage extends StatelessWidget {
                   },
                 ),
               ),
-              AdNewsTab(),
+              AdSourcesTab(),
             ],
           );
         },

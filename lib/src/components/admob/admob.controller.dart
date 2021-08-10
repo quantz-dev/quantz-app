@@ -12,39 +12,55 @@ class AdmobController extends MomentumController<AdmobModel> {
   AdmobModel init() {
     return AdmobModel(
       this,
-      animeListAd: generateBannerAd(AD_UNIT_ANIMELIST, showAnimeListAd),
-      showAnimeListAd: false,
-      newsTabAd: generateBannerAd(AD_UNIT_NEWS, showNewsTabAd),
-      showNewsTabAd: false,
+      libraryTabAd: generateBannerAd(AD_UNIT_LIBRARY, showLibraryTabAd),
+      showLibraryTabAd: false,
+      sourcesTabAd: generateBannerAd(AD_UNIT_SOURCES, showSourcesTabAd),
+      showSourcesTabAd: false,
+      feedTabAd: generateBannerAd(AD_UNIT_FEED, showFeedTabAd),
+      showFeedTabAd: false,
     );
   }
 
-  void disposeAnimeListAd() async {
-    model.update(showAnimeListAd: false);
-    await model.animeListAd.dispose();
+  void disposeLibraryAd() async {
+    model.update(showLibraryTabAd: false);
+    await model.libraryTabAd.dispose();
   }
 
-  void disposeNewsTabAd() async {
-    model.update(showNewsTabAd: false);
-    await model.newsTabAd.dispose();
+  void disposeSourcesTabAd() async {
+    model.update(showSourcesTabAd: false);
+    await model.sourcesTabAd.dispose();
   }
 
-  void loadAnimeListAd() async {
-    model.update(showAnimeListAd: false);
-    await model.animeListAd.load();
+  void disposeFeedTabAd() async {
+    model.update(showFeedTabAd: false);
+    await model.feedTabAd.dispose();
   }
 
-  void loadNewsTabAd() async {
-    model.update(showNewsTabAd: false);
-    await model.newsTabAd.load();
+  void loaLibraryTabAd() async {
+    model.update(showLibraryTabAd: false);
+    await model.libraryTabAd.load();
   }
 
-  void showAnimeListAd() {
-    model.update(showAnimeListAd: true);
+  void loadSourcesTabAd() async {
+    model.update(showSourcesTabAd: false);
+    await model.sourcesTabAd.load();
   }
 
-  void showNewsTabAd() {
-    model.update(showNewsTabAd: true);
+  void loadFeedTabAd() async {
+    model.update(showFeedTabAd: false);
+    await model.feedTabAd.load();
+  }
+
+  void showLibraryTabAd() {
+    model.update(showLibraryTabAd: true);
+  }
+
+  void showSourcesTabAd() {
+    model.update(showSourcesTabAd: true);
+  }
+
+  void showFeedTabAd() {
+    model.update(showFeedTabAd: true);
   }
 
   BannerAd generateBannerAd(String adUnitId, void Function() callback) {
