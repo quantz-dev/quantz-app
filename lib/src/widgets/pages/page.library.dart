@@ -10,14 +10,14 @@ import '../menu_actions/index.dart';
 
 final searchFocusNode = FocusNode();
 
-class AnimeListPage extends StatefulWidget {
-  const AnimeListPage({Key? key}) : super(key: key);
+class LibraryPage extends StatefulWidget {
+  const LibraryPage({Key? key}) : super(key: key);
 
   @override
-  _AnimeListPageState createState() => _AnimeListPageState();
+  _LibraryPageState createState() => _LibraryPageState();
 }
 
-class _AnimeListPageState extends MomentumState<AnimeListPage> with SingleTickerProviderStateMixin {
+class _LibraryPageState extends MomentumState<LibraryPage> with SingleTickerProviderStateMixin {
   final TextEditingController searchController = TextEditingController();
   TabController? tabController;
 

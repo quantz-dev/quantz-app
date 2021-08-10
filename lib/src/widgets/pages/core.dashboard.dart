@@ -36,7 +36,7 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
               color: background,
               child: TabviewWidget(
                 views: [
-                  AnimeListPage(),
+                  LibraryPage(),
                   NewsPage(),
                   MorePage(),
                 ],
