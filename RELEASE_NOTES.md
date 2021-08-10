@@ -1,2 +1,1 @@
-- Updated admob config.
-- Updated sample AndroidManifest.xml.
+- Refactor and code cleanup.
