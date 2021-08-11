@@ -2,13 +2,12 @@ name: deploy
 
 on:
   push:
-    branches:
-      - release
     tags:
       - 'v*'
 
 jobs:
   build:
+    if: github.event.base_ref == 'refs/heads/release' # if tag is created in release branch
     name: Build APK
     runs-on: ubuntu-latest
     steps:
