@@ -1,1 +1,1 @@
-const api = 'https://quantz-dev.herokuapp.com';
+const api = 'https://api.quantz.app';
