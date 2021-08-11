@@ -2,8 +2,10 @@ name: deploy
 
 on:
   push:
+    branches:
+      - release
     tags:
-    - 'v*'
+      - 'v*'
 
 jobs:
   build:
