@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.xamantra.quantz_dev_build">
+    package="dev.xamantra.quantz">
 
   <uses-permission android:name="android.permission.INTERNET" />
 
