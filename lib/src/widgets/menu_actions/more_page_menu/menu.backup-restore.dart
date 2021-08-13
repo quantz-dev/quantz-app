@@ -57,17 +57,36 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
           title: 'Backup & Restore',
           subtitle: cloud.signedIn ? profile.email : 'Google account required.',
           icon: Icons.cloud,
-          trail: Text(
-            cloud.signedIn ? 'Settings' : 'Login',
-            style: TextStyle(
-              color: primary,
-            ),
-          ),
+          trail: _LoginWidget(signedIn: cloud.signedIn),
           onTap: () {
             cloud.controller.signInWithGoogle();
           },
         );
       },
     );
+  }
+}
+
+class _LoginWidget extends StatelessWidget {
+  const _LoginWidget({
+    Key? key,
+    required this.signedIn,
+  }) : super(key: key);
+
+  final bool signedIn;
+
+  @override
+  Widget build(BuildContext context) {
+    return !signedIn
+        ? Image.asset(
+          'assets/google_sign_in.png',
+          width: 128,
+        )
+        : Text(
+            'Settings',
+            style: TextStyle(
+              color: primary,
+            ),
+          );
   }
 }
