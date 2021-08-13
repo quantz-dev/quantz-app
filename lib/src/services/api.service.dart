@@ -41,14 +41,14 @@ class ApiService extends MomentumService {
           'airing_status': airingStatus,
         },
       );
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 2500));
       var result = JikanUserAnimeList.fromJson(response.data);
       if (result.anime.isEmpty) {
         return JikanUserAnimeList(anime: []);
       }
       return result;
     } catch (e) {
-      showToast('$e', error: true);
+      showToast('Failed to fetch $username/animelist/$type {$airingStatus, page=$page}', error: true);
       print(e);
       return JikanUserAnimeList(anime: []);
     }
