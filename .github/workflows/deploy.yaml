@@ -30,6 +30,9 @@ jobs:
     - run: echo $ADMOB_UNITS_CONFIG | base64 -d > lib/src/core/admob_units.dart
       env:
         ADMOB_UNITS_CONFIG: ${{ secrets.ADMOB_UNITS_CONFIG }}
+    - run: echo $GOOGLE_PLAY_SERVICE_ACCOUNT | base64 -d > service_account.json
+      env:
+        GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '2.0.1'
@@ -37,10 +40,18 @@ jobs:
     - run: flutter build apk --release --build-name=${GITHUB_REF#refs/*/} --build-number=$GITHUB_RUN_NUMBER
     - run: flutter build appbundle --release --build-name=${GITHUB_REF#refs/*/} --build-number=$GITHUB_RUN_NUMBER
     - run: mv "build/app/outputs/apk/release/app-release.apk" "build/app/outputs/apk/release/quantz.${GITHUB_REF#refs/*/}.apk"
-    - run: mv "build/app/outputs/bundle/release/app-release.aab" "build/app/outputs/bundle/release/quantz.${GITHUB_REF#refs/*/}.aab"
     - name: Upload APK/s
       uses: ncipollo/release-action@v1.8.3
       with:
-        artifacts: "build/app/outputs/apk/release/*.apk,build/app/outputs/bundle/release/*.aab"
+        artifacts: "build/app/outputs/apk/release/*.apk"
         bodyFile: RELEASE_NOTES.md
         token: ${{ secrets.GITHUB_TOKEN  }}
+        prerelease: true
+    - name: Upload .aab to Google Play
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJson: service_account.json
+        packageName: dev.xamantra.quantz
+        releaseFile: build/app/outputs/bundle/release/app-release.aab
+        track: internal # The owner will manually choose what to promote to production.
+        whatsNewDirectory: release_notes/
