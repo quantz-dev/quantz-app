@@ -29,12 +29,17 @@ class SupportTheDeveloper extends StatelessWidget {
           title: 'Support the developer',
           subtitle: 'Donate \$1.00 monthly and remove ads.',
           icon: Icons.attach_money,
-          trail: Text(
-            !isActive ? 'Donate' : 'Active',
-            style: TextStyle(
-              color: primary,
-            ),
-          ),
+          trail: !isActive
+              ? Text(
+                  'Donate',
+                  style: TextStyle(
+                    color: primary,
+                  ),
+                )
+              : Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                ),
           onTap: () async {
             Momentum.controller<GoogleFlowController>(context).getSupporterSubscription();
           },

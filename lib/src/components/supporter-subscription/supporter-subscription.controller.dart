@@ -69,7 +69,6 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
         if (valid) {
           _pendingPurchase = null;
           model.update(subscriptionActive: valid);
-          initializedAds();
         } else {
           if (cloudController.model.loading) {
             // google signin is loading. don't show any error.
@@ -87,15 +86,16 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
         }
       }
     }
+    initializedAds();
   }
 
   Future<bool> _isPurchaseValid(PurchaseDetails purchaseDetails) async {
-    model.update(loading: true);
-
     /* Google account is required for purchase verification */
     String authToken = cloudController.model.token;
+    if (authToken.isEmpty) return false;
 
     /* Verification logic. */
+    model.update(loading: true);
     final v = purchaseDetails.verificationData;
     final valid = await api.verifySupporterPurchase(
       authToken: authToken,

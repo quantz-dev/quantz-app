@@ -39,6 +39,8 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
     }
     await cloudBackupController.initialize();
     await supporterController.initialize();
+
+    initializeAdmob();
   }
 
   /// Only call this when in-app-purchase has finish checking purchase status for supporter subscription.
@@ -92,6 +94,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
       model.update(token: newToken);
       convertTokenToProfile();
       cloudBackupController.model.update(loading: false);
+      supporterController.model.update(loading: false);
       return newToken;
     }
     supporterController.model.update(loading: false);
