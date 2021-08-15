@@ -32,6 +32,8 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
 
   ApiService get api => service<ApiService>();
 
+  CloudBackupController get cloudController => controller<CloudBackupController>();
+
   void bootstrap() async {
     await checkStore();
 
@@ -83,8 +85,13 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
 
   Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
     final v = purchaseDetails.verificationData;
-    final authToken = await api.signInWithGoogle();
-    controller<CloudBackupController>().authWithGoogle(authToken);
+    String authToken = '';
+    if (!cloudController.model.signedIn) {
+      authToken = await api.signInWithGoogle();
+      cloudController.authWithGoogle(authToken);
+    } else {
+      authToken = cloudController.model.token;
+    }
     final valid = await api.verifySupporterPurchase(
       authToken: authToken,
       purchaseToken: v.serverVerificationData,
