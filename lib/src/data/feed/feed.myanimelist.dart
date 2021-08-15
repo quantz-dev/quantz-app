@@ -17,7 +17,7 @@ class MyAnimeListFeedItem extends FeedItem{
 
   String get permalink => 'https://myanimelist.net/news/$malId';
   int get utcTimestampSeconds => (updatedAt?.toUtc().millisecondsSinceEpoch ?? 0) ~/ 1000;
-  String get sourceImage => 'assets/news-icons/mal.png';
+  String get sourceImage => 'assets/sources-icons/mal.png';
 
   MyAnimeListFeedItem copyWith({
     int? malId,

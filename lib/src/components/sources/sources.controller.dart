@@ -6,18 +6,18 @@ import 'package:momentum/momentum.dart';
 import '../../misc/index.dart';
 import 'index.dart';
 
-class NewsController extends MomentumController<NewsModel> {
+class SourcesController extends MomentumController<SourcesModel> {
   @override
-  NewsModel init() {
-    return NewsModel(
+  SourcesModel init() {
+    return SourcesModel(
       this,
       initialized: false,
       loading: false,
-      newsSubscriptionList: newsSourceList,
+      sourcesSubscriptionList: sourcesList,
     );
   }
 
-  String get persistenceKey => NEWS_STATE_KEY;
+  String get persistenceKey => SOURCES_STATE_KEY;
 
   FirebaseMessaging? _messaging;
   FirebaseMessaging get messaging => _messaging!;
@@ -27,30 +27,30 @@ class NewsController extends MomentumController<NewsModel> {
     _messaging = FirebaseMessaging.instance;
     if (!model.initialized) {
       model.update(loading: true);
-      await toggleNews(model.newsSubscriptionList[0], true);
+      await toggleNews(model.sourcesSubscriptionList[0], true);
       model.update(loading: false, initialized: true);
     }
     syncNewsSources();
   }
 
   void syncNewsSources() {
-    var list = List<NewsSource>.from(model.newsSubscriptionList);
-    for (var i = 0; i < newsSourceList.length; i++) {
-      var exist = list.any((x) => x.name == newsSourceList[i].name);
+    var list = List<NewsSource>.from(model.sourcesSubscriptionList);
+    for (var i = 0; i < sourcesList.length; i++) {
+      var exist = list.any((x) => x.name == sourcesList[i].name);
       if (!exist) {
-        list.insert(i, newsSourceList[i]);
+        list.insert(i, sourcesList[i]);
       } else {
-        var current = list.firstWhere((x) => x.name == newsSourceList[i].name);
-        list.replaceRange(i, i + 1, [newsSourceList[i].copyWith(following: current.following)]);
+        var current = list.firstWhere((x) => x.name == sourcesList[i].name);
+        list.replaceRange(i, i + 1, [sourcesList[i].copyWith(following: current.following)]);
       }
     }
-    model.update(newsSubscriptionList: list);
+    model.update(sourcesSubscriptionList: list);
   }
 
   Future<void> toggleNews(NewsSource source, bool state) async {
     model.update(loading: true);
     try {
-      var list = List<NewsSource>.from(model.newsSubscriptionList);
+      var list = List<NewsSource>.from(model.sourcesSubscriptionList);
       var updated = source.copyWith(following: state);
       var index = list.indexWhere((x) => x.firebaseTopic == source.firebaseTopic);
       if (state) {
@@ -60,7 +60,7 @@ class NewsController extends MomentumController<NewsModel> {
       }
       list.removeAt(index);
       list.insert(index, updated);
-      model.update(newsSubscriptionList: list);
+      model.update(sourcesSubscriptionList: list);
     } catch (e) {
       print(e);
     }
@@ -70,8 +70,8 @@ class NewsController extends MomentumController<NewsModel> {
   Future<void> restoreFromBackup(String source) async {
     var json = jsonDecode(source);
     var backup = model.fromJson(json);
-    final news = backup?.newsSubscriptionList ?? [];
-    for (var item in news) {
+    final sources = backup?.sourcesSubscriptionList ?? [];
+    for (var item in sources) {
       await toggleNews(item, item.following);
     }
   }

@@ -39,7 +39,7 @@ class _DashboardPageState extends State<DashboardPage> with SingleTickerProvider
                 views: [
                   LibraryPage(),
                   FeedPage(),
-                  NewsPage(),
+                  SourcesPage(),
                   MorePage(),
                 ],
                 tabs: [
