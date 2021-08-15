@@ -17,10 +17,10 @@ class SupportTheDeveloper extends StatelessWidget {
         final isActive = subscription.subscriptionActive;
 
         if (subscription.loading) {
-          return ListTile(
-            leading: Icon(Icons.attach_money),
-            title: LinearProgressIndicator(),
-            subtitle: Text('Processing purchase ...'),
+          return MenuListItem(
+            icon: Icons.attach_money,
+            titleWidget: LinearProgressIndicator(),
+            subtitle: 'Processing purchase ...',
           );
         }
 

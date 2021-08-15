@@ -88,6 +88,8 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   }
 
   Future<bool> _isPurchaseValid(PurchaseDetails purchaseDetails) async {
+    model.update(loading: true);
+
     /* Google account is required for purchase verification */
     String authToken = '';
     final auth = cloudController.model;
@@ -115,6 +117,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
     else
       _pendingPurchase = purchaseDetails;
 
+    model.update(loading: false);
     return valid;
     /* Verification logic. */
   }
