@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'index.dart';
 
-void showNewsGuide(BuildContext context) {
+void showSourcesGuide(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      return _NewsGuidePrompt();
+      return _SourcesGuidePrompt();
     },
   );
 }
 
-class _NewsGuidePrompt extends StatelessWidget {
-  const _NewsGuidePrompt({Key? key}) : super(key: key);
+class _SourcesGuidePrompt extends StatelessWidget {
+  const _SourcesGuidePrompt({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

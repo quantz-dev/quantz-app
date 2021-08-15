@@ -71,10 +71,10 @@ class NewsSourceLink {
   }
 }
 
-const newsSourceList = [
+const sourcesList = [
   const NewsSource(
     name: 'AnimeNewsNetwork',
-    iconAssetPath: 'assets/news-icons/ann.png',
+    iconAssetPath: 'assets/sources-icons/ann.png',
     firebaseTopic: 'anime_news_network',
     following: false,
     links: [
@@ -83,7 +83,7 @@ const newsSourceList = [
   ),
   const NewsSource(
     name: 'Livechart Headlines',
-    iconAssetPath: 'assets/news-icons/livechart.png',
+    iconAssetPath: 'assets/sources-icons/livechart.png',
     firebaseTopic: 'livechart_headlines',
     following: false,
     links: [
@@ -92,7 +92,7 @@ const newsSourceList = [
   ),
   const NewsSource(
     name: 'MyAnimeList',
-    iconAssetPath: 'assets/news-icons/mal.png',
+    iconAssetPath: 'assets/sources-icons/mal.png',
     firebaseTopic: 'my_anime_list',
     following: false,
     links: [
@@ -102,7 +102,7 @@ const newsSourceList = [
   ),
   const NewsSource(
     name: 'r/anime - Subreddit',
-    iconAssetPath: 'assets/news-icons/reddit.png',
+    iconAssetPath: 'assets/sources-icons/reddit.png',
     firebaseTopic: 'r_anime_feed',
     following: false,
     links: [
