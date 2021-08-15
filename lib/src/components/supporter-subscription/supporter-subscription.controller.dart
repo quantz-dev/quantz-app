@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:momentum/momentum.dart';
-import 'package:quantz/src/components/cloud-backup/index.dart';
 
 import '../../core/in-app-purchase.dart';
 import '../../services/index.dart';
 import '../../widgets/index.dart';
-import '../admob/index.dart';
+import '../cloud-backup/index.dart';
+import '../google-flow/google-flow.controller.dart';
 import 'index.dart';
 
 SupporterSubscriptionController supporterCtrl(BuildContext context) => Momentum.controller<SupporterSubscriptionController>(context);
@@ -34,7 +34,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
 
   CloudBackupController get cloudController => controller<CloudBackupController>();
 
-  void bootstrap() async {
+  Future<void> initialize() async {
     await checkStore();
 
     if (!model.storeIsAvailable) return;
@@ -54,6 +54,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   }
 
   void _checkPurchaseUpdated(PurchaseDetails purchaseDetails) async {
+    _pendingPurchase = purchaseDetails;
     final isPurchased = purchaseDetails.status == PurchaseStatus.purchased;
     final isRestored = purchaseDetails.status == PurchaseStatus.restored;
     if (purchaseDetails.status == PurchaseStatus.pending) {
@@ -66,6 +67,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
       } else if (isPurchased || isRestored) {
         bool valid = await _isPurchaseValid(purchaseDetails);
         if (valid) {
+          _pendingPurchase = null;
           model.update(subscriptionActive: valid);
           initializedAds();
         } else {
@@ -91,19 +93,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
     model.update(loading: true);
 
     /* Google account is required for purchase verification */
-    String authToken = '';
-    final auth = cloudController.model;
-    if (auth.loading) {
-      _pendingPurchase = purchaseDetails;
-      return false;
-    }
-    if (!auth.signedIn) {
-      authToken = await api.signInWithGoogle();
-      cloudController.authWithGoogle(authToken);
-    } else {
-      authToken = cloudController.model.token;
-    }
-    /* Google account is required for purchase verification */
+    String authToken = cloudController.model.token;
 
     /* Verification logic. */
     final v = purchaseDetails.verificationData;
@@ -112,11 +102,6 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
       purchaseToken: v.serverVerificationData,
       source: v.source,
     );
-    if (valid)
-      _pendingPurchase = null;
-    else
-      _pendingPurchase = purchaseDetails;
-
     model.update(loading: false);
     return valid;
     /* Verification logic. */
@@ -127,6 +112,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
     model.update(storeIsAvailable: available);
   }
 
+  /// This is currently called when `Support the developer` button is clicked.
   Future<void> getSupporterSubscription() async {
     if (model.subscriptionActive) {
       showToast('You are already supporting the developer.');
@@ -163,6 +149,6 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   }
 
   void initializedAds() {
-    controller<AdmobController>().initialize();
+    controller<GoogleFlowController>().initializeAdmob();
   }
 }
