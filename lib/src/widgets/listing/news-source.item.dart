@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../components/news/index.dart';
+import '../../components/sources/index.dart';
 import '../inputs/index.dart';
 
 class NewsSourceItem extends StatelessWidget {
@@ -36,7 +36,7 @@ class NewsSourceItem extends StatelessWidget {
             ButtonSwith(
               value: following,
               onChanged: (value) {
-                Momentum.controller<NewsController>(context).toggleNews(item, value);
+                Momentum.controller<SourcesController>(context).toggleNews(item, value);
               },
             ),
           ],
