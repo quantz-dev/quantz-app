@@ -24,6 +24,7 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
         switch (event) {
           case CloudbackupEvents.alreadySignedIn:
             final result = await showBackupSettings(context);
+            controller.model.update(loading: false);
             switch (result) {
               case CloudbackupEvents.startNewBackup:
                 showLoading(context, controller.startNewBackup());
@@ -54,10 +55,10 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
         final profile = cloud.profile;
 
         if (cloud.loading) {
-          return ListTile(
-            leading: Icon(Icons.cloud),
-            title: LinearProgressIndicator(),
-            subtitle: Text('Processing cloud backup ...'),
+          return MenuListItem(
+            icon: Icons.cloud,
+            titleWidget: LinearProgressIndicator(),
+            subtitle: 'Processing cloud backup ...',
           );
         }
 
