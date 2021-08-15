@@ -15,7 +15,7 @@ class RAnimeFeedItem extends FeedItem {
 
   String get permalink => 'https://www.reddit.com$rlink';
   int get utcTimestampSeconds => createdUtc;
-  String get sourceImage => 'assets/news-icons/reddit.png';
+  String get sourceImage => 'assets/sources-icons/reddit.png';
 
   RAnimeFeedItem copyWith({
     String? title,
