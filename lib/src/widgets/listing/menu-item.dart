@@ -31,11 +31,13 @@ class MenuListItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
-      subtitle: Text(
-        subtitle,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      ),
+      subtitle: subtitle.isEmpty
+          ? null
+          : Text(
+              subtitle,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
       trailing: trail,
       onTap: onTap ?? () {},
     );
