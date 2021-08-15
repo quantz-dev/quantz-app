@@ -11,6 +11,7 @@ import '../../widgets/index.dart';
 import '../animelist/index.dart';
 import '../import/index.dart';
 import '../news/index.dart';
+import '../supporter-subscription/index.dart';
 import 'index.dart';
 
 class CloudBackupController extends MomentumController<CloudBackupModel> {
@@ -21,6 +22,7 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
       token: '',
       profile: JwtTokenProfile(),
       latestBackupInfo: CloudBackup(),
+      loading: false,
     );
   }
 
@@ -28,13 +30,16 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
 
   Future<void> bootstrapAsync() async {
     if (model.token.isNotEmpty) {
+      model.update(loading: true);
       await refreshToken(); // tries to refresh token in the backround.
       final latestBackupInfo = await api.fetchBackup(token: model.token, includeData: false);
-      model.update(latestBackupInfo: latestBackupInfo);
+      model.update(latestBackupInfo: latestBackupInfo, loading: false);
+      controller<SupporterSubscriptionController>().getSupporterSubscription();
     }
   }
 
   Future<void> signInWithGoogle() async {
+    model.update(loading: true);
     final signedIn = await GoogleSignIn().isSignedIn();
     if (signedIn) {
       sendEvent(CloudbackupEvents.alreadySignedIn);
@@ -44,13 +49,16 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
     if (token.isNotEmpty) {
       await authWithGoogle(token);
     }
+    model.update(loading: false);
   }
 
   Future<void> authWithGoogle(String token) async {
     if (token.isEmpty) return;
+    model.update(loading: true);
     final latestBackupInfo = await api.fetchBackup(token: token, includeData: false);
     model.update(token: token, latestBackupInfo: latestBackupInfo);
     convertTokenToProfile();
+    model.update(loading: false);
   }
 
   void convertTokenToProfile() {
@@ -66,13 +74,18 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
     }
   }
 
-  Future<void> refreshToken() async {
+  Future<String> refreshToken() async {
+    model.update(loading: true);
     final signedIn = await GoogleSignIn().isSignedIn();
     if (signedIn) {
       final newToken = await api.refreshToken();
       model.update(token: newToken);
       convertTokenToProfile();
+      model.update(loading: false);
+      return newToken;
     }
+    model.update(loading: false);
+    return '';
   }
 
   Future<void> startNewBackup() async {
@@ -121,9 +134,11 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
   }
 
   Future<void> signout() async {
+    model.update(loading: true);
     await GoogleSignIn().signOut();
     model.update(token: '');
     model.modifyLastRestore(lastRestore: null);
     convertTokenToProfile();
+    model.update(loading: false);
   }
 }
