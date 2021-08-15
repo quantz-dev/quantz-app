@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 class MenuListItem extends StatelessWidget {
   const MenuListItem({
     Key? key,
-    required this.title,
+    this.title = '',
+    this.titleWidget,
     this.subtitle = '',
     required this.icon,
-    required this.trail,
-    required this.onTap,
+    this.trail = const SizedBox(),
+    this.onTap,
   }) : super(key: key);
 
   final String title;
+  final Widget? titleWidget;
   final String subtitle;
   final IconData icon;
   final Widget trail;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +25,19 @@ class MenuListItem extends StatelessWidget {
         height: 100,
         child: Icon(icon),
       ),
-      title: Text(
-        title,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 1,
-      ),
+      title: titleWidget ??
+          Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
       subtitle: Text(
         subtitle,
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
       ),
       trailing: trail,
-      onTap: onTap,
+      onTap: onTap ?? () {},
     );
   }
 }
