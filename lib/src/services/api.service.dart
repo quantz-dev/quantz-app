@@ -41,14 +41,14 @@ class ApiService extends MomentumService {
           'airing_status': airingStatus,
         },
       );
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 2500));
       var result = JikanUserAnimeList.fromJson(response.data);
       if (result.anime.isEmpty) {
         return JikanUserAnimeList(anime: []);
       }
       return result;
     } catch (e) {
-      showToast('$e', error: true);
+      showToast('Failed to fetch $username/animelist/$type {$airingStatus, page=$page}', error: true);
       print(e);
       return JikanUserAnimeList(anime: []);
     }
@@ -126,9 +126,34 @@ class ApiService extends MomentumService {
       var response = await _dio.post('$api/backup/fetch', data: param);
       return CloudBackup.fromJson(response.data);
     } catch (e) {
-      showToast('Error fetching backup.', error: true);
+      if (e is DioError) {
+        final notFound = e.response?.statusCode == 404;
+        if (notFound) {
+          return CloudBackup();
+        }
+      } else {
+        showToast('Error fetching backup.', error: true);
+      }
       print(e);
       return CloudBackup();
+    }
+  }
+
+  Future<bool> verifySupporterPurchase({
+    required String authToken,
+    required String purchaseToken,
+    required String source,
+  }) async {
+    try {
+      final param = <String, dynamic>{
+        'auth_token': authToken,
+        'purchase_token': purchaseToken,
+        'source': source,
+      };
+      var response = await _dio.post('$api/supporter/verify', data: param);
+      return response.data['valid'];
+    } catch (e) {
+      return false;
     }
   }
 

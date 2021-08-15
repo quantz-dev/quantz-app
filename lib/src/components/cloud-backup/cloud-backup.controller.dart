@@ -41,6 +41,13 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
       return;
     }
     final token = await api.signInWithGoogle();
+    if (token.isNotEmpty) {
+      await authWithGoogle(token);
+    }
+  }
+
+  Future<void> authWithGoogle(String token) async {
+    if (token.isEmpty) return;
     final latestBackupInfo = await api.fetchBackup(token: token, includeData: false);
     model.update(token: token, latestBackupInfo: latestBackupInfo);
     convertTokenToProfile();
