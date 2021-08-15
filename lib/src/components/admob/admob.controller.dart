@@ -3,6 +3,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:momentum/momentum.dart';
 
 import '../../core/index.dart';
+import '../supporter-subscription/index.dart';
 import 'index.dart';
 
 AdmobController admobCtrl(BuildContext context) => Momentum.controller<AdmobController>(context);
@@ -12,6 +13,7 @@ class AdmobController extends MomentumController<AdmobModel> {
   AdmobModel init() {
     return AdmobModel(
       this,
+      initialized: false,
       libraryTabAd: generateBannerAd(AD_UNIT_LIBRARY, showLibraryTabAd),
       showLibraryTabAd: false,
       sourcesTabAd: generateBannerAd(AD_UNIT_SOURCES, showSourcesTabAd),
@@ -19,6 +21,22 @@ class AdmobController extends MomentumController<AdmobModel> {
       feedTabAd: generateBannerAd(AD_UNIT_FEED, showFeedTabAd),
       showFeedTabAd: false,
     );
+  }
+
+  bool get subscribed => controller<SupporterSubscriptionController>().model.subscriptionActive;
+  bool get ready => model.initialized && !subscribed;
+
+  bootstrap() {
+    initialize();
+  }
+
+  Future<void> initialize() async {
+    if (!subscribed) {
+      // initialize Ads if user is not subscribed as Supporter.
+      final status = await MobileAds.instance.initialize();
+      print(status.adapterStatuses);
+      model.update(initialized: true);
+    }
   }
 
   void disposeLibraryAd() async {
@@ -37,6 +55,7 @@ class AdmobController extends MomentumController<AdmobModel> {
   }
 
   void loaLibraryTabAd() async {
+    if (!ready) return;
     model.update(showLibraryTabAd: false);
     await model.libraryTabAd.load();
   }
@@ -47,19 +66,23 @@ class AdmobController extends MomentumController<AdmobModel> {
   }
 
   void loadFeedTabAd() async {
+    if (!ready) return;
     model.update(showFeedTabAd: false);
     await model.feedTabAd.load();
   }
 
   void showLibraryTabAd() {
+    if (!ready) return;
     model.update(showLibraryTabAd: true);
   }
 
   void showSourcesTabAd() {
+    if (!ready) return;
     model.update(showSourcesTabAd: true);
   }
 
   void showFeedTabAd() {
+    if (!ready) return;
     model.update(showFeedTabAd: true);
   }
 

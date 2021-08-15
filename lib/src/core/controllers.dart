@@ -1,4 +1,5 @@
 import 'package:momentum/momentum.dart';
+import '../components/supporter-subscription/index.dart';
 
 import '../components/admob/index.dart';
 import '../components/animelist/index.dart';
@@ -23,5 +24,6 @@ List<MomentumController> controllers() {
     FilterController()..config(maxTimeTravelSteps: 2),
     AdmobController(),
     FeedController()..config(lazy: true),
+    SupporterSubscriptionController()..config(lazy: true),
   ];
 }
