@@ -35,7 +35,7 @@ class SupportTheDeveloper extends StatelessWidget {
             ),
           ),
           onTap: () async {
-            subscription.controller.buySupporterSubscription();
+            subscription.controller.getSupporterSubscription();
           },
         );
       },

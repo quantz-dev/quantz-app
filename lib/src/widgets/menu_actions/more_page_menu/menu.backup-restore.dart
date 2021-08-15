@@ -53,6 +53,14 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
         final cloud = snapshot<CloudBackupModel>();
         final profile = cloud.profile;
 
+        if (cloud.loading) {
+          return ListTile(
+            leading: Icon(Icons.cloud),
+            title: LinearProgressIndicator(),
+            subtitle: Text('Processing cloud backup ...'),
+          );
+        }
+
         return MenuListItem(
           title: 'Backup & Restore',
           subtitle: cloud.signedIn ? profile.email : 'Google account required.',
@@ -79,9 +87,9 @@ class _LoginWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return !signedIn
         ? Image.asset(
-          'assets/google_sign_in.png',
-          width: 128,
-        )
+            'assets/google_sign_in.png',
+            width: 128,
+          )
         : Text(
             'Settings',
             style: TextStyle(

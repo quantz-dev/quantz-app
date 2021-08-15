@@ -64,12 +64,16 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
         print(['IAP ERROR', err?.source, err?.code, err?.message]);
         model.update(purchaseError: err?.message ?? '', purchaseIsPending: false);
       } else if (isPurchased || isRestored) {
-        bool valid = await _verifyPurchase(purchaseDetails);
+        bool valid = await _isPurchaseValid(purchaseDetails);
         if (valid) {
           model.update(subscriptionActive: valid);
           initializedAds();
         } else {
-          showToast('Unable to validated your purchase.', error: !valid);
+          if (cloudController.model.loading) {
+            // google signin is loading. don't show any error.
+          } else {
+            showToast('Unable to validated your purchase.', error: !valid);
+          }
         }
       }
       if (purchaseDetails.pendingCompletePurchase) {
@@ -83,15 +87,24 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
     }
   }
 
-  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
-    final v = purchaseDetails.verificationData;
+  Future<bool> _isPurchaseValid(PurchaseDetails purchaseDetails) async {
+    /* Google account is required for purchase verification */
     String authToken = '';
-    if (!cloudController.model.signedIn) {
+    final auth = cloudController.model;
+    if (auth.loading) {
+      _pendingPurchase = purchaseDetails;
+      return false;
+    }
+    if (!auth.signedIn) {
       authToken = await api.signInWithGoogle();
       cloudController.authWithGoogle(authToken);
     } else {
       authToken = cloudController.model.token;
     }
+    /* Google account is required for purchase verification */
+
+    /* Verification logic. */
+    final v = purchaseDetails.verificationData;
     final valid = await api.verifySupporterPurchase(
       authToken: authToken,
       purchaseToken: v.serverVerificationData,
@@ -103,6 +116,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
       _pendingPurchase = purchaseDetails;
 
     return valid;
+    /* Verification logic. */
   }
 
   Future<void> checkStore() async {
@@ -110,13 +124,17 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
     model.update(storeIsAvailable: available);
   }
 
-  Future<void> buySupporterSubscription() async {
+  Future<void> getSupporterSubscription() async {
     if (model.subscriptionActive) {
       showToast('You are already supporting the developer.');
       return;
     }
     if (_pendingPurchase != null) {
-      _verifyPurchase(_pendingPurchase!);
+      final valid = await _isPurchaseValid(_pendingPurchase!);
+      if (valid) {
+        model.update(subscriptionActive: valid);
+        initializedAds();
+      }
       return;
     }
     model.update(loading: true);
