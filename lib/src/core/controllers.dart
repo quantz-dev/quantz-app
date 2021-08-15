@@ -7,7 +7,7 @@ import '../components/feed/index.dart';
 import '../components/filter/index.dart';
 import '../components/google-flow/index.dart';
 import '../components/import/index.dart';
-import '../components/news/index.dart';
+import '../components/sources/index.dart';
 import '../components/notification/index.dart';
 import '../components/supporter-subscription/index.dart';
 import '../components/topic/index.dart';
@@ -19,7 +19,7 @@ List<MomentumController> controllers() {
     AnimelistController(),
     notificationController,
     ImportController(),
-    NewsController(),
+    SourcesController(),
     TopicController(),
     FilterController()..config(maxTimeTravelSteps: 2),
     FeedController(),

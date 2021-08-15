@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 
-import '../../components/news/index.dart';
+import '../../components/sources/index.dart';
 import '../index.dart';
 import '../listing/index.dart';
 import '../menu_actions/news_guide/index.dart';
 
-class NewsPage extends StatelessWidget {
-  const NewsPage({Key? key}) : super(key: key);
+class SourcesPage extends StatelessWidget {
+  const SourcesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +20,16 @@ class NewsPage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.help_outline),
             onPressed: () {
-              showNewsGuide(context);
+              showSourcesGuide(context);
             },
           ),
         ],
       ),
       body: MomentumBuilder(
-        controllers: [NewsController],
+        controllers: [SourcesController],
         builder: (context, snapshot) {
-          var news = snapshot<NewsModel>();
-          if (news.loading) {
+          var sources = snapshot<SourcesModel>();
+          if (sources.loading) {
             return Center(
               child: SizedBox(
                 height: 36,
@@ -42,14 +42,14 @@ class NewsPage extends StatelessWidget {
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: newsSourceList.length,
+                  itemCount: sourcesList.length,
                   // physics: BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
-                    var item = news.newsSubscriptionList[index];
+                    var item = sources.sourcesSubscriptionList[index];
                     return NewsSourceItem(
                       item: item,
                       following: item.following,
-                      isLastItem: index == news.newsSubscriptionList.length - 1,
+                      isLastItem: index == sources.sourcesSubscriptionList.length - 1,
                     );
                   },
                 ),

@@ -1,3 +1,3 @@
 export 'guide.item.dart';
 export 'index.dart';
-export 'news_guide_prompt.dart';
+export 'sources_guide_prompt.dart';
