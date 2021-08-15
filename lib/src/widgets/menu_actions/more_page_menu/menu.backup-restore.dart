@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 
 import '../../../components/cloud-backup/index.dart';
+import '../../../components/google-flow/google-flow.controller.dart';
+import '../../../components/google-flow/google-flow.model.dart';
 import '../../index.dart';
 import '../../listing/index.dart';
 import '../../syncing/index.dart';
@@ -14,10 +16,13 @@ class MenuBackupRestore extends StatefulWidget {
 }
 
 class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
+  GoogleFlowController? flowController;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final controller = Momentum.controller<CloudBackupController>(context);
+    flowController = Momentum.controller<GoogleFlowController>(context);
     controller.listen<CloudbackupEvents>(
       state: this,
       invoke: (event) async {
@@ -33,7 +38,7 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
                 showLoading(context, controller.restoreFromLatest());
                 break;
               case CloudbackupEvents.logoutGoogle:
-                showLoading(context, controller.signout());
+                showLoading(context, flowController!.signout());
                 break;
               default:
                 break;
@@ -49,16 +54,20 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
   @override
   Widget build(BuildContext context) {
     return MomentumBuilder(
-      controllers: [CloudBackupController],
+      controllers: [
+        CloudBackupController,
+        GoogleFlowController,
+      ],
       builder: (context, snapshot) {
         final cloud = snapshot<CloudBackupModel>();
-        final profile = cloud.profile;
+        final googleFlow = snapshot<GoogleFlowModel>();
+        final profile = googleFlow.profile;
 
         if (cloud.loading) {
           return MenuListItem(
             icon: Icons.cloud,
             titleWidget: LinearProgressIndicator(),
-            subtitle: 'Processing cloud backup ...',
+            subtitle: 'Backup & Restore',
           );
         }
 
@@ -68,7 +77,7 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
           icon: Icons.cloud,
           trail: _LoginWidget(signedIn: cloud.signedIn),
           onTap: () {
-            cloud.controller.signInWithGoogle();
+            flowController?.showCloudBackup();
           },
         );
       },
