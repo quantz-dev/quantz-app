@@ -5,19 +5,19 @@ import '../misc/index.dart';
 class BackupData {
   final Map<String, dynamic> importState;
   final Map<String, dynamic> animeListState;
-  final Map<String, dynamic> newsState;
+  final Map<String, dynamic> sourcesState;
 
   BackupData({
     required this.importState,
     required this.animeListState,
-    required this.newsState,
+    required this.sourcesState,
   });
 
   Map<String, dynamic> toJson() {
     return {
       IMPORT_STATE_KEY: importState,
       ANIMELIST_STATE_KEY: animeListState,
-      NEWS_STATE_KEY: newsState,
+      NEWS_STATE_KEY: sourcesState,
     };
   }
 
@@ -25,7 +25,7 @@ class BackupData {
     return BackupData(
       importState: Map<String, dynamic>.from(map[IMPORT_STATE_KEY]),
       animeListState: Map<String, dynamic>.from(map[ANIMELIST_STATE_KEY]),
-      newsState: Map<String, dynamic>.from(map[NEWS_STATE_KEY]),
+      sourcesState: Map<String, dynamic>.from(map[NEWS_STATE_KEY]),
     );
   }
 

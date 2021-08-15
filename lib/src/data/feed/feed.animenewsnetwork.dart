@@ -16,7 +16,7 @@ class AnimeNewsNetworkFeedItem extends FeedItem {
   final DateTime? updatedAt;
 
   int get utcTimestampSeconds => (updatedAt?.toUtc().millisecondsSinceEpoch ?? 0) ~/ 1000;
-  String get sourceImage => 'assets/news-icons/ann.png';
+  String get sourceImage => 'assets/sources-icons/ann.png';
 
   AnimeNewsNetworkFeedItem copyWith({
     String? title,
