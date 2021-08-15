@@ -14,6 +14,17 @@ class GoogleFlowModel extends MomentumModel<GoogleFlowController> {
   final JwtTokenProfile profile;
 
   bool get signedIn => token.isNotEmpty;
+  String get emailObscure {
+    final e = profile.email;
+    if (e.isNotEmpty) {
+      final username = e.substring(0, e.indexOf('@'));
+      final domain = e.replaceAll('$username@', '');
+      final firstLetter = username[0];
+      final lastLetter = username[username.length - 1];
+      return '$firstLetter********$lastLetter@$domain';
+    }
+    return '';
+  }
 
   @override
   void update({
