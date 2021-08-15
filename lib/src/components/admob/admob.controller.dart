@@ -24,18 +24,38 @@ class AdmobController extends MomentumController<AdmobModel> {
   }
 
   bool get subscribed => controller<SupporterSubscriptionController>().model.subscriptionActive;
-  bool get ready => model.initialized && !subscribed;
+  bool get ready => model.initialized;
 
-  bootstrap() {
-    initialize();
-  }
+  /// - `0` = Library Tab
+  /// - `1` = Feed Tab
+  /// - `2` = Sources Tab
+  /// - `3` = More Tab *(no ad here)*
+  int lastActiveTab = -1;
 
   Future<void> initialize() async {
-    if (!subscribed) {
+    if (subscribed) {
+      model.update(initialized: false);
+    } else {
       // initialize Ads if user is not subscribed as Supporter.
       final status = await MobileAds.instance.initialize();
       print(status.adapterStatuses);
       model.update(initialized: true);
+      loadAdForActiveTab();
+    }
+  }
+
+  void loadAdForActiveTab() {
+    switch (lastActiveTab) {
+      case 0:
+        loadLibraryTabAd();
+        break;
+      case 1:
+        loadFeedTabAd();
+        break;
+      case 2:
+        loadSourcesTabAd();
+        break;
+      default:
     }
   }
 
@@ -54,21 +74,25 @@ class AdmobController extends MomentumController<AdmobModel> {
     await model.feedTabAd.dispose();
   }
 
-  void loaLibraryTabAd() async {
+  void loadLibraryTabAd() async {
+    lastActiveTab = 0;
     if (!ready) return;
     model.update(showLibraryTabAd: false);
     await model.libraryTabAd.load();
   }
 
-  void loadSourcesTabAd() async {
-    model.update(showSourcesTabAd: false);
-    await model.sourcesTabAd.load();
-  }
-
   void loadFeedTabAd() async {
+    lastActiveTab = 1;
     if (!ready) return;
     model.update(showFeedTabAd: false);
     await model.feedTabAd.load();
+  }
+
+  void loadSourcesTabAd() async {
+    lastActiveTab = 2;
+    if (!ready) return;
+    model.update(showSourcesTabAd: false);
+    await model.sourcesTabAd.load();
   }
 
   void showLibraryTabAd() {
@@ -76,14 +100,14 @@ class AdmobController extends MomentumController<AdmobModel> {
     model.update(showLibraryTabAd: true);
   }
 
-  void showSourcesTabAd() {
-    if (!ready) return;
-    model.update(showSourcesTabAd: true);
-  }
-
   void showFeedTabAd() {
     if (!ready) return;
     model.update(showFeedTabAd: true);
+  }
+
+  void showSourcesTabAd() {
+    if (!ready) return;
+    model.update(showSourcesTabAd: true);
   }
 
   BannerAd generateBannerAd(String adUnitId, void Function() callback) {

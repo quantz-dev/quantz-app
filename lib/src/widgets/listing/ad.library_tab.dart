@@ -17,7 +17,7 @@ class _AdLibraryTabState extends State<AdLibraryTab> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _admobController = admobCtrl(context)..loaLibraryTabAd();
+    _admobController = admobCtrl(context)..loadLibraryTabAd();
   }
 
   @override

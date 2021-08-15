@@ -1,4 +1,5 @@
 import 'package:momentum/momentum.dart';
+import 'package:quantz/src/components/google-flow/google-flow.controller.dart';
 
 import '../../data/index.dart';
 import 'index.dart';
@@ -6,35 +7,29 @@ import 'index.dart';
 class CloudBackupModel extends MomentumModel<CloudBackupController> {
   CloudBackupModel(
     CloudBackupController controller, {
-    required this.token,
-    required this.profile,
     required this.latestBackupInfo,
     required this.loading,
     this.lastRestore,
   }) : super(controller);
 
-  final String token;
-  final JwtTokenProfile profile;
   final CloudBackup latestBackupInfo;
   final DateTime? lastRestore;
   final bool loading;
 
-  bool get signedIn => token.isNotEmpty;
   bool get hasLatestBackup => latestBackupInfo.updatedAt != null;
   bool get hasLastRestored => lastRestore != null;
 
+  bool get signedIn => controller.controller<GoogleFlowController>().model.signedIn;
+  String get token => controller.controller<GoogleFlowController>().model.token;
+
   @override
   void update({
-    String? token,
-    JwtTokenProfile? profile,
     CloudBackup? latestBackupInfo,
     DateTime? lastRestore,
     bool? loading,
   }) {
     CloudBackupModel(
       controller,
-      token: token ?? this.token,
-      profile: profile ?? this.profile,
       latestBackupInfo: latestBackupInfo ?? this.latestBackupInfo,
       lastRestore: lastRestore ?? this.lastRestore,
       loading: loading ?? this.loading,
@@ -46,8 +41,6 @@ class CloudBackupModel extends MomentumModel<CloudBackupController> {
   }) {
     CloudBackupModel(
       controller,
-      token: this.token,
-      profile: this.profile,
       latestBackupInfo: this.latestBackupInfo,
       lastRestore: lastRestore,
       loading: false,
@@ -56,7 +49,6 @@ class CloudBackupModel extends MomentumModel<CloudBackupController> {
 
   Map<String, dynamic> toJson() {
     return {
-      'token': token,
       'lastRestore': lastRestore?.millisecondsSinceEpoch,
     };
   }
@@ -65,8 +57,6 @@ class CloudBackupModel extends MomentumModel<CloudBackupController> {
     if (map == null) return null;
     return CloudBackupModel(
       controller,
-      token: map['token'],
-      profile: JwtTokenProfile(),
       latestBackupInfo: CloudBackup(),
       lastRestore: map['lastRestore'] == null ? null : DateTime.fromMillisecondsSinceEpoch(map['lastRestore']),
       loading: false,

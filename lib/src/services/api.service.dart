@@ -15,13 +15,14 @@ class ApiService extends MomentumService {
   final _dio = Dio();
 
   Future<AnimeListResponse> getAnimeList() async {
+    const path = '$api/anime/list';
     try {
-      var path = '$api/anime/list';
       var response = await _dio.get(path);
       return AnimeListResponse.fromJson(response.data);
     } catch (e) {
       showToast('$e', error: true);
       print(e);
+      print(['ERROR', path]);
       return AnimeListResponse(count: 0, entries: []);
     }
   }
@@ -55,13 +56,14 @@ class ApiService extends MomentumService {
   }
 
   Future<FirebaseSubscription> getFirebaseSubscription() async {
+    var token = await FirebaseMessaging.instance.getToken();
+    final path = '$api/topics/$token';
     try {
-      var token = await FirebaseMessaging.instance.getToken();
-      var response = await _dio.post('$api/topics/$token');
+      var response = await _dio.post(path);
       return FirebaseSubscription.fromJson(response.data);
     } catch (e) {
-      showToast('$e', error: true);
       print(e);
+      print(['ERROR', path]);
       return FirebaseSubscription();
     }
   }
@@ -118,12 +120,13 @@ class ApiService extends MomentumService {
     required String token,
     bool includeData = true,
   }) async {
+    const path = '$api/backup/fetch';
     try {
       final param = <String, dynamic>{
         'jwt_token': token,
         'include_data': includeData,
       };
-      var response = await _dio.post('$api/backup/fetch', data: param);
+      var response = await _dio.post(path, data: param);
       return CloudBackup.fromJson(response.data);
     } catch (e) {
       if (e is DioError) {
@@ -135,6 +138,7 @@ class ApiService extends MomentumService {
         showToast('Error fetching backup.', error: true);
       }
       print(e);
+      print(['ERROR', path]);
       return CloudBackup();
     }
   }
@@ -144,15 +148,17 @@ class ApiService extends MomentumService {
     required String purchaseToken,
     required String source,
   }) async {
+    const path = '$api/supporter/verify';
     try {
       final param = <String, dynamic>{
         'auth_token': authToken,
         'purchase_token': purchaseToken,
         'source': source,
       };
-      var response = await _dio.post('$api/supporter/verify', data: param);
+      var response = await _dio.post(path, data: param);
       return response.data['valid'];
     } catch (e) {
+      print(['ERROR', path]);
       return false;
     }
   }

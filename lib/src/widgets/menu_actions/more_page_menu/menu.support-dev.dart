@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
+import 'package:quantz/src/components/google-flow/google-flow.controller.dart';
 
 import '../../../components/supporter-subscription/index.dart';
 import '../../index.dart';
@@ -20,7 +21,7 @@ class SupportTheDeveloper extends StatelessWidget {
           return MenuListItem(
             icon: Icons.attach_money,
             titleWidget: LinearProgressIndicator(),
-            subtitle: 'Processing purchase ...',
+            subtitle: 'Support the developer',
           );
         }
 
@@ -35,7 +36,7 @@ class SupportTheDeveloper extends StatelessWidget {
             ),
           ),
           onTap: () async {
-            subscription.controller.getSupporterSubscription();
+            Momentum.controller<GoogleFlowController>(context).getSupporterSubscription();
           },
         );
       },
