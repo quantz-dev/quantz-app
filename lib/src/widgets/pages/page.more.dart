@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../menu_actions/more_page_menu/menu.support-dev.dart';
 
 import '../index.dart';
 import '../menu_actions/more_page_menu/index.dart';
@@ -40,6 +41,7 @@ class MorePage extends StatelessWidget {
                 children: [
                   MenuMalImport(),
                   MenuBackupRestore(),
+                  SupportTheDeveloper(),
                 ],
               ),
             ),

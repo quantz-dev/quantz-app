@@ -23,8 +23,16 @@ class MenuListItem extends StatelessWidget {
         height: 100,
         child: Icon(icon),
       ),
-      title: Text(title),
-      subtitle: Text(subtitle),
+      title: Text(
+        title,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+      subtitle: Text(
+        subtitle,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
       trailing: trail,
       onTap: onTap,
     );
