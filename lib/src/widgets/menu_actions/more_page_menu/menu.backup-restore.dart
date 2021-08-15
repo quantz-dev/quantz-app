@@ -61,7 +61,6 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
       builder: (context, snapshot) {
         final cloud = snapshot<CloudBackupModel>();
         final googleFlow = snapshot<GoogleFlowModel>();
-        final profile = googleFlow.profile;
 
         if (cloud.loading) {
           return MenuListItem(
@@ -73,7 +72,7 @@ class _MenuBackupRestoreState extends MomentumState<MenuBackupRestore> {
 
         return MenuListItem(
           title: 'Backup & Restore',
-          subtitle: cloud.signedIn ? profile.email : 'Google account required.',
+          subtitle: cloud.signedIn ? googleFlow.emailObscure : 'Google account required.',
           icon: Icons.cloud,
           trail: _LoginWidget(signedIn: cloud.signedIn),
           onTap: () {
