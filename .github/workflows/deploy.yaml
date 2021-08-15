@@ -33,6 +33,9 @@ jobs:
     - run: echo $GOOGLE_PLAY_SERVICE_ACCOUNT | base64 -d > service_account.json
       env:
         GOOGLE_PLAY_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+    - run: echo $IN_APP_PURCHASE_CONFIG | base64 -d > lib/src/core/in-app-purchase.dart
+      env:
+        IN_APP_PURCHASE_CONFIG: ${{ secrets.IN_APP_PURCHASE_CONFIG }}
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '2.0.1'
