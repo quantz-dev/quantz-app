@@ -1,9 +1,9 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:momentum/momentum.dart';
-import 'package:quantz/src/services/api.service.dart';
 
 import '../../data/index.dart';
+import '../../services/api.service.dart';
 import '../admob/index.dart';
 import '../cloud-backup/index.dart';
 import '../supporter-subscription/index.dart';
@@ -48,6 +48,11 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
     await admobController.initialize();
   }
 
+  void toggleLoading(bool isLoading) {
+    supporterController.model.update(loading: isLoading);
+    cloudBackupController.model.update(loading: isLoading);
+  }
+
   Future<void> getSupporterSubscription() async {
     if (!model.signedIn) {
       await signInWithGoogle();
@@ -65,14 +70,12 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
   }
 
   Future<void> signInWithGoogle() async {
-    supporterController.model.update(loading: true);
-    cloudBackupController.model.update(loading: true);
+    toggleLoading(true);
     final token = await api.signInWithGoogle();
     if (token.isNotEmpty) {
       await authWithGoogle(token);
     }
-    supporterController.model.update(loading: false);
-    cloudBackupController.model.update(loading: false);
+    toggleLoading(false);
   }
 
   Future<void> authWithGoogle(String token) async {
@@ -86,8 +89,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
   }
 
   Future<String> refreshToken() async {
-    supporterController.model.update(loading: true);
-    cloudBackupController.model.update(loading: true);
+    toggleLoading(true);
     final signedIn = await GoogleSignIn().isSignedIn();
     if (signedIn) {
       final newToken = await api.refreshToken();
@@ -97,8 +99,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
       supporterController.model.update(loading: false);
       return newToken;
     }
-    supporterController.model.update(loading: false);
-    cloudBackupController.model.update(loading: false);
+    toggleLoading(false);
     return '';
   }
 
@@ -116,11 +117,11 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
   }
 
   Future<void> signout() async {
-    cloudBackupController.model.update(loading: true);
+    toggleLoading(true);
     await GoogleSignIn().signOut();
     model.update(token: '');
     cloudBackupController.model.modifyLastRestore(lastRestore: null);
     convertTokenToProfile();
-    cloudBackupController.model.update(loading: false);
+    toggleLoading(false);
   }
 }
