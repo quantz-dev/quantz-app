@@ -58,3 +58,5 @@ private_key.pepk
 quantz_key.zip
 lib/src/core/admob_units.prod.dart
 lib/src/core/in-app-purchase.dart
+android/app/google-services.prod.json
+android/app/google-services.dev.json
