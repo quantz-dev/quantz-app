@@ -36,6 +36,9 @@ jobs:
     - run: echo $IN_APP_PURCHASE_CONFIG | base64 -d > lib/src/core/in-app-purchase.dart
       env:
         IN_APP_PURCHASE_CONFIG: ${{ secrets.IN_APP_PURCHASE_CONFIG }}
+    - run: echo $MAL_CLIENT_CONFIG | base64 -d > lib/src/core/mal.client.dart
+      env:
+        MAL_CLIENT_CONFIG: ${{ secrets.MAL_CLIENT_CONFIG }}
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '2.0.1'
