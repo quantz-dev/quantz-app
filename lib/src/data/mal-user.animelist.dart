@@ -23,8 +23,8 @@ class MalUserAnimeListResponse {
   String toRawJson() => json.encode(toJson());
 
   factory MalUserAnimeListResponse.fromJson(Map<String, dynamic> json) => MalUserAnimeListResponse(
-        data: List<MalUserAnimeItem>.from(json["data"].map((x) => MalUserAnimeItem.fromJson(x))),
-        paging: Paging.fromJson(json["paging"]),
+        data: List<MalUserAnimeItem>.from(json["data"]?.map((x) => MalUserAnimeItem.fromJson(x)) ?? []),
+        paging: json["paging"] == null ? Paging() : Paging.fromJson(json["paging"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -56,8 +56,8 @@ class MalUserAnimeItem {
   String toRawJson() => json.encode(toJson());
 
   factory MalUserAnimeItem.fromJson(Map<String, dynamic> json) => MalUserAnimeItem(
-        node: MalUserAnimeNode.fromJson(json["node"]),
-        listStatus: MalUserAnimeListStatus.fromJson(json["list_status"]),
+        node: json["node"] == null ? MalUserAnimeNode() : MalUserAnimeNode.fromJson(json["node"]),
+        listStatus: json["list_status"] == null ? MalUserAnimeListStatus() : MalUserAnimeListStatus.fromJson(json["list_status"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -158,7 +158,7 @@ class MalUserAnimeNode {
   factory MalUserAnimeNode.fromJson(Map<String, dynamic> json) => MalUserAnimeNode(
         id: json["id"] ?? -1,
         title: json["title"] ?? '',
-        mainPicture: MainPicture.fromJson(json["main_picture"]),
+        mainPicture: json["main_picture"] == null ? MainPicture() : MainPicture.fromJson(json["main_picture"]),
       );
 
   Map<String, dynamic> toJson() => {
