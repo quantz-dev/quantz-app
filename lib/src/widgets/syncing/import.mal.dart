@@ -25,6 +25,7 @@ class _ImportMAL extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Momentum.controller<ImportController>(context);
+    final username = controller.model.malUsername;
 
     return Dialog(
       child: Container(
@@ -36,6 +37,8 @@ class _ImportMAL extends StatelessWidget {
           children: [
             TextFormField(
               initialValue: controller.model.malUsername,
+              readOnly: true,
+              enabled: false,
               decoration: InputDecoration(
                 border: new OutlineInputBorder(
                   borderSide: BorderSide.none,
@@ -92,10 +95,12 @@ class _ImportMAL extends StatelessWidget {
             Container(
               width: double.infinity,
               child: TextButton(
-                onPressed: () {
-                  controller.loadMalList(controller.model.malUsername);
-                  Navigator.pop(context, true);
-                },
+                onPressed: username.isEmpty
+                    ? null
+                    : () {
+                        controller.loadMalList(controller.model.malUsername);
+                        Navigator.pop(context, true);
+                      },
                 style: ButtonStyle(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   backgroundColor: MaterialStateProperty.all(primary),
@@ -104,6 +109,30 @@ class _ImportMAL extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
                     'Start Import',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () async {
+                  await controller.logout();
+                  Navigator.pop(context, false);
+                },
+                style: ButtonStyle(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  backgroundColor: MaterialStateProperty.all(Colors.redAccent),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    'Logout',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white,

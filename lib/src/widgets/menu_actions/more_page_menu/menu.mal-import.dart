@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../components/import/index.dart';
 import '../../index.dart';
 import '../../listing/index.dart';
-import '../../syncing/index.dart';
+import '../../syncing/import.mal.dart';
 
 class MenuMalImport extends StatelessWidget {
   const MenuMalImport({Key? key}) : super(key: key);
@@ -16,9 +17,17 @@ class MenuMalImport extends StatelessWidget {
       builder: (context, snapshot) {
         var import = snapshot<ImportModel>();
 
+        if (import.loading) {
+          return MenuListItem(
+            icon: Icons.sync,
+            titleWidget: LinearProgressIndicator(),
+            subtitle: 'MyAnimeList Import',
+          );
+        }
+
         return MenuListItem(
           title: 'MyAnimeList Import',
-          subtitle: 'Your list must be public.',
+          subtitle: import.malUsername.isEmpty ? 'Login required.' : 'You\'re logged in.',
           icon: Icons.sync,
           trail: Text(
             import.malUsername.isEmpty ? 'Import Now' : import.malUsername,
@@ -27,10 +36,19 @@ class MenuMalImport extends StatelessWidget {
             ),
           ),
           onTap: () async {
-            final started = await showImportMAL(context);
-            if (started) {
-              await Future.delayed(Duration(seconds: 1));
-              await showMalImportProgress(context);
+            try {
+              final url = await import.controller.getLoginUrl();
+              if (url.isEmpty) {
+                final started = await showImportMAL(context);
+                if (started) {
+                  await Future.delayed(Duration(seconds: 1));
+                  await showMalImportProgress(context);
+                }
+                return;
+              }
+              launch(url);
+            } catch (e) {
+              print(e);
             }
           },
         );
