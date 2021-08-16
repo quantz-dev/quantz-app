@@ -1,4 +1,5 @@
 import 'package:momentum/momentum.dart';
+import '../services/mal.service.dart';
 
 import '../services/index.dart';
 
@@ -8,5 +9,6 @@ List<MomentumService> services() {
   return [
     fcmService,
     ApiService(),
+    MalService(),
   ];
 }

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:momentum/momentum.dart';
 
 import '../../data/index.dart';
-import '../../services/index.dart';
+import '../../services/mal.service.dart';
 import '../animelist/index.dart';
 import 'index.dart';
 
@@ -24,40 +24,59 @@ class ImportController extends MomentumController<ImportModel> {
     );
   }
 
+  MalService get mal => service<MalService>();
+
+  Future<String> getLoginUrl() async {
+    model.update(loading: true);
+    final result = await mal.getLoginUrl();
+    if (result.isEmpty) {
+      final profile = await mal.getUserProfile();
+      model.update(malUsername: profile.name);
+    }
+    model.update(loading: false);
+    return result;
+  }
+
+  Future<void> logout() async {
+    await mal.logout();
+    model.update(malUsername: '');
+  }
+
   Future<void> loadMalList(String username) async {
     if (username.isEmpty) {
       return;
     }
     model.update(malList: []);
 
-    await _fetchUserAnimeList(username, 'airing', 'watching', 1);
-    await _fetchUserAnimeList(username, 'airing', 'plantowatch', 1);
-    await _fetchUserAnimeList(username, 'not_yet_aired', 'plantowatch', 1);
+    await _fetchUserAnimeList('watching');
+    await _fetchUserAnimeList('plan_to_watch');
 
     _setupSync();
   }
 
-  Future<void> _fetchUserAnimeList(
-    String username,
-    String airingStatus,
-    String type,
-    int page,
-  ) async {
-    print([username, airingStatus, type, page]);
+  Future<void> _fetchUserAnimeList(String status, {String next = ''}) async {
     model.update(loading: true);
-    var api = service<ApiService>();
     var malList = List<int>.from(model.malList);
-    var response = await api.getUserAnimeList(
-      username: username,
-      type: type,
-      airingStatus: airingStatus,
-      page: page,
+    var offset = 0;
+    if (next.isNotEmpty) {
+      final uri = Uri.parse(next);
+      final offsetParam = uri.queryParameters['offset'];
+      if (offsetParam != null) {
+        offset = int.parse(offsetParam);
+      }
+    }
+    var response = await mal.getUserAnimeList(
+      status: status,
+      offset: offset,
     );
-    if (response.anime.isNotEmpty) {
-      var items = response.anime;
-      malList.addAll(items.map((e) => e.malId));
+    if (response.data.isNotEmpty) {
+      var items = response.data;
+      malList.addAll(items.map((e) => e.node.id));
       model.update(malList: malList.toSet().toList());
-      await _fetchUserAnimeList(username, airingStatus, type, page + 1);
+      final next = response.paging.next;
+      if (next.isNotEmpty) {
+        await _fetchUserAnimeList(status, next: response.paging.next);
+      }
     }
   }
 

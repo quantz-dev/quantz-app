@@ -27,34 +27,6 @@ class ApiService extends MomentumService {
     }
   }
 
-  Future<JikanUserAnimeList> getUserAnimeList({
-    required String username,
-    required String type,
-    required String airingStatus,
-    required int page,
-  }) async {
-    try {
-      var path = 'https://api.jikan.moe/v3/user/$username/animelist/$type';
-      var response = await _dio.get(
-        path,
-        queryParameters: {
-          'page': page,
-          'airing_status': airingStatus,
-        },
-      );
-      await Future.delayed(Duration(milliseconds: 2500));
-      var result = JikanUserAnimeList.fromJson(response.data);
-      if (result.anime.isEmpty) {
-        return JikanUserAnimeList(anime: []);
-      }
-      return result;
-    } catch (e) {
-      showToast('Failed to fetch $username/animelist/$type {$airingStatus, page=$page}', error: true);
-      print(e);
-      return JikanUserAnimeList(anime: []);
-    }
-  }
-
   Future<FirebaseSubscription> getFirebaseSubscription() async {
     var token = await FirebaseMessaging.instance.getToken();
     final path = '$api/topics/$token';
