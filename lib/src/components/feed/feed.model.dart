@@ -1,26 +1,26 @@
 import 'package:momentum/momentum.dart';
 
-import '../../data/feed/feed.interface.dart';
+import '../../data/feed.response.dart';
 import 'index.dart';
 
 class FeedModel extends MomentumModel<FeedController> {
   FeedModel(
     FeedController controller, {
-    required this.feedItems,
+    required this.feed,
     required this.loading,
   }) : super(controller);
 
-  final List<FeedItem> feedItems;
+  final QuantzFeed feed;
   final bool loading;
 
   @override
   void update({
-    List<FeedItem>? feedItems,
+    QuantzFeed? feed,
     bool? loading,
   }) {
     FeedModel(
       controller,
-      feedItems: feedItems ?? this.feedItems,
+      feed: feed ?? this.feed,
       loading: loading ?? this.loading,
     ).updateMomentum();
   }

@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:momentum/momentum.dart';
-import 'package:quantz/src/services/mal.service.dart';
+import '../../services/mal.service.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../data/index.dart';

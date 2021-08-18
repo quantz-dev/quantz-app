@@ -1,5 +1,5 @@
 import 'package:momentum/momentum.dart';
-import 'package:quantz/src/components/google-flow/google-flow.controller.dart';
+import '../google-flow/google-flow.controller.dart';
 
 import '../../data/index.dart';
 import 'index.dart';
