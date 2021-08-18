@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
-import '../listing/ad.feed_tab.dart';
 
 import '../../components/feed/index.dart';
 import '../colors.dart';
+import '../listing/ad.feed_tab.dart';
 import '../listing/feed.item.dart';
 
 class FeedPage extends StatelessWidget {
@@ -15,7 +15,7 @@ class FeedPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Feed'),
         backgroundColor: secondaryBackground,
-        elevation: 0,
+        elevation: 0.80,
       ),
       body: MomentumBuilder(
         controllers: [FeedController],
@@ -30,18 +30,18 @@ class FeedPage extends StatelessWidget {
                   ),
                 )
               : Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
                         itemCount: feed.feedItems.length,
                         itemBuilder: (context, index) {
                           return FeedItemWidget(item: feed.feedItems[index]);
                         },
                       ),
-                  ),
-                  AdFeedTab(),
-                ],
-              );
+                    ),
+                    AdFeedTab(),
+                  ],
+                );
         },
       ),
     );
