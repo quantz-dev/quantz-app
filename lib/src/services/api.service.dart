@@ -4,10 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:momentum/momentum.dart';
 
 import '../core/index.dart';
-import '../data/feed/feed.animenewsnetwork.dart';
-import '../data/feed/feed.livechart.dart';
-import '../data/feed/feed.myanimelist.dart';
-import '../data/feed/feed.ranime.dart';
+import '../data/feed.response.dart';
 import '../data/index.dart';
 import '../widgets/index.dart';
 
@@ -135,39 +132,18 @@ class ApiService extends MomentumService {
     }
   }
 
-  Future<List<AnimeNewsNetworkFeedItem>> getAnnLatest() async {
+  Future<QuantzFeed> getLatestFeed({int page = 1, int limit = 10}) async {
     try {
-      final response = await _dio.get('$api/animenewsnetwork/latest');
-      return List<AnimeNewsNetworkFeedItem>.from(response.data.map((json) => AnimeNewsNetworkFeedItem.fromJson(json)));
+      final response = await _dio.get(
+        '$api/feed/latest',
+        queryParameters: {
+          'page': page,
+          'limit': limit,
+        },
+      );
+      return QuantzFeed.fromJson(response.data);
     } catch (e) {
-      return [];
-    }
-  }
-
-  Future<List<LivechartFeedItem>> getLivechartLatest() async {
-    try {
-      final response = await _dio.get('$api/livechart/latest');
-      return List<LivechartFeedItem>.from(response.data.map((json) => LivechartFeedItem.fromJson(json)));
-    } catch (e) {
-      return [];
-    }
-  }
-
-  Future<List<MyAnimeListFeedItem>> getMyAnimeListLatest() async {
-    try {
-      final response = await _dio.get('$api/myanimelist/latest');
-      return List<MyAnimeListFeedItem>.from(response.data.map((json) => MyAnimeListFeedItem.fromJson(json)));
-    } catch (e) {
-      return [];
-    }
-  }
-
-  Future<List<RAnimeFeedItem>> getRAnimeLatest() async {
-    try {
-      final response = await _dio.get('$api/ranime/latest');
-      return List<RAnimeFeedItem>.from(response.data.map((json) => RAnimeFeedItem.fromJson(json)));
-    } catch (e) {
-      return [];
+      return QuantzFeed();
     }
   }
 }
