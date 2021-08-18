@@ -1,6 +1,6 @@
 import 'package:momentum/momentum.dart';
 
-import '../../data/feed/feed.interface.dart';
+import '../../data/feed.response.dart';
 import '../../services/api.service.dart';
 import 'index.dart';
 
@@ -9,7 +9,7 @@ class FeedController extends MomentumController<FeedModel> {
   FeedModel init() {
     return FeedModel(
       this,
-      feedItems: [],
+      feed: QuantzFeed(),
       loading: false,
     );
   }
@@ -17,20 +17,29 @@ class FeedController extends MomentumController<FeedModel> {
   ApiService get api => service<ApiService>();
 
   void bootstrap() async {
-    model.update(loading: true);
-    final feedItems = <FeedItem>[];
+    loadInitial();
+  }
 
-    final animeNewsNetworkFeed = await api.getAnnLatest();
-    final livechartFeed = await api.getLivechartLatest();
-    final myanimelistFeed = await api.getMyAnimeListLatest();
-    final ranimeFeed = await api.getRAnimeLatest();
+  Future<void> loadInitial({bool refresh = false}) async {
+    if (!refresh) model.update(loading: true);
 
-    feedItems.addAll(animeNewsNetworkFeed);
-    feedItems.addAll(livechartFeed);
-    feedItems.addAll(myanimelistFeed);
-    feedItems.addAll(ranimeFeed);
-    feedItems.sort((a, b) => b.utcTimestampSeconds.compareTo(a.utcTimestampSeconds));
+    final feed = await api.getLatestFeed();
+    var feedItems = feed.items;
+    if (feedItems.isNotEmpty) {
+      feedItems.sort((a, b) => b.utcTimestampSeconds.compareTo(a.utcTimestampSeconds));
+      model.update(feed: feed.copyWith(items: feedItems), loading: false);
+    } else {
+      model.update(loading: false);
+    }
+  }
 
-    model.update(feedItems: feedItems, loading: false);
+  Future<void> loadMore() async {
+    final feed = await api.getLatestFeed(page: model.feed.page + 1);
+    var feedItems = List<QuantzFeedItem>.from(model.feed.items)..addAll(feed.items);
+    if (feedItems.isNotEmpty) {
+      feedItems = feedItems.toSet().toList();
+      feedItems.sort((a, b) => b.utcTimestampSeconds.compareTo(a.utcTimestampSeconds));
+      model.update(feed: feed.copyWith(items: feedItems));
+    }
   }
 }

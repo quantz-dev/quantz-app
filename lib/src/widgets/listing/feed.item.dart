@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../data/feed/feed.interface.dart';
+import '../../data/feed.response.dart';
 import '../index.dart';
 
 class FeedItemWidget extends StatelessWidget {
@@ -10,7 +10,7 @@ class FeedItemWidget extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
-  final FeedItem item;
+  final QuantzFeedItem item;
 
   @override
   Widget build(BuildContext context) {

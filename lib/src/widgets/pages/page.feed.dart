@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../components/feed/index.dart';
 import '../colors.dart';
@@ -7,7 +8,9 @@ import '../listing/ad.feed_tab.dart';
 import '../listing/feed.item.dart';
 
 class FeedPage extends StatelessWidget {
-  const FeedPage({Key? key}) : super(key: key);
+  FeedPage({Key? key}) : super(key: key);
+
+  final RefreshController controller = RefreshController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +24,7 @@ class FeedPage extends StatelessWidget {
         controllers: [FeedController],
         builder: (context, snapshot) {
           final feed = snapshot<FeedModel>();
+          final items = feed.feed.items;
           return feed.loading
               ? Center(
                   child: SizedBox(
@@ -32,11 +36,28 @@ class FeedPage extends StatelessWidget {
               : Column(
                   children: [
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: feed.feedItems.length,
-                        itemBuilder: (context, index) {
-                          return FeedItemWidget(item: feed.feedItems[index]);
+                      child: SmartRefresher(
+                        enablePullDown: true,
+                        enablePullUp: true,
+                        header: WaterDropMaterialHeader(
+                          backgroundColor: secondaryBackground,
+                        ),
+                        onRefresh: () async {
+                          await feed.controller.loadInitial(refresh: true);
+                          controller.refreshCompleted();
                         },
+                        onLoading: () async {
+                          await feed.controller.loadMore();
+                          controller.loadComplete();
+                        },
+                        controller: controller,
+                        child: ListView.builder(
+                          itemCount: items.length,
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return FeedItemWidget(item: items[index]);
+                          },
+                        ),
                       ),
                     ),
                     AdFeedTab(),
