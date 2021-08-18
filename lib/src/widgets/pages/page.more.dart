@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quantz/src/widgets/menu_actions/more_page_menu/menu.licenses.dart';
+import '../menu_actions/more_page_menu/menu.licenses.dart';
 import '../menu_actions/more_page_menu/menu.support-dev.dart';
 
 import '../index.dart';

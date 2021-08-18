@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
-import 'package:quantz/src/components/google-flow/google-flow.controller.dart';
+import '../../../components/google-flow/google-flow.controller.dart';
 
 import '../../../components/supporter-subscription/index.dart';
 import '../../index.dart';
