@@ -4,6 +4,7 @@ import 'package:momentum/momentum.dart';
 
 import '../../data/index.dart';
 import '../../services/api.service.dart';
+import '../../services/google-api.service.dart';
 import '../admob/index.dart';
 import '../cloud-backup/index.dart';
 import '../supporter-subscription/index.dart';
@@ -28,6 +29,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
   }
 
   ApiService get api => service<ApiService>();
+  GoogleApiService get google => service<GoogleApiService>();
 
   CloudBackupController get cloudBackupController => controller<CloudBackupController>();
   SupporterSubscriptionController get supporterController => controller<SupporterSubscriptionController>();
@@ -71,7 +73,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
 
   Future<void> signInWithGoogle() async {
     toggleLoading(true);
-    final token = await api.signInWithGoogle();
+    final token = await google.signInWithGoogle();
     if (token.isNotEmpty) {
       await authWithGoogle(token);
     }
@@ -92,7 +94,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
     toggleLoading(true);
     final signedIn = await GoogleSignIn().isSignedIn();
     if (signedIn) {
-      final newToken = await api.refreshToken();
+      final newToken = await google.refreshToken();
       model.update(token: newToken);
       convertTokenToProfile();
       cloudBackupController.model.update(loading: false);
