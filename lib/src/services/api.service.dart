@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:momentum/momentum.dart';
 
 import '../core/index.dart';
 import '../data/feed.response.dart';
 import '../data/index.dart';
 import '../widgets/index.dart';
+import 'interface/api.interface.dart';
 
-class ApiService extends MomentumService {
+class ApiService extends ApiInterface {
   final _dio = Dio();
 
   Future<AnimeListResponse> getAnimeList() async {

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:momentum/momentum.dart';
+import '../../services/interface/api.interface.dart';
 
 import '../../core/in-app-purchase.dart';
-import '../../services/index.dart';
 import '../../widgets/index.dart';
 import '../cloud-backup/index.dart';
 import '../google-flow/google-flow.controller.dart';
@@ -30,7 +30,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   StreamSubscription<List<PurchaseDetails>>? _subscription;
   PurchaseDetails? _pendingPurchase;
 
-  ApiService get api => service<ApiService>();
+  ApiInterface get api => service<ApiInterface>(runtimeType: false);
 
   CloudBackupController get cloudController => controller<CloudBackupController>();
 

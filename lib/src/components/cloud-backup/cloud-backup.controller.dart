@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:momentum/momentum.dart';
+import '../../services/interface/api.interface.dart';
 
 import '../../data/index.dart';
 import '../../misc/index.dart';
-import '../../services/index.dart';
 import '../../widgets/index.dart';
 import '../animelist/index.dart';
 import '../import/index.dart';
@@ -22,7 +22,7 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
     );
   }
 
-  ApiService get api => service<ApiService>();
+  ApiInterface get api => service<ApiInterface>(runtimeType: false);
 
   Future<void> initialize() async {
     if (model.signedIn) {

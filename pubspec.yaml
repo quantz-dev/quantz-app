@@ -18,7 +18,7 @@ dependencies:
   google_mobile_ads: 0.13.3
   in_app_purchase: 1.0.6
 
-  momentum: 2.0.0
+  momentum: 2.2.1
   shared_preferences: 2.0.5
   fluttertoast: 8.0.1-nullsafety.0
   flutter_fgbg: 0.1.0

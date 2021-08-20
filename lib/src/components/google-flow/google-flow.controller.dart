@@ -1,10 +1,10 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:momentum/momentum.dart';
+import '../../services/interface/google-api.interface.dart';
 
 import '../../data/index.dart';
-import '../../services/api.service.dart';
-import '../../services/google-api.service.dart';
+import '../../services/interface/api.interface.dart';
 import '../admob/index.dart';
 import '../cloud-backup/index.dart';
 import '../supporter-subscription/index.dart';
@@ -28,8 +28,8 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
     );
   }
 
-  ApiService get api => service<ApiService>();
-  GoogleApiService get google => service<GoogleApiService>();
+  ApiInterface get api => service<ApiInterface>(runtimeType: false);
+  GoogleApiInterface get google => service<GoogleApiInterface>(runtimeType: false);
 
   CloudBackupController get cloudBackupController => controller<CloudBackupController>();
   SupporterSubscriptionController get supporterController => controller<SupporterSubscriptionController>();
