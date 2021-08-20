@@ -1,10 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:momentum/momentum.dart';
-import '../../services/mal.service.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../data/index.dart';
-import '../../services/index.dart';
+import '../../services/interface/api.interface.dart';
+import '../../services/interface/mal.interface.dart';
 import '../../widgets/index.dart';
 import '../filter/index.dart';
 import '../topic/index.dart';
@@ -32,7 +32,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   FirebaseMessaging get messaging => _messaging!;
 
   TopicController get topicController => controller<TopicController>();
-  MalService get mal => service<MalService>();
+  MalInterface get mal => service<MalInterface>(runtimeType: false);
 
   @override
   void onReady() {
@@ -65,7 +65,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   }
 
   Future<void> loadAnimeList() async {
-    var api = service<ApiService>();
+    var api = service<ApiInterface>(runtimeType: false);
     var result = await api.getAnimeList();
     if (result.entries.isNotEmpty) {
       model.update(list: result.entries);

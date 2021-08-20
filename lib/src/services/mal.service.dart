@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:momentum/momentum.dart';
 import 'package:random_string/random_string.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -8,8 +7,9 @@ import '../core/mal.client.dart';
 import '../data/mal-token.dart';
 import '../data/mal-user.animelist.dart';
 import '../data/mal-user.profile.dart';
+import 'interface/mal.interface.dart';
 
-class MalService extends MomentumService {
+class MalService extends MalInterface {
   final _dio = Dio();
 
   bool get loggedIn => _accessToken.isNotEmpty;
