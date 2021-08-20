@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:momentum/momentum.dart';
+import '../../services/interface/mal.interface.dart';
 
 import '../../data/index.dart';
-import '../../services/mal.service.dart';
 import '../animelist/index.dart';
 import 'index.dart';
 
@@ -24,7 +24,7 @@ class ImportController extends MomentumController<ImportModel> {
     );
   }
 
-  MalService get mal => service<MalService>();
+  MalInterface get mal => service<MalInterface>(runtimeType: false);
 
   Future<String> getLoginUrl() async {
     model.update(loading: true);

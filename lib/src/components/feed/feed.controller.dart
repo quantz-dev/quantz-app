@@ -1,7 +1,7 @@
 import 'package:momentum/momentum.dart';
+import '../../services/interface/api.interface.dart';
 
 import '../../data/feed.response.dart';
-import '../../services/api.service.dart';
 import 'index.dart';
 
 class FeedController extends MomentumController<FeedModel> {
@@ -14,7 +14,7 @@ class FeedController extends MomentumController<FeedModel> {
     );
   }
 
-  ApiService get api => service<ApiService>();
+  ApiInterface get api => service<ApiInterface>(runtimeType: false);
 
   void bootstrap() async {
     loadInitial();
