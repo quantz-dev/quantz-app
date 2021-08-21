@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:momentum/momentum.dart';
@@ -126,6 +128,19 @@ class AdmobController extends MomentumController<AdmobModel> {
           callback();
         },
         onAdFailedToLoad: (ad, error) {
+          final errorJson = {
+            "code": error.code,
+            "domain": error.domain,
+            "message": error.message,
+            "responseId": error.responseInfo?.responseId,
+            "mediationAdapterClassName": error.responseInfo?.mediationAdapterClassName,
+          };
+          final adJson = {
+            "adUnitId": ad.adUnitId,
+            "responseId": ad.responseInfo?.responseId,
+            "mediationAdapterClassName": ad.responseInfo?.mediationAdapterClassName,
+          };
+          print(['QUANTZ', 'onAdFailedToLoad()', jsonEncode(errorJson), jsonEncode(adJson)]);
           ad.dispose();
         },
       ),
