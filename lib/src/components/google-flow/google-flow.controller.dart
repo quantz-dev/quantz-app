@@ -1,4 +1,3 @@
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:momentum/momentum.dart';
 import '../../services/interface/google-api.interface.dart';
@@ -37,6 +36,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
 
   Future<void> bootstrapAsync() async {
     if (model.token.isNotEmpty) {
+      google.setAuthToken(model.token);
       await refreshToken(); // tries to refresh token in the backround.
     }
     await cloudBackupController.initialize();
@@ -90,19 +90,14 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
     cloudBackupController.model.update(loading: false);
   }
 
-  Future<String> refreshToken() async {
+  Future<void> refreshToken() async {
     toggleLoading(true);
-    final signedIn = await GoogleSignIn().isSignedIn();
-    if (signedIn) {
-      final newToken = await google.refreshToken();
-      model.update(token: newToken);
-      convertTokenToProfile();
-      cloudBackupController.model.update(loading: false);
-      supporterController.model.update(loading: false);
-      return newToken;
-    }
+    final newToken = await google.refreshToken();
+    model.update(token: newToken);
+    convertTokenToProfile();
+    cloudBackupController.model.update(loading: false);
+    supporterController.model.update(loading: false);
     toggleLoading(false);
-    return '';
   }
 
   void convertTokenToProfile() {
@@ -120,7 +115,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
 
   Future<void> signout() async {
     toggleLoading(true);
-    await GoogleSignIn().signOut();
+    await google.signOut();
     model.update(token: '');
     cloudBackupController.model.modifyLastRestore(lastRestore: null);
     convertTokenToProfile();
