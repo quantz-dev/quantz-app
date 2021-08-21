@@ -36,6 +36,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
 
   Future<void> bootstrapAsync() async {
     if (model.token.isNotEmpty) {
+      google.setAuthToken(model.token);
       await refreshToken(); // tries to refresh token in the backround.
     }
     await cloudBackupController.initialize();

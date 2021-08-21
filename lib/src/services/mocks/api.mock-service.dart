@@ -69,10 +69,4 @@ class ApiMockService extends ApiInterface {
       return QuantzFeed();
     }
   }
-
-  @override
-  Future<bool> verifySupporterPurchase({required String authToken, required String purchaseToken, required String source}) async {
-    await Future.delayed(Duration(seconds: 2));
-    throw true;
-  }
 }

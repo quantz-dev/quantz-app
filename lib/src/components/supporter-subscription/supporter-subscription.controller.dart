@@ -55,6 +55,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   }
 
   void _checkPurchaseUpdated(PurchaseDetails purchaseDetails) async {
+    model.update(loading: true);
     final status = await google.processPurchaseUpdated(purchaseDetails);
     switch (status) {
       case UpdatedPurchaseStatus.none:
@@ -63,7 +64,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
         model.update(purchaseIsPending: true);
         break;
       case UpdatedPurchaseStatus.subscriptionValid:
-        model.update(subscriptionActive: true);
+        model.update(subscriptionActive: true, purchaseIsPending: false);
         break;
       case UpdatedPurchaseStatus.subscriptionInvalid:
         model.update(subscriptionActive: false);
@@ -76,11 +77,13 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
         break;
     }
     initializedAds();
+    model.update(loading: false);
   }
 
   Future<void> checkStore() async {
+    model.update(loading: true);
     final bool available = await google.checkStore();
-    model.update(storeIsAvailable: available);
+    model.update(storeIsAvailable: available, loading: false);
   }
 
   /// This is currently called when `Support the developer` button is clicked.

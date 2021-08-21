@@ -68,26 +68,6 @@ class ApiService extends ApiInterface {
     }
   }
 
-  Future<bool> verifySupporterPurchase({
-    required String authToken,
-    required String purchaseToken,
-    required String source,
-  }) async {
-    const path = '$api/supporter/verify';
-    try {
-      final param = <String, dynamic>{
-        'auth_token': authToken,
-        'purchase_token': purchaseToken,
-        'source': source,
-      };
-      var response = await _dio.post(path, data: param);
-      return response.data['valid'];
-    } catch (e) {
-      print(['ERROR', path]);
-      return false;
-    }
-  }
-
   Future<QuantzFeed> getLatestFeed({int page = 1, int limit = 10}) async {
     try {
       final response = await _dio.get(
