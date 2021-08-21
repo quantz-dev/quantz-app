@@ -55,8 +55,10 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   }
 
   void _checkPurchaseUpdated(PurchaseDetails purchaseDetails) async {
+    print(['QUANTZ', '_checkPurchaseUpdated($purchaseDetails)']);
     model.update(loading: true);
     final status = await google.processPurchaseUpdated(purchaseDetails);
+    print(['QUANTZ', '_checkPurchaseUpdated($purchaseDetails)', status]);
     switch (status) {
       case UpdatedPurchaseStatus.none:
         break;
@@ -83,6 +85,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   Future<void> checkStore() async {
     model.update(loading: true);
     final bool available = await google.checkStore();
+    print(['QUANTZ', 'checkStore()', 'available = $available']);
     model.update(storeIsAvailable: available, loading: false);
   }
 
@@ -106,6 +109,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   }
 
   void initializedAds() {
+    print(['QUANTZ', 'initializedAds()']);
     controller<GoogleFlowController>().initializeAdmob();
   }
 }

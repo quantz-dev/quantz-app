@@ -33,6 +33,7 @@ class AdmobController extends MomentumController<AdmobModel> {
   int lastActiveTab = -1;
 
   Future<void> initialize() async {
+    print(['QUANTZ', 'AdmobController.initialize()', 'subscribed = $subscribed']);
     if (subscribed) {
       model.update(initialized: false);
     } else {
@@ -45,6 +46,7 @@ class AdmobController extends MomentumController<AdmobModel> {
   }
 
   void loadAdForActiveTab() {
+    print(['QUANTZ', 'loadAdForActiveTab() : $lastActiveTab']);
     switch (lastActiveTab) {
       case 0:
         loadLibraryTabAd();
@@ -78,6 +80,7 @@ class AdmobController extends MomentumController<AdmobModel> {
     lastActiveTab = 0;
     if (!ready) return;
     model.update(showLibraryTabAd: false);
+    print(['QUANTZ', 'loadLibraryTabAd()']);
     await model.libraryTabAd.load();
   }
 
@@ -85,6 +88,7 @@ class AdmobController extends MomentumController<AdmobModel> {
     lastActiveTab = 1;
     if (!ready) return;
     model.update(showFeedTabAd: false);
+    print(['QUANTZ', 'loadFeedTabAd()']);
     await model.feedTabAd.load();
   }
 
@@ -92,6 +96,7 @@ class AdmobController extends MomentumController<AdmobModel> {
     lastActiveTab = 2;
     if (!ready) return;
     model.update(showSourcesTabAd: false);
+    print(['QUANTZ', 'loadSourcesTabAd()']);
     await model.sourcesTabAd.load();
   }
 
@@ -117,6 +122,7 @@ class AdmobController extends MomentumController<AdmobModel> {
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
+          print(['QUANTZ', 'onAdLoaded() : $adUnitId']);
           callback();
         },
         onAdFailedToLoad: (ad, error) {
