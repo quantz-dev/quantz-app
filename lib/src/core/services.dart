@@ -1,8 +1,9 @@
 import 'package:momentum/momentum.dart';
 
-import '../services/google-api.service.dart';
+import '../services/concretes/api.service.dart';
+import '../services/concretes/google-api.service.dart';
+import '../services/concretes/mal.service.dart';
 import '../services/index.dart';
-import '../services/mal.service.dart';
 
 var fcmService = FcmService();
 

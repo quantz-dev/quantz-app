@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 
-import '../core/index.dart';
-import '../data/feed.response.dart';
-import '../data/index.dart';
-import '../widgets/index.dart';
-import 'interface/api.interface.dart';
+import '../../core/config.dart';
+import '../../data/backup.dart';
+import '../../data/feed.response.dart';
+import '../../data/response.all_anime.dart';
+import '../../widgets/toast.dart';
+import '../interface/api.interface.dart';
 
 class ApiService extends ApiInterface {
   final _dio = Dio();
