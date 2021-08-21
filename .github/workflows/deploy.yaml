@@ -43,6 +43,7 @@ jobs:
       with:
         flutter-version: '2.0.1'
     - run: flutter pub get
+    - run: flutter test
     - run: flutter build apk --release --build-name=${GITHUB_REF#refs/*/} --build-number=$GITHUB_RUN_NUMBER
     - run: flutter build appbundle --release --build-name=${GITHUB_REF#refs/*/} --build-number=$GITHUB_RUN_NUMBER
     - run: mv "build/app/outputs/apk/release/app-release.apk" "build/app/outputs/apk/release/quantz.${GITHUB_REF#refs/*/}.apk"
