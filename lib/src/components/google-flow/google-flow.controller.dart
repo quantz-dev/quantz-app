@@ -47,6 +47,7 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
 
   /// Only call this when in-app-purchase has finish checking purchase status for supporter subscription.
   Future<void> initializeAdmob() async {
+    print(['QUANTZ', 'initializeAdmob()']);
     await admobController.initialize();
   }
 
