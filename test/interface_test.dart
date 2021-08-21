@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:momentum/momentum.dart';
 import 'package:quantz/src/core/index.dart';
@@ -29,4 +31,50 @@ void main() {
     print(['MAL_SERVICE', malService.hashCode]);
     expect(malService, isInstanceOf<MalInterface>());
   });
+
+  testWidgets('(widget tree) services interface should be abstracted properly', (tester) async {
+    final widget = Momentum(
+      child: MaterialApp(home: Scaffold(
+        body: Builder(
+          builder: (context) {
+            Momentum.service<ApiInterface>(context, runtimeType: false);
+            Momentum.service<GoogleApiInterface>(context, runtimeType: false);
+            Momentum.service<MalInterface>(context, runtimeType: false);
+            // throws an error if interface implementations aren't found.
+            return Text('WIDGET_BUILT'); // if not, the abstraction worked.
+          },
+        ),
+      )),
+      controllers: [],
+      services: services(),
+    );
+
+    await tester.pumpWidget(widget);
+    await tester.pumpAndSettle();
+
+    expect(find.text('WIDGET_BUILT'), findsOneWidget);
+  });
+
+  testWidgets('(widget tree) services interface should throw an error for non-existent interface', (tester) async {
+    final widget = Momentum(
+      child: MaterialApp(home: Scaffold(
+        body: Builder(
+          builder: (context) {
+            // this should throw an error
+            Momentum.service<DummyInterface>(context, runtimeType: false);
+            return Text('WIDGET_BUILT');
+          },
+        ),
+      )),
+      controllers: [],
+      services: services(),
+    );
+
+    await tester.pumpWidget(widget);
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isInstanceOf<Exception>());
+  });
 }
+
+abstract class DummyInterface extends MomentumService {}
