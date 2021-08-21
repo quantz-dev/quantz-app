@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:momentum/momentum.dart';
+import '../../services/interface/google-api.interface.dart';
 import '../../services/interface/api.interface.dart';
 
 import '../../data/index.dart';
@@ -23,6 +23,7 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
   }
 
   ApiInterface get api => service<ApiInterface>(runtimeType: false);
+  GoogleApiInterface get google => service<GoogleApiInterface>(runtimeType: false);
 
   Future<void> initialize() async {
     if (model.signedIn) {
@@ -34,7 +35,7 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
 
   Future<bool> triggerCloudBackupPrompt() async {
     model.update(loading: true);
-    final signedIn = await GoogleSignIn().isSignedIn();
+    final signedIn = await google.isSignedIn();
     if (signedIn) {
       sendEvent(CloudbackupEvents.alreadySignedIn);
     }

@@ -10,6 +10,10 @@ import '../interface/google-api.interface.dart';
 class GoogleApiService extends GoogleApiInterface {
   final _dio = Dio();
 
+  Future<bool> isSignedIn() async {
+    return GoogleSignIn().isSignedIn();
+  }
+
   Future<FirebaseSubscription> getFirebaseSubscription() async {
     var token = await FirebaseMessaging.instance.getToken();
     final path = '$api/topics/$token';
@@ -36,6 +40,11 @@ class GoogleApiService extends GoogleApiInterface {
       showToast('$e', error: true);
       return '';
     }
+  }
+
+  Future<void> signOut() async {
+    await GoogleSignIn().signOut();
+    return;
   }
 
   Future<String> refreshToken() async {
