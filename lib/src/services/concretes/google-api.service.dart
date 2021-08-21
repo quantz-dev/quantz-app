@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../core/index.dart';
-import '../data/index.dart';
-import '../widgets/index.dart';
-import 'interface/google-api.interface.dart';
+import '../../core/config.dart';
+import '../../data/firebase.topics.dart';
+import '../../widgets/toast.dart';
+import '../interface/google-api.interface.dart';
 
 class GoogleApiService extends GoogleApiInterface {
   final _dio = Dio();
