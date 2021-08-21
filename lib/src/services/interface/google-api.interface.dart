@@ -4,6 +4,10 @@ import 'package:momentum/momentum.dart';
 import '../../data/firebase.topics.dart';
 
 abstract class GoogleApiInterface extends MomentumService {
+  /// In case the consumer of this service have a client-stored (persisted) token.
+  /// This lets the consumer set an initial token.
+  void setAuthToken(String authToken);
+
   Future<bool> isSignedIn();
 
   Future<FirebaseSubscription> getFirebaseSubscription();

@@ -5,11 +5,18 @@ import '../../data/firebase.topics.dart';
 import '../interface/google-api.interface.dart';
 
 class GoogleApiMockService extends GoogleApiInterface {
-  bool _isSignedIn = false;
+  String get authToken => _authToken;
+  String _authToken = '';
 
+  @override
+  void setAuthToken(String token) {
+    _authToken = token;
+  }
+
+  @override
   Future<bool> isSignedIn() async {
     await Future.delayed(Duration(seconds: 1));
-    return _isSignedIn;
+    return authToken.isNotEmpty;
   }
 
   @override
@@ -20,19 +27,17 @@ class GoogleApiMockService extends GoogleApiInterface {
   @override
   Future<String> signInWithGoogle() async {
     await Future.delayed(Duration(seconds: 2));
-    _isSignedIn = true;
     return dummyToken;
   }
 
   Future<void> signOut() async {
     await Future.delayed(Duration(seconds: 1));
-    _isSignedIn = false;
     return;
   }
 
   @override
   Future<String> refreshToken() async {
-    if (_isSignedIn) {
+    if (await isSignedIn()) {
       await Future.delayed(Duration(seconds: 2));
       return dummyToken;
     } else {

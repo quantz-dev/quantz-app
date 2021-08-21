@@ -17,6 +17,10 @@ class GoogleApiService extends GoogleApiInterface {
   String get authToken => _authToken;
   String _authToken = '';
 
+  void setAuthToken(String token) {
+    _authToken = token;
+  }
+
   Future<bool> isSignedIn() async {
     return GoogleSignIn().isSignedIn();
   }
@@ -101,14 +105,14 @@ class GoogleApiService extends GoogleApiInterface {
         valid = await isPurchaseValid(purchaseDetails);
         if (valid) {
           _pendingPurchase = null;
+          resultStatus = UpdatedPurchaseStatus.subscriptionValid;
         } else {
           resultStatus = UpdatedPurchaseStatus.subscriptionInvalid;
         }
       }
-      if (valid && purchaseDetails.pendingCompletePurchase) {
+      if (purchaseDetails.pendingCompletePurchase) {
         try {
           await InAppPurchase.instance.completePurchase(purchaseDetails);
-          resultStatus = UpdatedPurchaseStatus.subscriptionValid;
         } catch (e, trace) {
           resultStatus = UpdatedPurchaseStatus.completingPurchaseError;
           print(['IAP.completePurchase ERROR', e, trace]);

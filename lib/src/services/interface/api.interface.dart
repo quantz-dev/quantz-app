@@ -11,7 +11,5 @@ abstract class ApiInterface extends MomentumService {
 
   Future<CloudBackup> fetchBackup({required String token, bool includeData = true});
 
-  Future<bool> verifySupporterPurchase({required String authToken, required String purchaseToken, required String source});
-
   Future<QuantzFeed> getLatestFeed({int page = 1, int limit = 10});
 }
