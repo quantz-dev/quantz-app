@@ -39,6 +39,9 @@ jobs:
     - run: echo $MAL_CLIENT_CONFIG | base64 -d > lib/src/core/mal.client.dart
       env:
         MAL_CLIENT_CONFIG: ${{ secrets.MAL_CLIENT_CONFIG }}
+    - run: echo $SERVICES_DART_CODE | base64 -d > lib/src/core/services.dart
+      env:
+        SERVICES_DART_CODE: ${{ secrets.SERVICES_DART_CODE }}
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '2.0.1'
