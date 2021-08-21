@@ -89,19 +89,14 @@ class GoogleFlowController extends MomentumController<GoogleFlowModel> {
     cloudBackupController.model.update(loading: false);
   }
 
-  Future<String> refreshToken() async {
+  Future<void> refreshToken() async {
     toggleLoading(true);
-    final signedIn = await google.isSignedIn();
-    if (signedIn) {
-      final newToken = await google.refreshToken();
-      model.update(token: newToken);
-      convertTokenToProfile();
-      cloudBackupController.model.update(loading: false);
-      supporterController.model.update(loading: false);
-      return newToken;
-    }
+    final newToken = await google.refreshToken();
+    model.update(token: newToken);
+    convertTokenToProfile();
+    cloudBackupController.model.update(loading: false);
+    supporterController.model.update(loading: false);
     toggleLoading(false);
-    return '';
   }
 
   void convertTokenToProfile() {
