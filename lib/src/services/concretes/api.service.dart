@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 
-import '../core/index.dart';
-import '../data/feed.response.dart';
-import '../data/index.dart';
-import '../widgets/index.dart';
-import 'interface/api.interface.dart';
+import '../../core/config.dart';
+import '../../data/backup.dart';
+import '../../data/feed.response.dart';
+import '../../data/response.all_anime.dart';
+import '../../widgets/toast.dart';
+import '../interface/api.interface.dart';
 
 class ApiService extends ApiInterface {
   final _dio = Dio();
@@ -64,26 +65,6 @@ class ApiService extends ApiInterface {
       print(e);
       print(['ERROR', path]);
       return CloudBackup();
-    }
-  }
-
-  Future<bool> verifySupporterPurchase({
-    required String authToken,
-    required String purchaseToken,
-    required String source,
-  }) async {
-    const path = '$api/supporter/verify';
-    try {
-      final param = <String, dynamic>{
-        'auth_token': authToken,
-        'purchase_token': purchaseToken,
-        'source': source,
-      };
-      var response = await _dio.post(path, data: param);
-      return response.data['valid'];
-    } catch (e) {
-      print(['ERROR', path]);
-      return false;
     }
   }
 
