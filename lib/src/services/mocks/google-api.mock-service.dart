@@ -1,0 +1,40 @@
+import '../../data/firebase.topics.dart';
+import '../interface/google-api.interface.dart';
+
+class GoogleApiMockService extends GoogleApiInterface {
+  bool _isSignedIn = false;
+
+  Future<bool> isSignedIn() async {
+    await Future.delayed(Duration(seconds: 1));
+    return _isSignedIn;
+  }
+
+  @override
+  Future<FirebaseSubscription> getFirebaseSubscription() async {
+    return FirebaseSubscription();
+  }
+
+  @override
+  Future<String> signInWithGoogle() async {
+    await Future.delayed(Duration(seconds: 2));
+    _isSignedIn = true;
+    return dummyToken;
+  }
+
+  Future<void> signOut() async {
+    await Future.delayed(Duration(seconds: 1));
+    _isSignedIn = false;
+    return;
+  }
+
+  @override
+  Future<String> refreshToken() async {
+    await Future.delayed(Duration(seconds: 2));
+    _isSignedIn = true;
+    return dummyToken;
+  }
+}
+
+// this is an actual token I generated using a dummy google account. Please don't abuse.
+const dummyToken =
+    'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZlZjRiZDkwODU5MWY2OTdhOGE5Yjg5M2IwM2U2YTc3ZWIwNGU1MWYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI5NzIzMTQ0MDk4MTUtMHVsOGFwamIxZmdrMGtmcGJ2Y3YxdTV1cGJ0YXNydDEuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI5NzIzMTQ0MDk4MTUtdHRkNXNuMm9pc2xmNmFvbmd1cHZja2ZmY3NvZXA3a3QuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDczNzc5MTY0ODI1NDk4MjczNTkiLCJlbWFpbCI6ImR1bW15ZGV2cXVhbnR6QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiRHVtbXkgRGV2IiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBVFhBSnl6TEEzZ0hmeDNROHozbzRfYmhveWE5eGxscUFJMU5mcmhpY0djPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkR1bW15IiwiZmFtaWx5X25hbWUiOiJEZXYiLCJsb2NhbGUiOiJlbi1HQiIsImlhdCI6MTYyOTU0MDY4MywiZXhwIjoxNjI5NTQ0MjgzfQ.C5rUPr1QIVCgzo0-Vabeh0nkgtfPhulsmehxIYEXDXIBzrPLGExUmUP390x_OatVtHe5cH07jab465m3qvND3BFPQ2VBITzForM8E0oF033SE3A4RuqsoOB9J_D60H6T-BPvQKQZD1erkFTBu8YsD6zVKnBYNUXTI3u83ueZ6e354kiargFtGAIdt195d5ryHjfcaJ2C-aPUwZAlKktEfbWxEtEDs4YTMMjBt7rkYtCEM9VdFul36ojbqIucygTlwH8-VoFGfwy8L_9kzqE_VAPOzVCZSuJ9pzX3lgxs74htu6Vo3ACmyytXFKTeqqplR5R5DCtSQExWLBm4pKeIGQ';
