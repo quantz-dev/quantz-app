@@ -29,10 +29,10 @@ class MenuMalImport extends StatelessWidget {
 
         return MenuListItem(
           title: 'MyAnimeList Import',
-          subtitle: loggedIn ? 'Login required.' : 'You\'re logged in.',
+          subtitle: !loggedIn ? 'Login required.' : 'You\'re logged in.',
           icon: Icons.sync,
           trail: Text(
-            loggedIn ? 'Import Now' : import.malUsername,
+            !loggedIn ? 'Import Now' : import.malUsername,
             style: TextStyle(
               color: primary,
             ),
