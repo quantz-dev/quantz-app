@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:quantz/src/data/mal-user.animeupdate.dart';
 
 import '../../data/mal-user.animelist.dart';
+import '../../data/mal-user.animeupdate.dart';
 import '../../data/mal-user.profile.dart';
 import '../interface/mal.interface.dart';
 

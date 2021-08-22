@@ -153,21 +153,29 @@ class MalUserAnimeNode {
     this.id = 0,
     this.title = '',
     this.mainPicture = const MainPicture(),
+    this.numEpisodes = 0,
+    this.status = '',
   });
 
   final int id;
   final String title;
   final MainPicture mainPicture;
+  final int numEpisodes;
+  final String status;
 
   MalUserAnimeNode copyWith({
     int? id,
     String? title,
     MainPicture? mainPicture,
+    int? numEpisodes,
+    String? status,
   }) =>
       MalUserAnimeNode(
         id: id ?? this.id,
         title: title ?? this.title,
         mainPicture: mainPicture ?? this.mainPicture,
+        numEpisodes: numEpisodes ?? this.numEpisodes,
+        status: status ?? this.status,
       );
 
   factory MalUserAnimeNode.fromRawJson(String str) => MalUserAnimeNode.fromJson(json.decode(str));
@@ -178,12 +186,16 @@ class MalUserAnimeNode {
         id: json["id"] ?? 0,
         title: json["title"] ?? '',
         mainPicture: json["main_picture"] == null ? MainPicture() : MainPicture.fromJson(json["main_picture"]),
+        numEpisodes: json["num_episodes"] ?? 0,
+        status: json["status"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
         "main_picture": mainPicture.toJson(),
+        "num_episodes": numEpisodes,
+        "status": status,
       };
 }
 
@@ -253,23 +265,31 @@ class MalUserAnimeDetails {
     this.title = '',
     this.mainPicture = const MainPicture(),
     this.myListStatus = const MalUserAnimeListStatus(),
+    this.numEpisodes = 0,
+    this.status = '',
   });
 
   final int id;
   final String title;
   final MainPicture mainPicture;
   final MalUserAnimeListStatus myListStatus;
+  final int numEpisodes;
+  final String status;
 
   MalUserAnimeDetails copyWith({
     int? id,
     String? title,
     MainPicture? mainPicture,
+    int? numEpisodes,
+    String? status,
     MalUserAnimeListStatus? myListStatus,
   }) =>
       MalUserAnimeDetails(
         id: id ?? this.id,
         title: title ?? this.title,
         mainPicture: mainPicture ?? this.mainPicture,
+        numEpisodes: numEpisodes ?? this.numEpisodes,
+        status: status ?? this.status,
         myListStatus: myListStatus ?? this.myListStatus,
       );
 
@@ -281,6 +301,8 @@ class MalUserAnimeDetails {
         id: json["id"] == null ? 0 : json["id"],
         title: json["title"] == null ? '' : json["title"],
         mainPicture: json["main_picture"] == null ? MainPicture() : MainPicture.fromJson(json["main_picture"]),
+        numEpisodes: json["num_episodes"] ?? 0,
+        status: json["status"] ?? '',
         myListStatus: json["my_list_status"] == null ? MalUserAnimeListStatus() : MalUserAnimeListStatus.fromJson(json["my_list_status"]),
       );
 
@@ -288,6 +310,8 @@ class MalUserAnimeDetails {
         "id": id,
         "title": title,
         "main_picture": mainPicture.toJson(),
+        "num_episodes": numEpisodes,
+        "status": status,
         "my_list_status": myListStatus.toJson(),
       };
 }
