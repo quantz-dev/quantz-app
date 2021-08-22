@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:momentum/momentum.dart';
 import '../../services/interface/mal.interface.dart';
 
@@ -24,7 +22,13 @@ class ImportController extends MomentumController<ImportModel> {
     );
   }
 
-  MalInterface get mal => service<MalInterface>(runtimeType: false);
+  MalInterface? _mal;
+  MalInterface get mal {
+    if (_mal == null) {
+      _mal = service<MalInterface>(runtimeType: false);
+    }
+    return _mal!;
+  }
 
   Future<String> getLoginUrl() async {
     model.update(loading: true);
@@ -145,13 +149,5 @@ class ImportController extends MomentumController<ImportModel> {
     animeListCtrl.flagEntries();
     animeListCtrl.arrangeList();
     animeListCtrl.separateList();
-  }
-
-  void restoreFromBackup(String source) {
-    var json = jsonDecode(source);
-    var backup = model.fromJson(json);
-    if (backup != null) {
-      model.update(malUsername: backup.malUsername);
-    }
   }
 }

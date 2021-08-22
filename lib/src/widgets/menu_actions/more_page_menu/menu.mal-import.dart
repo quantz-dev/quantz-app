@@ -17,6 +17,8 @@ class MenuMalImport extends StatelessWidget {
       builder: (context, snapshot) {
         var import = snapshot<ImportModel>();
 
+        final loggedIn = import.loggedIn;
+
         if (import.loading) {
           return MenuListItem(
             icon: Icons.sync,
@@ -27,10 +29,10 @@ class MenuMalImport extends StatelessWidget {
 
         return MenuListItem(
           title: 'MyAnimeList Import',
-          subtitle: import.malUsername.isEmpty ? 'Login required.' : 'You\'re logged in.',
+          subtitle: loggedIn ? 'Login required.' : 'You\'re logged in.',
           icon: Icons.sync,
           trail: Text(
-            import.malUsername.isEmpty ? 'Import Now' : import.malUsername,
+            loggedIn ? 'Import Now' : import.malUsername,
             style: TextStyle(
               color: primary,
             ),

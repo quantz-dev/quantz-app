@@ -70,13 +70,11 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
         if (backupData.data.isNotEmpty) {
           /* Parsing */
           final json = jsonDecode(backupData.data);
-          final importState = jsonEncode(json[IMPORT_STATE_KEY]);
           final animeListState = jsonEncode(json[ANIMELIST_STATE_KEY]);
           final sourcesState = jsonEncode(json[SOURCES_STATE_KEY]);
           /* Parsing */
 
           /* Restoration */
-          controller<ImportController>().restoreFromBackup(importState);
           await controller<SourcesController>().restoreFromBackup(sourcesState);
           await controller<AnimelistController>().restoreFromBackup(animeListState);
           model.update(lastRestore: DateTime.now());
