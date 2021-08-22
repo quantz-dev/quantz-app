@@ -6,6 +6,7 @@ import '../../core/mal.client.dart';
 import '../../core/persistence.dart';
 import '../../data/mal-token.dart';
 import '../../data/mal-user.animelist.dart';
+import '../../data/mal-user.animeupdate.dart';
 import '../../data/mal-user.profile.dart';
 import '../interface/mal.interface.dart';
 
@@ -124,7 +125,7 @@ class MalService extends MalInterface {
         'status': status,
         'limit': 1000,
         'offset': offset,
-        'fields': 'list_status{status,score,num_episodes_watched,start_date,finish_date}',
+        'fields': 'list_status{status,score,num_episodes_watched,start_date,finish_date},num_episodes,status',
       };
       final response = await _dio.get(
         'https://api.myanimelist.net/v2/users/@me/animelist',
@@ -155,6 +156,58 @@ class MalService extends MalInterface {
       return MalUserProfile.fromJson(response.data);
     } catch (e) {
       return MalUserProfile();
+    }
+  }
+
+  @override
+  Future<MalUserAnimeUpdate> updateUserAnime({
+    required int malId,
+    String? status,
+    int? numWatchedEpisodes,
+    String? startDate,
+    String? finishDate,
+  }) async {
+    try {
+      await _refreshAccessToken();
+      final data = {
+        "status": status,
+        "num_watched_episodes": numWatchedEpisodes,
+        "start_date": startDate,
+        "finish_date": finishDate,
+      }..removeWhere((key, value) => value == null);
+      final response = await _dio.put(
+        'https://api.myanimelist.net/v2/anime/$malId/my_list_status',
+        data: data,
+        options: Options(
+          headers: <String, dynamic>{
+            'Authorization': 'Bearer $_accessToken',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        ),
+      );
+      return MalUserAnimeUpdate.fromJson(response.data);
+    } catch (e) {
+      return MalUserAnimeUpdate();
+    }
+  }
+
+  @override
+  Future<MalUserAnimeDetails> getUserAnime(int malId) async {
+    try {
+      await _refreshAccessToken();
+      final response = await _dio.get(
+        'https://api.myanimelist.net/v2/anime/$malId',
+        queryParameters: {"fields": "my_list_status{status,score,num_episodes_watched,start_date,finish_date},num_episodes,status"},
+        options: Options(
+          headers: <String, dynamic>{
+            'Authorization': 'Bearer $_accessToken',
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        ),
+      );
+      return MalUserAnimeDetails.fromJson(response.data);
+    } catch (e) {
+      return MalUserAnimeDetails();
     }
   }
 
