@@ -56,7 +56,6 @@ class ImportModel extends MomentumModel<ImportController> {
 
   Map<String, dynamic> toJson() {
     return {
-      'malUsername': malUsername,
       'syncSub': syncSub,
       'syncDub': syncDub,
     };
@@ -70,7 +69,7 @@ class ImportModel extends MomentumModel<ImportController> {
       malList: [],
       toFollow: [],
       toUnfollow: [],
-      malUsername: map['malUsername'],
+      malUsername: '',
       syncSub: map['syncSub'],
       syncDub: map['syncDub'],
       statProgress: statProgress,
