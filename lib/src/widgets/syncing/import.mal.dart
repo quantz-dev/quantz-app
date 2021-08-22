@@ -98,7 +98,7 @@ class _ImportMAL extends StatelessWidget {
                 onPressed: username.isEmpty
                     ? null
                     : () {
-                        controller.loadMalList(controller.model.malUsername);
+                        controller.loadMalList();
                         Navigator.pop(context, true);
                       },
                 style: ButtonStyle(
