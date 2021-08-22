@@ -1,7 +1,8 @@
 import 'package:momentum/momentum.dart';
-import '../../services/interface/mal.interface.dart';
+import '../../data/mal-user.animelist.dart';
 
 import '../../data/index.dart';
+import '../../services/interface/mal.interface.dart';
 import '../animelist/index.dart';
 import 'index.dart';
 
@@ -17,6 +18,7 @@ class ImportController extends MomentumController<ImportModel> {
       malUsername: '',
       syncSub: true,
       syncDub: false,
+      malUserAnimeListCache: [],
       statProgress: 0,
       statToImport: 0,
     );
@@ -51,16 +53,32 @@ class ImportController extends MomentumController<ImportModel> {
       return;
     }
     model.update(malList: []);
+    await loadUserAnimeList();
+    integrateUserAnimeList();
+    _setupSync();
+  }
 
+  Future<void> loadUserAnimeList() async {
     await _fetchUserAnimeList('watching');
     await _fetchUserAnimeList('plan_to_watch');
+    await _fetchUserAnimeList('on_hold');
+  }
 
-    _setupSync();
+  void updateUserAnimeStatus(int malId, MalUserAnimeListStatus status) {
+    var malUserAnimeListCache = List<MalUserAnimeItem>.from(model.malUserAnimeListCache);
+    final index = malUserAnimeListCache.indexWhere((x) => x.node.id == malId);
+    if (index >= 0) {
+      malUserAnimeListCache[index] = malUserAnimeListCache[index].copyWith(
+        listStatus: status,
+      );
+    }
+    model.update(malUserAnimeListCache: malUserAnimeListCache);
   }
 
   Future<void> _fetchUserAnimeList(String status, {String next = ''}) async {
     model.update(loading: true);
     var malList = List<int>.from(model.malList);
+    var malUserAnimeListCache = List<MalUserAnimeItem>.from(model.malUserAnimeListCache);
     var offset = 0;
     if (next.isNotEmpty) {
       final uri = Uri.parse(next);
@@ -76,11 +94,18 @@ class ImportController extends MomentumController<ImportModel> {
     if (response.data.isNotEmpty) {
       var items = response.data;
       malList.addAll(items.map((e) => e.node.id));
-      model.update(malList: malList.toSet().toList());
+      malUserAnimeListCache.addAll(items);
+      model.update(malList: malList.toSet().toList(), malUserAnimeListCache: malUserAnimeListCache.toSet().toList());
       final next = response.paging.next;
       if (next.isNotEmpty) {
         await _fetchUserAnimeList(status, next: response.paging.next);
       }
+    }
+  }
+
+  void integrateUserAnimeList() {
+    if (model.malUserAnimeListCache.isNotEmpty) {
+      controller<AnimelistController>().softRefreshAnimeList();
     }
   }
 

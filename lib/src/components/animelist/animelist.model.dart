@@ -14,6 +14,7 @@ class AnimelistModel extends MomentumModel<AnimelistController> {
     required this.dubList,
     required this.loadingList,
     required this.refreshingList,
+    required this.loadingUserAnimeDetails,
     required this.subscriptions,
     required this.searchMode,
     required this.searchResults,
@@ -26,6 +27,7 @@ class AnimelistModel extends MomentumModel<AnimelistController> {
   final List<AnimeEntry> dubList;
   final bool loadingList;
   final bool refreshingList;
+  final bool loadingUserAnimeDetails;
 
   final Map<String, bool> subscriptions;
 
@@ -41,6 +43,7 @@ class AnimelistModel extends MomentumModel<AnimelistController> {
     List<AnimeEntry>? dubList,
     bool? loadingList,
     bool? refreshingList,
+    bool? loadingUserAnimeDetails,
     Map<String, bool>? subscriptions,
     bool? searchMode,
     List<AnimeEntry>? searchResults,
@@ -54,6 +57,7 @@ class AnimelistModel extends MomentumModel<AnimelistController> {
       dubList: dubList ?? this.dubList,
       loadingList: loadingList ?? this.loadingList,
       refreshingList: refreshingList ?? this.refreshingList,
+      loadingUserAnimeDetails: loadingUserAnimeDetails ?? this.loadingUserAnimeDetails,
       subscriptions: subscriptions ?? this.subscriptions,
       searchMode: searchMode ?? this.searchMode,
       searchResults: searchResults ?? this.searchResults,
@@ -74,6 +78,7 @@ class AnimelistModel extends MomentumModel<AnimelistController> {
       dubList: [],
       loadingList: false,
       refreshingList: false,
+      loadingUserAnimeDetails: false,
       subscriptions: Map<String, bool>.from(map['subscriptions']),
       searchMode: false,
       searchResults: [],

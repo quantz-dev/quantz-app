@@ -6,6 +6,7 @@ import '../../components/animelist/index.dart';
 import '../../data/index.dart';
 import '../index.dart';
 import '../inputs/index.dart';
+import 'anime.item-integration.dart';
 
 final buttonStyle = ButtonStyle(
   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -27,6 +28,15 @@ class AnimeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final switchWidget = ButtonSwith(
+      value: following,
+      onChanged: (value) {
+        Momentum.controller<AnimelistController>(context).toggleTopic(
+          item,
+          flagEntry: true,
+        );
+      },
+    );
     return TextButton(
       onPressed: () {
         try {
@@ -52,15 +62,12 @@ class AnimeItem extends StatelessWidget {
             SizedBox(width: 12),
             Expanded(child: _AnimeEntryDetails(item: item, showType: showType)),
             _AnimeItemOrderLabel(item: item),
-            ButtonSwith(
-              value: following,
-              onChanged: (value) {
-                Momentum.controller<AnimelistController>(context).toggleTopic(
-                  item,
-                  flagEntry: true,
-                );
-              },
-            ),
+            item.malStatus != null
+                ? AnimeItemIntegrationAction(
+                    item: item,
+                    fallbackWidget: switchWidget,
+                  )
+                : switchWidget,
           ],
         ),
       ),

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'mal-user.animelist.dart';
+
 class AnimeListResponse {
   AnimeListResponse({
     this.count = 0,
@@ -56,6 +58,7 @@ class AnimeEntry {
     this.orderLabel = '',
     this.following = false,
     this.episodeTime = '',
+    this.malStatus,
   });
 
   final String slug;
@@ -81,6 +84,7 @@ class AnimeEntry {
   final String orderLabel;
   final bool following;
   final String episodeTime; // Something like `an hour ago` or `3 days ago`.
+  final MalUserAnimeListStatus? malStatus; // watching progress of the user (MAL Integration only)
   /* These props here are not part of JSON response. They're for UI */
 
   bool get hasMAL => malId > 0;
@@ -115,6 +119,7 @@ class AnimeEntry {
     String? orderLabel,
     bool? following,
     String? episodeTime,
+    MalUserAnimeListStatus? malStatus,
   }) =>
       AnimeEntry(
         slug: slug ?? this.slug,
@@ -138,6 +143,7 @@ class AnimeEntry {
         orderLabel: orderLabel ?? this.orderLabel,
         following: following ?? this.following,
         episodeTime: episodeTime ?? this.episodeTime,
+        malStatus: malStatus ?? this.malStatus,
       );
 
   factory AnimeEntry.fromRawJson(String str) => AnimeEntry.fromJson(json.decode(str));

@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
+import 'mal-user.animeupdate.dart';
+
 class MalUserAnimeListResponse {
   MalUserAnimeListResponse({
     this.data = const [],
@@ -33,7 +37,7 @@ class MalUserAnimeListResponse {
       };
 }
 
-class MalUserAnimeItem {
+class MalUserAnimeItem extends Equatable {
   MalUserAnimeItem({
     this.node = const MalUserAnimeNode(),
     this.listStatus = const MalUserAnimeListStatus(),
@@ -64,18 +68,33 @@ class MalUserAnimeItem {
         "node": node.toJson(),
         "list_status": listStatus.toJson(),
       };
+
+  @override
+  List<Object> get props => [node.id];
 }
 
 class MalUserAnimeListStatus {
   const MalUserAnimeListStatus({
     this.status = '',
-    this.score = -1,
-    this.numEpisodesWatched = -1,
+    this.score = 0,
+    this.numEpisodesWatched = 0,
     this.isRewatching = false,
     this.updatedAt,
     this.startDate = '',
     this.finishDate = '',
   });
+
+  factory MalUserAnimeListStatus.fromUpdate(MalUserAnimeUpdate updated) {
+    return MalUserAnimeListStatus(
+      status: updated.status,
+      score: updated.score,
+      numEpisodesWatched: updated.numEpisodesWatched,
+      isRewatching: updated.isRewatching,
+      updatedAt: updated.updatedAt,
+      startDate: updated.startDate,
+      finishDate: updated.finishDate,
+    );
+  }
 
   final String status;
   final int score;
@@ -110,8 +129,8 @@ class MalUserAnimeListStatus {
 
   factory MalUserAnimeListStatus.fromJson(Map<String, dynamic> json) => MalUserAnimeListStatus(
         status: json["status"] ?? '',
-        score: json["score"] ?? -1,
-        numEpisodesWatched: json["num_episodes_watched"] ?? -1,
+        score: json["score"] ?? 0,
+        numEpisodesWatched: json["num_episodes_watched"] ?? 0,
         isRewatching: json["is_rewatching"] ?? false,
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
         startDate: json["start_date"] == null ? '' : json["start_date"],
@@ -131,7 +150,7 @@ class MalUserAnimeListStatus {
 
 class MalUserAnimeNode {
   const MalUserAnimeNode({
-    this.id = -1,
+    this.id = 0,
     this.title = '',
     this.mainPicture = const MainPicture(),
   });
@@ -156,7 +175,7 @@ class MalUserAnimeNode {
   String toRawJson() => json.encode(toJson());
 
   factory MalUserAnimeNode.fromJson(Map<String, dynamic> json) => MalUserAnimeNode(
-        id: json["id"] ?? -1,
+        id: json["id"] ?? 0,
         title: json["title"] ?? '',
         mainPicture: json["main_picture"] == null ? MainPicture() : MainPicture.fromJson(json["main_picture"]),
       );
@@ -225,5 +244,50 @@ class Paging {
 
   Map<String, dynamic> toJson() => {
         "next": next,
+      };
+}
+
+class MalUserAnimeDetails {
+  MalUserAnimeDetails({
+    this.id = 0,
+    this.title = '',
+    this.mainPicture = const MainPicture(),
+    this.myListStatus = const MalUserAnimeListStatus(),
+  });
+
+  final int id;
+  final String title;
+  final MainPicture mainPicture;
+  final MalUserAnimeListStatus myListStatus;
+
+  MalUserAnimeDetails copyWith({
+    int? id,
+    String? title,
+    MainPicture? mainPicture,
+    MalUserAnimeListStatus? myListStatus,
+  }) =>
+      MalUserAnimeDetails(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        mainPicture: mainPicture ?? this.mainPicture,
+        myListStatus: myListStatus ?? this.myListStatus,
+      );
+
+  factory MalUserAnimeDetails.fromRawJson(String str) => MalUserAnimeDetails.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory MalUserAnimeDetails.fromJson(Map<String, dynamic> json) => MalUserAnimeDetails(
+        id: json["id"] == null ? 0 : json["id"],
+        title: json["title"] == null ? '' : json["title"],
+        mainPicture: json["main_picture"] == null ? MainPicture() : MainPicture.fromJson(json["main_picture"]),
+        myListStatus: json["my_list_status"] == null ? MalUserAnimeListStatus() : MalUserAnimeListStatus.fromJson(json["my_list_status"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "main_picture": mainPicture.toJson(),
+        "my_list_status": myListStatus.toJson(),
       };
 }
