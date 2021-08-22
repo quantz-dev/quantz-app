@@ -1,14 +1,13 @@
 import 'dart:convert';
 
 import 'package:momentum/momentum.dart';
-import '../../services/interface/google-api.interface.dart';
-import '../../services/interface/api.interface.dart';
 
 import '../../data/index.dart';
 import '../../misc/index.dart';
+import '../../services/interface/api.interface.dart';
+import '../../services/interface/google-api.interface.dart';
 import '../../widgets/index.dart';
 import '../animelist/index.dart';
-import '../import/index.dart';
 import '../sources/index.dart';
 import 'index.dart';
 
@@ -45,12 +44,10 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
 
   Future<void> startNewBackup() async {
     if (model.signedIn) {
-      final importState = controller<ImportController>().model.toJson();
       final animeListState = controller<AnimelistController>().model.toBackup();
       final sourcesState = controller<SourcesController>().model.toJson();
 
       final data = BackupData(
-        importState: importState,
         animeListState: animeListState,
         sourcesState: sourcesState,
       ).toRawJson();
@@ -70,13 +67,11 @@ class CloudBackupController extends MomentumController<CloudBackupModel> {
         if (backupData.data.isNotEmpty) {
           /* Parsing */
           final json = jsonDecode(backupData.data);
-          final importState = jsonEncode(json[IMPORT_STATE_KEY]);
           final animeListState = jsonEncode(json[ANIMELIST_STATE_KEY]);
           final sourcesState = jsonEncode(json[SOURCES_STATE_KEY]);
           /* Parsing */
 
           /* Restoration */
-          controller<ImportController>().restoreFromBackup(importState);
           await controller<SourcesController>().restoreFromBackup(sourcesState);
           await controller<AnimelistController>().restoreFromBackup(animeListState);
           model.update(lastRestore: DateTime.now());

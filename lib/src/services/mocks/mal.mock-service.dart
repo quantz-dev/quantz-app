@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 
 import '../../data/mal-user.animelist.dart';
+import '../../data/mal-user.animeupdate.dart';
 import '../../data/mal-user.profile.dart';
 import '../interface/mal.interface.dart';
 
@@ -48,5 +49,28 @@ class MalMockService extends MalInterface {
   Future<void> logout() async {
     await Future.delayed(Duration(seconds: 1));
     _loggedIn = false;
+  }
+
+  @override
+  Future<MalUserAnimeUpdate> updateUserAnime({
+    required int malId,
+    String? status,
+    int? numWatchedEpisodes,
+    String? startDate,
+    String? finishDate,
+  }) async {
+    await Future.delayed(Duration(seconds: 2));
+    return MalUserAnimeUpdate(
+      status: status ?? 'watching',
+      numEpisodesWatched: numWatchedEpisodes ?? 0,
+      startDate: startDate ?? '',
+      finishDate: finishDate ?? '',
+    );
+  }
+
+  @override
+  Future<MalUserAnimeDetails> getUserAnime(int malId) async {
+    await Future.delayed(Duration(seconds: 2));
+    return MalUserAnimeDetails();
   }
 }

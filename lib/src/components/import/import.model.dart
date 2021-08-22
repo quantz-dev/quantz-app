@@ -1,6 +1,7 @@
 import 'package:momentum/momentum.dart';
 
 import '../../data/index.dart';
+import '../../data/mal-user.animelist.dart';
 import 'index.dart';
 
 class ImportModel extends MomentumModel<ImportController> {
@@ -13,6 +14,7 @@ class ImportModel extends MomentumModel<ImportController> {
     required this.malUsername,
     required this.syncSub,
     required this.syncDub,
+    required this.malUserAnimeListCache,
     required this.statProgress,
     required this.statToImport,
   }) : super(controller);
@@ -25,8 +27,12 @@ class ImportModel extends MomentumModel<ImportController> {
   final bool syncSub;
   final bool syncDub;
 
+  final List<MalUserAnimeItem> malUserAnimeListCache;
+
   final int statProgress;
   final int statToImport;
+
+  bool get loggedIn => controller.mal.loggedIn;
 
   @override
   void update({
@@ -39,6 +45,7 @@ class ImportModel extends MomentumModel<ImportController> {
     bool? syncDub,
     int? statProgress,
     int? statToImport,
+    List<MalUserAnimeItem>? malUserAnimeListCache,
   }) {
     ImportModel(
       controller,
@@ -49,6 +56,7 @@ class ImportModel extends MomentumModel<ImportController> {
       malUsername: malUsername ?? this.malUsername,
       syncSub: syncSub ?? this.syncSub,
       syncDub: syncDub ?? this.syncDub,
+      malUserAnimeListCache: malUserAnimeListCache ?? this.malUserAnimeListCache,
       statProgress: statProgress ?? this.statProgress,
       statToImport: statToImport ?? this.statToImport,
     ).updateMomentum();
@@ -56,9 +64,9 @@ class ImportModel extends MomentumModel<ImportController> {
 
   Map<String, dynamic> toJson() {
     return {
-      'malUsername': malUsername,
       'syncSub': syncSub,
       'syncDub': syncDub,
+      'malUserAnimeListCache': malUserAnimeListCache.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -70,9 +78,10 @@ class ImportModel extends MomentumModel<ImportController> {
       malList: [],
       toFollow: [],
       toUnfollow: [],
-      malUsername: map['malUsername'],
+      malUsername: '',
       syncSub: map['syncSub'],
       syncDub: map['syncDub'],
+      malUserAnimeListCache: map['malUserAnimeListCache'] == null ? [] : List<MalUserAnimeItem>.from((map['malUserAnimeListCache'] as List).map((e) => MalUserAnimeItem.fromJson(e))),
       statProgress: statProgress,
       statToImport: statToImport,
     );

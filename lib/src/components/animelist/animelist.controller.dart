@@ -1,12 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:intl/intl.dart';
 import 'package:momentum/momentum.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../data/index.dart';
+import '../../data/mal-user.animelist.dart';
 import '../../services/interface/api.interface.dart';
 import '../../services/interface/mal.interface.dart';
 import '../../widgets/index.dart';
 import '../filter/index.dart';
+import '../import/index.dart';
 import '../topic/index.dart';
 import 'index.dart';
 
@@ -21,6 +24,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
       dubList: [],
       loadingList: false,
       refreshingList: false,
+      loadingUserAnimeDetails: false,
       subscriptions: {},
       searchMode: false,
       searchResults: [],
@@ -62,6 +66,76 @@ class AnimelistController extends MomentumController<AnimelistModel> {
     flagEntries();
     arrangeList();
     separateList();
+  }
+
+  void softRefreshAnimeList() {
+    flagEntries();
+    arrangeList();
+    separateList();
+  }
+
+  Future<void> getUserAnimeDetails(AnimeEntry anime) async {
+    model.update(loadingUserAnimeDetails: true);
+    if (anime.malId > 0) {
+      final updated = await mal.getUserAnime(anime.malId);
+      if (updated.id > 0) {
+        controller<ImportController>().updateUserAnimeStatus(updated.id, updated);
+        softRefreshAnimeList();
+      }
+    }
+    model.update(loadingUserAnimeDetails: false);
+  }
+
+  Future<MalUserAnimeListStatus?> updateUserAnimeDetails(AnimeEntry anime, int episodeWatched) async {
+    model.update(loadingUserAnimeDetails: true);
+    MalUserAnimeListStatus? status;
+    final integrationController = controller<ImportController>();
+    if (anime.malId > 0) {
+      var numWatchedEpisodes = episodeWatched;
+      String watchingStatus = 'watching';
+      String? startDate;
+      String? finishDate;
+
+      if (numWatchedEpisodes <= 0) {
+        watchingStatus = 'plan_to_watch';
+        startDate = '';
+        numWatchedEpisodes = 0;
+      } else if (numWatchedEpisodes >= 1) {
+        watchingStatus = 'watching';
+        if (numWatchedEpisodes == 1) {
+          startDate = DateFormat('y-MM-dd').format(DateTime.now());
+        }
+        final animeDetails = integrationController.model.malUserAnimeListCache.firstWhere(
+          (x) => x.node.id == anime.malId,
+          orElse: () => MalUserAnimeItem(),
+        );
+        if (animeDetails.node.id > 0) {
+          final isLastEpisode = numWatchedEpisodes == animeDetails.node.numEpisodes;
+          if (isLastEpisode) {
+            finishDate = DateFormat('y-MM-dd').format(DateTime.now());
+            if (animeDetails.node.status == 'finished_airing') {
+              watchingStatus = 'completed';
+            }
+          }
+        }
+      }
+
+      final updated = await mal.updateUserAnime(
+        malId: anime.malId,
+        numWatchedEpisodes: numWatchedEpisodes,
+        status: watchingStatus,
+        startDate: startDate,
+        finishDate: finishDate,
+      );
+      if (updated.numEpisodesWatched == numWatchedEpisodes) {
+        status = MalUserAnimeListStatus.fromUpdate(updated);
+        final updatedDetails = await mal.getUserAnime(anime.malId);
+        integrationController.updateUserAnimeStatus(anime.malId, updatedDetails);
+        softRefreshAnimeList();
+      }
+    }
+    model.update(loadingUserAnimeDetails: false);
+    return status;
   }
 
   Future<void> loadAnimeList() async {
@@ -148,6 +222,8 @@ class AnimelistController extends MomentumController<AnimelistModel> {
     }
   }
 
+  void syncFromMAL(AnimeEntry entry) async {}
+
   void search(String query) {
     final q = query.toLowerCase().trim();
     final searchResults = <AnimeEntry>[];
@@ -191,14 +267,23 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   ///  action like follow/unfollow.
   void flagEntries() {
     final filter = controller<FilterController>().model;
+    final import = controller<ImportController>().model;
+    final malUserAnimeListCache = import.malUserAnimeListCache;
+    final syncSub = import.syncSub;
+    final syncDub = import.syncDub;
     var list = List<AnimeEntry>.from(model.list);
     for (var i = 0; i < list.length; i++) {
       final following = model.subscriptions[list[i].slug] ?? false;
+      final malAnime = malUserAnimeListCache.firstWhere((x) => x.node.id == list[i].malId, orElse: () => MalUserAnimeItem());
+      var showStatus = false;
+      if (syncSub && list[i].type == 'sub') showStatus = true;
+      if (syncDub && list[i].type == 'dub') showStatus = true;
       list[i] = list[i].copyWith(
         following: following,
         episodeTime: timeago.format(DateTime.fromMillisecondsSinceEpoch(list[i].latestEpisodeTimestamp)),
         displayTitle: getDisplayTitle(filter.displayTitle, list[i]),
         orderLabel: getOrderLabel(filter.orderBy, list[i]),
+        malStatus: (malAnime.node.id > 0 && showStatus) ? malAnime.listStatus : null,
       );
     }
     model.update(list: list);
