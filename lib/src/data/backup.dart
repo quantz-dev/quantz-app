@@ -3,19 +3,16 @@ import 'dart:convert';
 import '../misc/index.dart';
 
 class BackupData {
-  final Map<String, dynamic> importState;
   final Map<String, dynamic> animeListState;
   final Map<String, dynamic> sourcesState;
 
   BackupData({
-    required this.importState,
     required this.animeListState,
     required this.sourcesState,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      IMPORT_STATE_KEY: importState,
       ANIMELIST_STATE_KEY: animeListState,
       SOURCES_STATE_KEY: sourcesState,
     };
@@ -23,7 +20,6 @@ class BackupData {
 
   factory BackupData.fromJson(Map<String, dynamic> map) {
     return BackupData(
-      importState: Map<String, dynamic>.from(map[IMPORT_STATE_KEY]),
       animeListState: Map<String, dynamic>.from(map[ANIMELIST_STATE_KEY]),
       sourcesState: Map<String, dynamic>.from(map[SOURCES_STATE_KEY]),
     );
