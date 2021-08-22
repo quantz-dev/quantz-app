@@ -46,8 +46,8 @@ class ImportController extends MomentumController<ImportModel> {
     model.update(malUsername: '');
   }
 
-  Future<void> loadMalList(String username) async {
-    if (username.isEmpty) {
+  Future<void> loadMalList() async {
+    if (!mal.loggedIn) {
       return;
     }
     model.update(malList: []);
