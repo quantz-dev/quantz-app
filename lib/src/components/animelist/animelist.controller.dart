@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:intl/intl.dart';
 import 'package:momentum/momentum.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -78,7 +79,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
     if (anime.malId > 0) {
       final updated = await mal.getUserAnime(anime.malId);
       if (updated.id > 0) {
-        controller<ImportController>().updateUserAnimeStatus(updated.id, updated.myListStatus);
+        controller<ImportController>().updateUserAnimeStatus(updated.id, updated);
         softRefreshAnimeList();
       }
     }
@@ -88,14 +89,48 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   Future<MalUserAnimeListStatus?> updateUserAnimeDetails(AnimeEntry anime, int episodeWatched) async {
     model.update(loadingUserAnimeDetails: true);
     MalUserAnimeListStatus? status;
+    final integrationController = controller<ImportController>();
     if (anime.malId > 0) {
+      var numWatchedEpisodes = episodeWatched;
+      String watchingStatus = 'watching';
+      String? startDate;
+      String? finishDate;
+
+      if (numWatchedEpisodes <= 0) {
+        watchingStatus = 'plan_to_watch';
+        startDate = '';
+        numWatchedEpisodes = 0;
+      } else if (numWatchedEpisodes >= 1) {
+        watchingStatus = 'watching';
+        if (numWatchedEpisodes == 1) {
+          startDate = DateFormat('y-MM-dd').format(DateTime.now());
+        }
+        final animeDetails = integrationController.model.malUserAnimeListCache.firstWhere(
+          (x) => x.node.id == anime.malId,
+          orElse: () => MalUserAnimeItem(),
+        );
+        if (animeDetails.node.id > 0) {
+          final isLastEpisode = numWatchedEpisodes == animeDetails.node.numEpisodes;
+          if (isLastEpisode) {
+            finishDate = DateFormat('y-MM-dd').format(DateTime.now());
+            if (animeDetails.node.status == 'finished_airing') {
+              watchingStatus = 'completed';
+            }
+          }
+        }
+      }
+
       final updated = await mal.updateUserAnime(
         malId: anime.malId,
-        numWatchedEpisodes: episodeWatched,
+        numWatchedEpisodes: numWatchedEpisodes,
+        status: watchingStatus,
+        startDate: startDate,
+        finishDate: finishDate,
       );
-      if (updated.numEpisodesWatched == episodeWatched) {
+      if (updated.numEpisodesWatched == numWatchedEpisodes) {
         status = MalUserAnimeListStatus.fromUpdate(updated);
-        controller<ImportController>().updateUserAnimeStatus(anime.malId, status);
+        final updatedDetails = await mal.getUserAnime(anime.malId);
+        integrationController.updateUserAnimeStatus(anime.malId, updatedDetails);
         softRefreshAnimeList();
       }
     }

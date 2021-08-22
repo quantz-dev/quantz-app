@@ -125,7 +125,7 @@ class MalService extends MalInterface {
         'status': status,
         'limit': 1000,
         'offset': offset,
-        'fields': 'list_status{status,score,num_episodes_watched,start_date,finish_date}',
+        'fields': 'list_status{status,score,num_episodes_watched,start_date,finish_date},num_episodes,status',
       };
       final response = await _dio.get(
         'https://api.myanimelist.net/v2/users/@me/animelist',
@@ -197,7 +197,7 @@ class MalService extends MalInterface {
       await _refreshAccessToken();
       final response = await _dio.get(
         'https://api.myanimelist.net/v2/anime/$malId',
-        queryParameters: {"fields": "my_list_status{status,score,num_episodes_watched,start_date,finish_date}"},
+        queryParameters: {"fields": "my_list_status{status,score,num_episodes_watched,start_date,finish_date},num_episodes,status"},
         options: Options(
           headers: <String, dynamic>{
             'Authorization': 'Bearer $_accessToken',

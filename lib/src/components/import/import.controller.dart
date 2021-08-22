@@ -64,12 +64,16 @@ class ImportController extends MomentumController<ImportModel> {
     await _fetchUserAnimeList('on_hold');
   }
 
-  void updateUserAnimeStatus(int malId, MalUserAnimeListStatus status) {
+  void updateUserAnimeStatus(int malId, MalUserAnimeDetails details) {
     var malUserAnimeListCache = List<MalUserAnimeItem>.from(model.malUserAnimeListCache);
     final index = malUserAnimeListCache.indexWhere((x) => x.node.id == malId);
-    if (index >= 0) {
+    if (index >= 0 && details.id > 0) {
       malUserAnimeListCache[index] = malUserAnimeListCache[index].copyWith(
-        listStatus: status,
+        node: malUserAnimeListCache[index].node.copyWith(
+              status: details.status,
+              numEpisodes: details.numEpisodes,
+            ),
+        listStatus: details.myListStatus,
       );
     }
     model.update(malUserAnimeListCache: malUserAnimeListCache);
