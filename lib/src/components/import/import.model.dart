@@ -28,6 +28,8 @@ class ImportModel extends MomentumModel<ImportController> {
   final int statProgress;
   final int statToImport;
 
+  bool get loggedIn => controller.mal.loggedIn;
+
   @override
   void update({
     bool? loading,
