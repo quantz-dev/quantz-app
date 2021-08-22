@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/version.dart';
 import '../../listing/index.dart';
 
 class MenuAppLicenses extends StatelessWidget {
@@ -15,7 +16,7 @@ class MenuAppLicenses extends StatelessWidget {
           context: context,
           applicationName: 'Quantz',
           applicationLegalese: 'dev.xamantra.quantz',
-          applicationVersion: 'VERSION',
+          applicationVersion: appVersion,
           applicationIcon: Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
