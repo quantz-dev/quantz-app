@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../../core/api_key.dart';
 import '../../core/config.dart';
 import '../../core/in-app-purchase.dart';
 import '../../data/firebase.topics.dart';
@@ -16,6 +17,17 @@ class GoogleApiService extends GoogleApiInterface {
 
   String get authToken => _authToken;
   String _authToken = '';
+
+  GoogleApiService() {
+    _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+      options.headers['api-key'] = api_key;
+      return handler.next(options); //continue
+    }, onResponse: (response, handler) {
+      return handler.next(response); // continue
+    }, onError: (DioError e, handler) {
+      return handler.next(e); //continue
+    }));
+  }
 
   void setAuthToken(String token) {
     _authToken = token;
