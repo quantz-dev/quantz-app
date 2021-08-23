@@ -42,6 +42,9 @@ jobs:
     - run: echo $SERVICES_DART_CODE | base64 -d > lib/src/core/services.dart
       env:
         SERVICES_DART_CODE: ${{ secrets.SERVICES_DART_CODE }}
+    - run: echo $API_KEY | base64 -d > lib/src/core/api_key.dart
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '2.0.1'

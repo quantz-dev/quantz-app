@@ -26,6 +26,7 @@ class AdmobController extends MomentumController<AdmobModel> {
   }
 
   bool get subscribed => controller<SupporterSubscriptionController>().model.subscriptionActive;
+
   bool get ready => model.initialized;
 
   /// - `0` = Library Tab
@@ -124,7 +125,7 @@ class AdmobController extends MomentumController<AdmobModel> {
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          print(['QUANTZ', 'onAdLoaded() : $adUnitId']);
+          print(['QUANTZ', 'onAdLoaded()']);
           callback();
         },
         onAdFailedToLoad: (ad, error) {
@@ -136,7 +137,6 @@ class AdmobController extends MomentumController<AdmobModel> {
             "mediationAdapterClassName": error.responseInfo?.mediationAdapterClassName,
           };
           final adJson = {
-            "adUnitId": ad.adUnitId,
             "responseId": ad.responseInfo?.responseId,
             "mediationAdapterClassName": ad.responseInfo?.mediationAdapterClassName,
           };
