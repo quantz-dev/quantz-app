@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../../core/api_key.dart';
 import '../../core/config.dart';
 import '../../data/backup.dart';
 import '../../data/feed.response.dart';
@@ -9,6 +10,17 @@ import '../interface/api.interface.dart';
 
 class ApiService extends ApiInterface {
   final _dio = Dio();
+
+  ApiService() {
+    _dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+      options.headers['api-key'] = api_key;
+      return handler.next(options); //continue
+    }, onResponse: (response, handler) {
+      return handler.next(response); // continue
+    }, onError: (DioError e, handler) {
+      return handler.next(e); //continue
+    }));
+  }
 
   Future<AnimeListResponse> getAnimeList() async {
     const path = '$api/anime/list';
