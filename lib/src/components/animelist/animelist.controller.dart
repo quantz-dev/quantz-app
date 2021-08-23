@@ -283,7 +283,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
         episodeTime: timeago.format(DateTime.fromMillisecondsSinceEpoch(list[i].latestEpisodeTimestamp)),
         displayTitle: getDisplayTitle(filter.displayTitle, list[i]),
         orderLabel: getOrderLabel(filter.orderBy, list[i]),
-        malStatus: (malAnime.node.id > 0 && showStatus) ? malAnime.listStatus : null,
+        malStatus: (malAnime.node.id > 0 && showStatus) ? malAnime.listStatus : MalUserAnimeListStatus(),
       );
     }
     model.update(list: list);
