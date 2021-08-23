@@ -4,9 +4,9 @@ import '../../data/index.dart';
 import '../../data/mal-user.animelist.dart';
 import 'index.dart';
 
-class ImportModel extends MomentumModel<ImportController> {
-  ImportModel(
-    ImportController controller, {
+class IntegrationModel extends MomentumModel<IntegrationController> {
+  IntegrationModel(
+    IntegrationController controller, {
     required this.loading,
     required this.malList,
     required this.toFollow,
@@ -47,7 +47,7 @@ class ImportModel extends MomentumModel<ImportController> {
     int? statToImport,
     List<MalUserAnimeItem>? malUserAnimeListCache,
   }) {
-    ImportModel(
+    IntegrationModel(
       controller,
       loading: loading ?? this.loading,
       malList: malList ?? this.malList,
@@ -70,9 +70,9 @@ class ImportModel extends MomentumModel<ImportController> {
     };
   }
 
-  ImportModel? fromJson(Map<String, dynamic>? map) {
+  IntegrationModel? fromJson(Map<String, dynamic>? map) {
     if (map == null) return null;
-    return ImportModel(
+    return IntegrationModel(
       controller,
       loading: false,
       malList: [],
