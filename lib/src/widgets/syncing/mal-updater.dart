@@ -195,9 +195,10 @@ class __MalUpdaterState extends State<_MalUpdater> {
   Future<void> updateEpisode(int episodeWatched) async {
     final updated = await animelistController.updateUserAnimeDetails(widget.anime, episodeWatched);
     if (updated != null) {
-      setState(() {
-        _status = updated;
-      });
+      _status = updated;
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 }
