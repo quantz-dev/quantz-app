@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
+import 'package:quantz/src/widgets/button.dart';
 
 import '../../components/import/index.dart';
 import '../index.dart';
@@ -92,54 +93,26 @@ class _ImportMAL extends StatelessWidget {
                 );
               },
             ),
-            Container(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: username.isEmpty
-                    ? null
-                    : () {
-                        controller.loadMalList();
-                        Navigator.pop(context, true);
-                      },
-                style: ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  backgroundColor: MaterialStateProperty.all(primary),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    'Start Import',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+            CustomButton(
+              color: primary,
+              text: 'Start Import',
+              textColor: Colors.white,
+              onPressed: username.isEmpty
+                  ? null
+                  : () {
+                      controller.loadMalList();
+                      Navigator.pop(context, true);
+                    },
             ),
             SizedBox(height: 8),
-            Container(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () async {
-                  await controller.logout();
-                  Navigator.pop(context, false);
-                },
-                style: ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  backgroundColor: MaterialStateProperty.all(Colors.redAccent),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    'Logout',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+            CustomButton(
+              color: Colors.redAccent,
+              text: 'Logout',
+              textColor: Colors.white,
+              onPressed: () async {
+                await controller.logout();
+                Navigator.pop(context, false);
+              },
             ),
           ],
         ),
