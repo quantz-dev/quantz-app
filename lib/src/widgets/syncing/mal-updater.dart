@@ -157,13 +157,34 @@ class __MalUpdaterState extends State<_MalUpdater> {
               },
             ),
             SizedBox(height: 12),
-            CustomButton(
-              textColor: Colors.redAccent,
-              text: 'CLOSE',
-              color: Colors.transparent,
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
+            Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    textColor: Colors.blueAccent,
+                    text: widget.anime.following ? 'Unfollow' : 'Follow',
+                    color: Colors.transparent,
+                    onPressed: () {
+                      Momentum.controller<AnimelistController>(context).toggleTopic(
+                        widget.anime,
+                        status: !widget.anime.following,
+                        flagEntry: true,
+                      );
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: CustomButton(
+                    textColor: Colors.redAccent,
+                    text: 'CLOSE',
+                    color: Colors.transparent,
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
