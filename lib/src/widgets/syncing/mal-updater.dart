@@ -63,7 +63,7 @@ class __MalUpdaterState extends State<_MalUpdater> {
     super.didChangeDependencies();
     _status = widget.anime.malStatus;
     _animelistController = Momentum.controller<AnimelistController>(context);
-    statusText = 'You\'re behind $behindEpisodes episode${behindEpisodes <= 1 ? "" : "s"}';
+    updateStatusText(_status);
   }
 
   @override
@@ -199,25 +199,29 @@ class __MalUpdaterState extends State<_MalUpdater> {
     final updated = await animelistController.updateUserAnimeDetails(widget.anime, episodeWatched);
     if (updated != null) {
       _status = updated;
-      switch (_status?.status) {
-        case "plan_to_watch":
-          statusText = "You\'re still planning to watch this.";
-          break;
-        case "completed":
-          statusText = "You already finished watching this.";
-          break;
-        case "dropped":
-          statusText = "You've stopped watching this.";
-          break;
-        case null:
-          statusText = "There was an error getting details.";
-          break;
-        default:
-          statusText = 'You\'re behind $behindEpisodes episode${behindEpisodes <= 1 ? "" : "s"}';
-      }
+      updateStatusText(_status);
       if (mounted) {
         setState(() {});
       }
+    }
+  }
+
+  void updateStatusText(MalUserAnimeListStatus? statusDetails) {
+    switch (statusDetails?.status) {
+      case "plan_to_watch":
+        statusText = "You\'re still planning to watch this.";
+        break;
+      case "completed":
+        statusText = "You already finished watching this.";
+        break;
+      case "dropped":
+        statusText = "You've stopped watching this.";
+        break;
+      case null:
+        statusText = "There was an error getting details.";
+        break;
+      default:
+        statusText = 'You\'re behind $behindEpisodes episode${behindEpisodes <= 1 ? "" : "s"}';
     }
   }
 }

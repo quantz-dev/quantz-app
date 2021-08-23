@@ -5,7 +5,7 @@ SharedPreferences? _sharedPreferences;
 SharedPreferences get sharedPreferences => _sharedPreferences!;
 
 Future<void> initSharedPreferences() async {
-  _sharedPreferences = await SharedPreferences.getInstance();
+  if (_sharedPreferences == null) _sharedPreferences = await SharedPreferences.getInstance();
 }
 
 Future<bool> persistSave(BuildContext? context, String key, String? value) async {
