@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 import 'package:quantz/src/widgets/button.dart';
 
-import '../../components/import/index.dart';
+import '../../components/integration/index.dart';
 import '../index.dart';
 import '../inputs/index.dart';
 
@@ -25,7 +25,7 @@ class _ImportMAL extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Momentum.controller<ImportController>(context);
+    var controller = Momentum.controller<IntegrationController>(context);
     final username = controller.model.malUsername;
 
     return Dialog(
@@ -68,7 +68,7 @@ class _ImportMAL extends StatelessWidget {
             ),
             SizedBox(height: 8),
             MomentumBuilder(
-              controllers: [ImportController],
+              controllers: [IntegrationController],
               builder: (context, snapshot) {
                 var model = controller.model;
                 return Column(
@@ -132,11 +132,11 @@ class __ImportProgressState extends MomentumState<_ImportProgress> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Momentum.controller<ImportController>(context).listen<ImportEvents>(
+    Momentum.controller<IntegrationController>(context).listen<IntegrationEvents>(
       state: this,
       invoke: (event) {
         switch (event) {
-          case ImportEvents.done:
+          case IntegrationEvents.done:
             Navigator.pop(context);
             break;
         }
@@ -153,9 +153,9 @@ class __ImportProgressState extends MomentumState<_ImportProgress> {
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           width: double.infinity,
           child: MomentumBuilder(
-            controllers: [ImportController],
+            controllers: [IntegrationController],
             builder: (context, snapshot) {
-              var import = snapshot<ImportModel>();
+              var import = snapshot<IntegrationModel>();
 
               var hasNothingToImport = import.statToImport == 0;
               var progress = import.statProgress / import.statToImport;

@@ -9,7 +9,7 @@ import '../../services/interface/api.interface.dart';
 import '../../services/interface/mal.interface.dart';
 import '../../widgets/index.dart';
 import '../filter/index.dart';
-import '../import/index.dart';
+import '../integration/index.dart';
 import '../topic/index.dart';
 import 'index.dart';
 
@@ -79,7 +79,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
     if (anime.malId > 0) {
       final updated = await mal.getUserAnime(anime.malId);
       if (updated.id > 0) {
-        controller<ImportController>().updateUserAnimeStatus(updated.id, updated);
+        controller<IntegrationController>().updateUserAnimeStatus(updated.id, updated);
         softRefreshAnimeList();
       }
     }
@@ -89,7 +89,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   Future<MalUserAnimeListStatus?> updateUserAnimeDetails(AnimeEntry anime, int episodeWatched) async {
     model.update(loadingUserAnimeDetails: true);
     MalUserAnimeListStatus? status;
-    final integrationController = controller<ImportController>();
+    final integrationController = controller<IntegrationController>();
     if (anime.malId > 0) {
       var numWatchedEpisodes = episodeWatched;
       String watchingStatus = 'watching';
@@ -267,7 +267,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   ///  action like follow/unfollow.
   void flagEntries() {
     final filter = controller<FilterController>().model;
-    final import = controller<ImportController>().model;
+    final import = controller<IntegrationController>().model;
     final malUserAnimeListCache = import.malUserAnimeListCache;
     final syncSub = import.syncSub;
     final syncDub = import.syncDub;
