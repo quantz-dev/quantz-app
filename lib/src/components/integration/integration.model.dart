@@ -66,6 +66,7 @@ class IntegrationModel extends MomentumModel<IntegrationController> {
     return {
       'syncSub': syncSub,
       'syncDub': syncDub,
+      'malUsername': malUsername,
       'malUserAnimeListCache': malUserAnimeListCache.map((e) => e.toJson()).toList(),
     };
   }
@@ -78,7 +79,7 @@ class IntegrationModel extends MomentumModel<IntegrationController> {
       malList: [],
       toFollow: [],
       toUnfollow: [],
-      malUsername: '',
+      malUsername: map['malUsername'] ?? '',
       syncSub: map['syncSub'],
       syncDub: map['syncDub'],
       malUserAnimeListCache: map['malUserAnimeListCache'] == null ? [] : List<MalUserAnimeItem>.from((map['malUserAnimeListCache'] as List).map((e) => MalUserAnimeItem.fromJson(e))),
