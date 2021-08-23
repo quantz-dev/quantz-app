@@ -95,6 +95,7 @@ class __MalUpdaterState extends State<_MalUpdater> {
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 99,
+                      textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 12),
                     Row(
