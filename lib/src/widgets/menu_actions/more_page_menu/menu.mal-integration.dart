@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../components/import/index.dart';
+import '../../../components/integration/index.dart';
 import '../../index.dart';
 import '../../listing/index.dart';
-import '../../syncing/import.mal.dart';
+import '../../syncing/integration.mal.dart';
 
 class MenuMalImport extends StatelessWidget {
   const MenuMalImport({Key? key}) : super(key: key);
@@ -13,9 +13,9 @@ class MenuMalImport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MomentumBuilder(
-      controllers: [ImportController],
+      controllers: [IntegrationController],
       builder: (context, snapshot) {
-        var import = snapshot<ImportModel>();
+        var import = snapshot<IntegrationModel>();
 
         final loggedIn = import.loggedIn;
 
@@ -23,12 +23,12 @@ class MenuMalImport extends StatelessWidget {
           return MenuListItem(
             icon: Icons.sync,
             titleWidget: LinearProgressIndicator(),
-            subtitle: 'MyAnimeList Import',
+            subtitle: 'MyAnimeList Integration',
           );
         }
 
         return MenuListItem(
-          title: 'MyAnimeList Import',
+          title: 'MyAnimeList Integration',
           subtitle: !loggedIn ? 'Login required.' : 'You\'re logged in.',
           icon: Icons.sync,
           trail: Text(

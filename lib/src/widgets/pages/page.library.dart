@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 
 import '../../components/animelist/index.dart';
-import '../../components/import/index.dart';
+import '../../components/integration/index.dart';
 import '../index.dart';
 import '../listing/index.dart';
 import '../menu_actions/filter_bottom_sheet/index.dart';
@@ -219,11 +219,11 @@ class _MainContent extends StatelessWidget {
     return MomentumBuilder(
       controllers: [
         AnimelistController,
-        ImportController,
+        IntegrationController,
       ],
       builder: (context, snapshot) {
         var animeList = snapshot<AnimelistModel>();
-        var import = snapshot<ImportModel>();
+        var import = snapshot<IntegrationModel>();
 
         var loadingList = animeList.loadingList;
         var loadingImport = import.loading;
