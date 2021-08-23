@@ -1,7 +1,7 @@
 import 'package:momentum/momentum.dart';
-import '../../data/mal-user.animelist.dart';
 
 import '../../data/index.dart';
+import '../../data/mal-user.animelist.dart';
 import '../../services/interface/mal.interface.dart';
 import '../animelist/index.dart';
 import 'index.dart';
@@ -45,7 +45,8 @@ class IntegrationController extends MomentumController<IntegrationModel> {
 
   Future<void> logout() async {
     await mal.logout();
-    model.update(malUsername: '');
+    model.update(malUsername: '', malUserAnimeListCache: []);
+    controller<AnimelistController>().softRefreshAnimeList();
   }
 
   Future<void> loadMalList() async {
