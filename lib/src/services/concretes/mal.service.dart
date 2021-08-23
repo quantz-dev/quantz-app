@@ -25,6 +25,7 @@ class MalService extends MalInterface {
         _getToken();
       }
     });
+    _refreshAccessToken();
   }
 
   Future<void> _saveRefreshToken(String refreshToken) async {
@@ -38,6 +39,7 @@ class MalService extends MalInterface {
   Future<void> _refreshAccessToken() async {
     try {
       if (_accessToken.isNotEmpty) return;
+      await initSharedPreferences();
       final refreshToken = _getRefreshToken();
       final param = <String, dynamic>{
         'grant_type': 'refresh_token',
