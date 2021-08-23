@@ -6,10 +6,10 @@ import '../../services/interface/mal.interface.dart';
 import '../animelist/index.dart';
 import 'index.dart';
 
-class ImportController extends MomentumController<ImportModel> {
+class IntegrationController extends MomentumController<IntegrationModel> {
   @override
-  ImportModel init() {
-    return ImportModel(
+  IntegrationModel init() {
+    return IntegrationModel(
       this,
       loading: false,
       malList: [],
@@ -174,7 +174,7 @@ class ImportController extends MomentumController<ImportModel> {
       statToImport: 0,
     );
 
-    sendEvent(ImportEvents.done);
+    sendEvent(IntegrationEvents.done);
     animeListCtrl.flagEntries();
     animeListCtrl.arrangeList();
     animeListCtrl.separateList();

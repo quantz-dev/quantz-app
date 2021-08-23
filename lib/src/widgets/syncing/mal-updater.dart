@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
+import 'package:quantz/src/widgets/icon_button.dart';
 import '../../components/animelist/index.dart';
 import '../../data/mal-user.animelist.dart';
 
 import '../../data/response.all_anime.dart';
+import '../button.dart';
 
 showMalUpdater(BuildContext context, AnimeEntry anime) {
   showDialog(
@@ -32,9 +34,11 @@ class _MalUpdater extends StatefulWidget {
 
 class __MalUpdaterState extends State<_MalUpdater> {
   MalUserAnimeListStatus? _status;
+
   MalUserAnimeListStatus get status => _status!;
 
   AnimelistController? _animelistController;
+
   AnimelistController get animelistController => _animelistController!;
 
   String get latestEpisode {
@@ -91,6 +95,7 @@ class __MalUpdaterState extends State<_MalUpdater> {
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 99,
+                      textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 12),
                     Row(
@@ -125,24 +130,13 @@ class __MalUpdaterState extends State<_MalUpdater> {
                           maxLines: 99,
                         ),
                         Expanded(
-                          child: Container(
-                            width: double.infinity,
-                            child: TextButton(
-                              onPressed: () {
-                                updateEpisode(status.numEpisodesWatched + 1);
-                              },
-                              style: ButtonStyle(
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.blueAccent,
-                                ),
-                              ),
-                            ),
+                          child: CustomIconButton(
+                            color: Colors.transparent,
+                            icon: Icons.add,
+                            iconColor: Colors.blueAccent,
+                            onPressed: () {
+                              updateEpisode(status.numEpisodesWatched + 1);
+                            },
                           ),
                         ),
                       ],
@@ -153,7 +147,7 @@ class __MalUpdaterState extends State<_MalUpdater> {
                             color: Colors.green,
                           )
                         : Text(
-                            'You\'re behind $behindEpisodes episodes',
+                            'You\'re behind $behindEpisodes episode${behindEpisodes <= 1 ? "" : "s"}',
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.5),
                             ),
@@ -163,27 +157,34 @@ class __MalUpdaterState extends State<_MalUpdater> {
               },
             ),
             SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                style: ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    'CLOSE',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.redAccent,
-                    ),
+            Row(
+              children: [
+                Expanded(
+                  child: CustomButton(
+                    textColor: Colors.blueAccent,
+                    text: widget.anime.following ? 'Unfollow' : 'Follow',
+                    color: Colors.transparent,
+                    onPressed: () {
+                      Momentum.controller<AnimelistController>(context).toggleTopic(
+                        widget.anime,
+                        status: !widget.anime.following,
+                        flagEntry: true,
+                      );
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
-              ),
+                Expanded(
+                  child: CustomButton(
+                    textColor: Colors.redAccent,
+                    text: 'CLOSE',
+                    color: Colors.transparent,
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -194,9 +195,10 @@ class __MalUpdaterState extends State<_MalUpdater> {
   Future<void> updateEpisode(int episodeWatched) async {
     final updated = await animelistController.updateUserAnimeDetails(widget.anime, episodeWatched);
     if (updated != null) {
-      setState(() {
-        _status = updated;
-      });
+      _status = updated;
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 }

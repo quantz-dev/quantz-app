@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
+import 'package:quantz/src/widgets/button.dart';
 
-import '../../components/import/index.dart';
+import '../../components/integration/index.dart';
 import '../index.dart';
 import '../inputs/index.dart';
 
@@ -24,7 +25,7 @@ class _ImportMAL extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Momentum.controller<ImportController>(context);
+    var controller = Momentum.controller<IntegrationController>(context);
     final username = controller.model.malUsername;
 
     return Dialog(
@@ -67,7 +68,7 @@ class _ImportMAL extends StatelessWidget {
             ),
             SizedBox(height: 8),
             MomentumBuilder(
-              controllers: [ImportController],
+              controllers: [IntegrationController],
               builder: (context, snapshot) {
                 var model = controller.model;
                 return Column(
@@ -92,54 +93,26 @@ class _ImportMAL extends StatelessWidget {
                 );
               },
             ),
-            Container(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: username.isEmpty
-                    ? null
-                    : () {
-                        controller.loadMalList();
-                        Navigator.pop(context, true);
-                      },
-                style: ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  backgroundColor: MaterialStateProperty.all(primary),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    'Start Import',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+            CustomButton(
+              color: primary,
+              text: 'Start Import',
+              textColor: Colors.white,
+              onPressed: username.isEmpty
+                  ? null
+                  : () {
+                      controller.loadMalList();
+                      Navigator.pop(context, true);
+                    },
             ),
             SizedBox(height: 8),
-            Container(
-              width: double.infinity,
-              child: TextButton(
-                onPressed: () async {
-                  await controller.logout();
-                  Navigator.pop(context, false);
-                },
-                style: ButtonStyle(
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  backgroundColor: MaterialStateProperty.all(Colors.redAccent),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    'Logout',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
+            CustomButton(
+              color: Colors.redAccent,
+              text: 'Logout',
+              textColor: Colors.white,
+              onPressed: () async {
+                await controller.logout();
+                Navigator.pop(context, false);
+              },
             ),
           ],
         ),
@@ -159,11 +132,11 @@ class __ImportProgressState extends MomentumState<_ImportProgress> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    Momentum.controller<ImportController>(context).listen<ImportEvents>(
+    Momentum.controller<IntegrationController>(context).listen<IntegrationEvents>(
       state: this,
       invoke: (event) {
         switch (event) {
-          case ImportEvents.done:
+          case IntegrationEvents.done:
             Navigator.pop(context);
             break;
         }
@@ -180,9 +153,9 @@ class __ImportProgressState extends MomentumState<_ImportProgress> {
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           width: double.infinity,
           child: MomentumBuilder(
-            controllers: [ImportController],
+            controllers: [IntegrationController],
             builder: (context, snapshot) {
-              var import = snapshot<ImportModel>();
+              var import = snapshot<IntegrationModel>();
 
               var hasNothingToImport = import.statToImport == 0;
               var progress = import.statProgress / import.statToImport;
