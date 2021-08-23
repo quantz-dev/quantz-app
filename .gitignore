@@ -62,3 +62,4 @@ android/app/google-services.prod.json
 android/app/google-services.dev.json
 lib/src/core/mal.client.dart
 android/app/google-services.prev.json
+lib/src/core/api_key.dart
