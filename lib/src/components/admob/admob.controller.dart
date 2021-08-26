@@ -22,6 +22,7 @@ class AdmobController extends MomentumController<AdmobModel> {
       showSourcesTabAd: false,
       feedTabAd: generateBannerAd(AD_UNIT_FEED, showFeedTabAd),
       showFeedTabAd: false,
+      lastTimeUserClickedAnAd: 0,
     );
   }
 
@@ -84,7 +85,7 @@ class AdmobController extends MomentumController<AdmobModel> {
     if (!ready) return;
     model.update(showLibraryTabAd: false);
     print(['QUANTZ', 'loadLibraryTabAd()']);
-    await model.libraryTabAd.load();
+    await loadAd(model.libraryTabAd);
   }
 
   void loadFeedTabAd() async {
@@ -92,7 +93,7 @@ class AdmobController extends MomentumController<AdmobModel> {
     if (!ready) return;
     model.update(showFeedTabAd: false);
     print(['QUANTZ', 'loadFeedTabAd()']);
-    await model.feedTabAd.load();
+    await loadAd(model.feedTabAd);
   }
 
   void loadSourcesTabAd() async {
@@ -100,7 +101,7 @@ class AdmobController extends MomentumController<AdmobModel> {
     if (!ready) return;
     model.update(showSourcesTabAd: false);
     print(['QUANTZ', 'loadSourcesTabAd()']);
-    await model.sourcesTabAd.load();
+    await loadAd(model.sourcesTabAd);
   }
 
   void showLibraryTabAd() {
@@ -116,6 +117,33 @@ class AdmobController extends MomentumController<AdmobModel> {
   void showSourcesTabAd() {
     if (!ready) return;
     model.update(showSourcesTabAd: true);
+  }
+
+  /// When an Ad is clicked, only show next Ads in 30 minutes.
+  ///
+  /// This is to prevent users from abusing Ad clicks.
+  Future<void> loadAd(BannerAd ad) async {
+    if (model.lastTimeUserClickedAnAd <= 0) {
+      await ad.load();
+    } else {
+      final diffSeconds = (DateTime.now().millisecondsSinceEpoch - model.lastTimeUserClickedAnAd) ~/ 1000; // seconds
+      final diffMinutes = diffSeconds ~/ 60; // minutes
+      print(['QUANTZ', 'loadAd(..)', 'diffMinutes = $diffMinutes']);
+      if (diffMinutes <= 30) {
+        // don't load any Ad to avoid invalid traffic.
+        return;
+      } else {
+        await ad.load();
+      }
+    }
+  }
+
+  void hideAllAd() {
+    model.update(
+      showFeedTabAd: false,
+      showLibraryTabAd: false,
+      showSourcesTabAd: false,
+    );
   }
 
   BannerAd generateBannerAd(String adUnitId, void Function() callback) {
@@ -142,6 +170,19 @@ class AdmobController extends MomentumController<AdmobModel> {
           };
           print(['QUANTZ', 'onAdFailedToLoad()', jsonEncode(errorJson), jsonEncode(adJson)]);
           ad.dispose();
+        },
+        onAdOpened: (ad) async {
+          // this gets executed when a banner ad is clicked.
+          print(['QUANTZ', 'onAdOpened()']);
+          model.update(lastTimeUserClickedAnAd: DateTime.now().millisecondsSinceEpoch);
+          hideAllAd();
+          await ad.dispose();
+        },
+        onAdWillDismissScreen: (ad) {
+          print(['QUANTZ', 'onAdWillDismissScreen()']);
+        },
+        onAdImpression: (ad) {
+          print(['QUANTZ', 'onAdImpression()']);
         },
       ),
     );
