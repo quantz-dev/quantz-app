@@ -127,6 +127,7 @@ class MalService extends MalInterface {
         'status': status,
         'limit': 1000,
         'offset': offset,
+        'nsfw': true,
         'fields': 'list_status{status,score,num_episodes_watched,start_date,finish_date},num_episodes,status',
       };
       final response = await _dio.get(
