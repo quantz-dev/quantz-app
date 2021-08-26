@@ -9,9 +9,9 @@
 
 
 <p align="center">
-<a href="https://play.google.com/store/apps/details?id=dev.xamantra.quantz"><img alt="GitHub all releases" src="https://img.shields.io/badge/Google%20Play-download-green"></a>
-<a href="https://github.com/xamantra/quantz-app/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/xamantra/quantz-app/total"></a>
-<a href="https://github.com/xamantra/quantz-app/actions/workflows/deploy.yaml"><img alt="deploy_badge" src="https://github.com/xamantra/quantz-app/actions/workflows/deploy.yaml/badge.svg"></a>
+<a href="https://play.google.com/store/apps/details?id=dev.xamantra.quantz" target="_blank"><img alt="GitHub all releases" src="https://img.shields.io/badge/Google%20Play-download-green"></a>
+<a href="https://github.com/xamantra/quantz-app/releases" target="_blank"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/xamantra/quantz-app/total"></a>
+<a href="https://github.com/xamantra/quantz-app/actions/workflows/deploy.yaml" target="_blank"><img alt="deploy_badge" src="https://github.com/xamantra/quantz-app/actions/workflows/deploy.yaml/badge.svg"></a>
 </p>
 
 
