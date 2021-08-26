@@ -7,6 +7,14 @@
 <img width="90%" src="https://i.imgur.com/SNJkf3m.png">
 </p>
 
+
+<p align="center">
+<a href="https://play.google.com/store/apps/details?id=dev.xamantra.quantz"><img alt="GitHub all releases" src="https://img.shields.io/badge/Google%20Play-download-green"></a>
+<a href="https://github.com/xamantra/quantz-app/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/xamantra/quantz-app/total"></a>
+<a href="https://github.com/xamantra/quantz-app/actions/workflows/deploy.yaml"><img alt="deploy_badge" src="https://github.com/xamantra/quantz-app/actions/workflows/deploy.yaml/badge.svg"></a>
+</p>
+
+
 # Features
 - **Sub and dub** - get notified with latest anime episodes on the internet.
 - **Ongoing and upcoming** - get notified with latest episode for ongoing series or first episodes of upcoming shows.
