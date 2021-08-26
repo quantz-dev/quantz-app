@@ -45,10 +45,7 @@
                 android:scheme="app"
                 android:host="quantz.app" />
                 <data
-                android:scheme="https"
-                android:host="quantz.app" />
-                <data
-                android:scheme="http"
+                android:scheme="auth"
                 android:host="quantz.app" />
             </intent-filter>
         </activity>
