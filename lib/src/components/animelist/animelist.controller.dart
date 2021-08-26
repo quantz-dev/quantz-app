@@ -326,8 +326,6 @@ class AnimelistController extends MomentumController<AnimelistModel> {
         return '${anime.malTotalUsers} users';
       case OrderBy.score:
         return '${anime.malScore}';
-      case OrderBy.favorites:
-        return '${anime.favePercent.toStringAsFixed(2)}%';
     }
   }
 

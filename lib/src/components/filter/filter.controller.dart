@@ -60,8 +60,6 @@ class FilterController extends MomentumController<FilterModel> {
         return x.malTotalUsers.compareTo(y.malTotalUsers);
       case OrderBy.score:
         return x.malScore.compareTo(y.malScore);
-      case OrderBy.favorites:
-        return x.favePercent.compareTo(y.favePercent);
     }
   }
 
