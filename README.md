@@ -4,7 +4,7 @@
 <h1 align="center">Quantz</h1>
 <p align="center">Push Notification service for anime episodes and news.</p>
 <p align="center">
-<img width="80%" src="https://i.imgur.com/SNJkf3m.png">
+<img width="90%" src="https://i.imgur.com/SNJkf3m.png">
 </p>
 
 # Features
