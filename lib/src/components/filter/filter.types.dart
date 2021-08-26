@@ -21,7 +21,6 @@ enum OrderBy {
   episodeRelease,
   popularity,
   score,
-  favorites,
 }
 
 String orderByLabel(OrderBy orderBy) {
@@ -36,8 +35,6 @@ String orderByLabel(OrderBy orderBy) {
       return 'Popularity';
     case OrderBy.score:
       return 'Score';
-    case OrderBy.favorites:
-      return 'Favorites';
   }
 }
 
