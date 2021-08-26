@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../menu_actions/more_page_menu/menu.licenses.dart';
-import '../menu_actions/more_page_menu/menu.support-dev.dart';
 
 import '../index.dart';
 import '../menu_actions/more_page_menu/index.dart';
+import '../menu_actions/more_page_menu/menu.github.dart';
+import '../menu_actions/more_page_menu/menu.licenses.dart';
+import '../menu_actions/more_page_menu/menu.support-dev.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({Key? key}) : super(key: key);
@@ -47,6 +48,8 @@ class MorePage extends StatelessWidget {
                   SupportTheDeveloper(),
                   Divider(height: 1),
                   MenuAppLicenses(),
+                  Divider(height: 1),
+                  MenuGithubLink(),
                 ],
               ),
             ),
