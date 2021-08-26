@@ -4,8 +4,16 @@
 <h1 align="center">Quantz</h1>
 <p align="center">Push Notification service for anime episodes and news.</p>
 <p align="center">
-<img width="80%" src="https://i.imgur.com/SNJkf3m.png">
+<img width="90%" src="https://i.imgur.com/SNJkf3m.png">
 </p>
+
+
+<p align="center">
+<a href="https://play.google.com/store/apps/details?id=dev.xamantra.quantz"><img alt="GitHub all releases" src="https://img.shields.io/badge/Google%20Play-download-green"></a>
+<a href="https://github.com/xamantra/quantz-app/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/xamantra/quantz-app/total"></a>
+<a href="https://github.com/xamantra/quantz-app/actions/workflows/deploy.yaml"><img alt="deploy_badge" src="https://github.com/xamantra/quantz-app/actions/workflows/deploy.yaml/badge.svg"></a>
+</p>
+
 
 # Features
 - **Sub and dub** - get notified with latest anime episodes on the internet.
