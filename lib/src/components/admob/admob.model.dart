@@ -13,6 +13,7 @@ class AdmobModel extends MomentumModel<AdmobController> {
     required this.showSourcesTabAd,
     required this.feedTabAd,
     required this.showFeedTabAd,
+    required this.lastTimeUserClickedAnAd,
   }) : super(controller);
 
   final bool initialized;
@@ -26,6 +27,8 @@ class AdmobModel extends MomentumModel<AdmobController> {
   final BannerAd feedTabAd;
   final bool showFeedTabAd;
 
+  final int lastTimeUserClickedAnAd;
+
   @override
   void update({
     bool? initialized,
@@ -35,6 +38,7 @@ class AdmobModel extends MomentumModel<AdmobController> {
     bool? showSourcesTabAd,
     BannerAd? feedTabAd,
     bool? showFeedTabAd,
+    int? lastTimeUserClickedAnAd,
   }) {
     AdmobModel(
       controller,
@@ -45,6 +49,28 @@ class AdmobModel extends MomentumModel<AdmobController> {
       showSourcesTabAd: showSourcesTabAd ?? this.showSourcesTabAd,
       feedTabAd: feedTabAd ?? this.feedTabAd,
       showFeedTabAd: showFeedTabAd ?? this.showFeedTabAd,
+      lastTimeUserClickedAnAd: lastTimeUserClickedAnAd ?? this.lastTimeUserClickedAnAd,
     ).updateMomentum();
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "lastTimeUserClickedAnAd": lastTimeUserClickedAnAd,
+    };
+  }
+
+  AdmobModel? fromJson(Map<String, dynamic>? json) {
+    if (json == null) return null;
+    return AdmobModel(
+      controller,
+      initialized: initialized,
+      libraryTabAd: libraryTabAd,
+      showLibraryTabAd: showLibraryTabAd,
+      sourcesTabAd: sourcesTabAd,
+      showSourcesTabAd: showSourcesTabAd,
+      feedTabAd: feedTabAd,
+      showFeedTabAd: showFeedTabAd,
+      lastTimeUserClickedAnAd: json['lastTimeUserClickedAnAd'] ?? 0,
+    );
   }
 }
