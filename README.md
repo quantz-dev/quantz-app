@@ -46,4 +46,6 @@ This app is made with [Flutter](https://flutter.dev/).
 # Support
 If you're using the app and liking it so far. Consider supporting the developer by donating from the mobile app through google play in-app purchase. It's a $1 per month subscription.
 
-Creating this app cost both time and money.
+By donating, you'll receive push notifications 15 minutes earlier. Non-supporter have 15 minutes delay for push notifications.
+
+There's also a posibility for me to build and publish an **iOS** version if donations go well. This app's source code is cross-platform.
