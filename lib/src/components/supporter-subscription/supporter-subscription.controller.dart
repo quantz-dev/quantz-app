@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:momentum/momentum.dart';
@@ -34,6 +35,14 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
 
   // ignore: cancel_subscriptions
   StreamSubscription<List<PurchaseDetails>>? _subscription;
+
+  FirebaseMessaging? _messaging;
+  FirebaseMessaging get messaging => _messaging!;
+
+  @override
+  void onReady() {
+    _messaging = FirebaseMessaging.instance;
+  }
 
   Future<void> initialize() async {
     await checkStore();
@@ -78,6 +87,14 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
         model.update(subscriptionActive: false);
         break;
     }
+    switch (status) {
+      case UpdatedPurchaseStatus.subscriptionValid:
+        await messaging.subscribeToTopic('dev_supporter');
+        break;
+      default:
+        await messaging.unsubscribeFromTopic('dev_supporter');
+        break;
+    }
     initializedAds();
     model.update(loading: false);
   }
@@ -101,8 +118,11 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
     } else if (google.pendingPurchase != null) {
       final valid = await google.isPurchaseValid(google.pendingPurchase!);
       if (valid) {
+        await messaging.subscribeToTopic('dev_supporter');
         model.update(subscriptionActive: valid);
         initializedAds();
+      } else {
+        await messaging.unsubscribeFromTopic('dev_supporter');
       }
     }
     model.update(loading: false);
