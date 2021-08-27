@@ -27,7 +27,7 @@ class SupportTheDeveloper extends StatelessWidget {
 
         return MenuListItem(
           title: 'Support the developer',
-          subtitle: 'Donate \$1.00 monthly and remove ads.',
+          subtitle: 'Donate \$1.00 monthly to support development.',
           icon: Icons.attach_money,
           trail: !isActive
               ? Text(
