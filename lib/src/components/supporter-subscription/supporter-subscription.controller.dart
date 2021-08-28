@@ -36,7 +36,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   // ignore: cancel_subscriptions
   StreamSubscription<List<PurchaseDetails>>? _subscription;
 
-  final FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FirebaseMessaging get messaging => FirebaseMessaging.instance;
 
   Future<void> initialize() async {
     await checkStore();
