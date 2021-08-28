@@ -9,6 +9,8 @@ abstract class MalInterface extends MomentumService {
 
   Future<String> getLoginUrl();
 
+  void onLoggedIn(void Function(Future<void> Function() getToken) callback);
+
   Future<MalUserAnimeListResponse> getUserAnimeList({required String status, required int offset});
 
   Future<MalUserProfile> getUserProfile();
