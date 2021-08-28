@@ -22,6 +22,11 @@ class MalMockService extends MalInterface {
   }
 
   @override
+  void onLoggedIn(void Function(Future<void> Function() getToken) callback) {
+    return;
+  }
+
+  @override
   Future<MalUserAnimeListResponse> getUserAnimeList({required String status, required int offset}) async {
     const path = 'https://gist.githubusercontent.com/xamantra/2c6b8d8cec2004c5030753b08e65a981/raw/3d39b6e11cc4ce368e8f8ae8166c15207879b33a/mock_mal_user_animelist.json';
     try {

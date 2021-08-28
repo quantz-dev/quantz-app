@@ -32,6 +32,15 @@ class IntegrationController extends MomentumController<IntegrationModel> {
     return _mal!;
   }
 
+  void onReady() {
+    mal.onLoggedIn((getToken) async {
+      model.update(loading: true);
+      await getToken();
+      final profile = await mal.getUserProfile();
+      model.update(loading: false, malUsername: profile.name);
+    });
+  }
+
   Future<String> getLoginUrl() async {
     model.update(loading: true);
     final result = await mal.getLoginUrl();

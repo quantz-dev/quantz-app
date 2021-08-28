@@ -18,14 +18,24 @@ class MalService extends MalInterface {
   String _codeChallenge = '';
   String _authCode = '';
 
+  void Function(Future<void> Function() getToken)? loginCallback;
+
   MalService() {
     linkStream.listen((event) {
       _authCode = event ?? '';
       if (_authCode.isNotEmpty) {
-        _getToken();
+        if (loginCallback != null) {
+          loginCallback!(_getToken);
+        } else {
+          _getToken();
+        }
       }
     });
     _refreshAccessToken();
+  }
+
+  void onLoggedIn(void Function(Future<void> Function() getToken) callback) {
+    loginCallback = callback;
   }
 
   Future<void> _saveRefreshToken(String refreshToken) async {
