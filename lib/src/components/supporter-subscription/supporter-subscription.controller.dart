@@ -60,6 +60,10 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
       print([error, trace]);
     });
 
+    // need to deactivate the reward everything the app gets opened
+    // it will be activated when the plugin detects the user has active subscription.
+    await deactivateReward();
+
     await google.restorePurchases();
   }
 
@@ -89,10 +93,10 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
     }
     switch (status) {
       case UpdatedPurchaseStatus.subscriptionValid:
-        await messaging.subscribeToTopic('dev_supporter');
+        await activateReward();
         break;
       default:
-        await messaging.unsubscribeFromTopic('dev_supporter');
+        await deactivateReward();
         break;
     }
     initializedAds();
@@ -118,11 +122,11 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
     } else if (google.pendingPurchase != null) {
       final valid = await google.isPurchaseValid(google.pendingPurchase!);
       if (valid) {
-        await messaging.subscribeToTopic('dev_supporter');
+        await activateReward();
         model.update(subscriptionActive: valid);
         initializedAds();
       } else {
-        await messaging.unsubscribeFromTopic('dev_supporter');
+        await deactivateReward();
       }
     }
     model.update(loading: false);
@@ -131,5 +135,15 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   void initializedAds() {
     print(['QUANTZ', 'initializedAds()']);
     controller<GoogleFlowController>().initializeAdmob();
+  }
+
+  Future<void> activateReward() async {
+    print(['QUANTZ', 'activateReward()']);
+    await messaging.subscribeToTopic('dev_supporter');
+  }
+
+  Future<void> deactivateReward() async {
+    print(['QUANTZ', 'deactivateReward()']);
+    await messaging.unsubscribeFromTopic('dev_supporter');
   }
 }
