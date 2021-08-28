@@ -1,1 +1,1 @@
-- Pre-release.
+- Fixed a critical error.
