@@ -54,6 +54,7 @@ class AnimeEntry {
     this.malFavorites = 0,
     this.season = '',
     this.livechartId = -1,
+    this.markedForDeletion = false,
     this.displayTitle = '',
     this.orderLabel = '',
     this.following = false,
@@ -78,6 +79,7 @@ class AnimeEntry {
   final int malFavorites;
   final String season;
   final int livechartId;
+  final bool markedForDeletion;
 
   /* These props here are not part of JSON response. They're for UI */
   final String displayTitle;
@@ -97,6 +99,8 @@ class AnimeEntry {
   /// Use this for sorting only.
   int get episodeTimestamp => latestEpisodeTimestamp == 0 ? -1 : latestEpisodeTimestamp;
 
+  bool get isOngoing => status == 'Ongoing' || markedForDeletion;
+
   AnimeEntry copyWith({
     String? slug,
     String? title,
@@ -115,6 +119,7 @@ class AnimeEntry {
     int? malFavorites,
     String? season,
     int? livechartId,
+    bool? markedForDeletion,
     String? displayTitle,
     String? orderLabel,
     bool? following,
@@ -168,6 +173,7 @@ class AnimeEntry {
         malFavorites: json["mal_favorites"] == null ? 0 : json["mal_favorites"],
         season: json["season"] == null ? '' : json["season"],
         livechartId: json["livechart_id"] == null ? -1 : json["livechart_id"],
+        markedForDeletion: json["marked_for_deletion"] == null ? false : json["marked_for_deletion"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -188,5 +194,6 @@ class AnimeEntry {
         "mal_favorites": malFavorites,
         "season": season,
         "livechart_id": livechartId,
+        "marked_for_deletion": markedForDeletion,
       };
 }

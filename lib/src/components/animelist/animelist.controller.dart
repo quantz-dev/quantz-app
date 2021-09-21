@@ -344,14 +344,14 @@ class AnimelistController extends MomentumController<AnimelistModel> {
 
     final orderBy = filter.orderBy;
     if (orderBy == OrderBy.episodeRelease) {
-      var withTimestamp = result.where((x) => x.hasEpisodeSchedule && x.status == 'Ongoing').toList();
-      var withoutTimestamp = result.where((x) => !x.hasEpisodeSchedule && x.status == 'Ongoing').toList();
+      var withTimestamp = result.where((x) => x.hasEpisodeSchedule && x.isOngoing).toList();
+      var withoutTimestamp = result.where((x) => !x.hasEpisodeSchedule && x.isOngoing).toList();
       var upcoming = result.where((x) => x.status == 'Upcoming').toList();
       result = withTimestamp..addAll(withoutTimestamp)..addAll(upcoming);
     }
 
     if (!filter.showOngoing) {
-      result.removeWhere((x) => x.status == 'Ongoing');
+      result.removeWhere((x) => x.isOngoing);
     }
     if (!filter.showUpcoming) {
       result.removeWhere((x) => x.status == 'Upcoming');

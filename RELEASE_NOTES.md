@@ -1,1 +1,1 @@
-- Fixed a critical error.
+- Don't immediately delete finished airing entry.

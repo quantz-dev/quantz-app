@@ -7,11 +7,11 @@ var fcmService = FcmService();
 List<MomentumService> services() {
   return [
     fcmService,
-    // ApiService(),
-    // GoogleApiService(),
-    // MalService(),
-    ApiMockService(),
-    GoogleApiMockService(),
-    MalMockService(),
+    ApiService(),
+    GoogleApiService(),
+    MalService(),
+    // ApiMockService(),
+    // GoogleApiMockService(),
+    // MalMockService(),
   ];
 }
