@@ -1,1 +1,2 @@
+- Fixed anime library not being filtered properly.
 - Don't immediately delete finished airing entry.
