@@ -144,6 +144,7 @@ class AnimeEntry {
         malFavorites: malFavorites ?? this.malFavorites,
         season: season ?? this.season,
         livechartId: livechartId ?? this.livechartId,
+        markedForDeletion: markedForDeletion ?? this.markedForDeletion,
         displayTitle: displayTitle ?? this.displayTitle,
         orderLabel: orderLabel ?? this.orderLabel,
         following: following ?? this.following,
