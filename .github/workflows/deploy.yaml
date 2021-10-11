@@ -62,7 +62,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN  }}
         prerelease: ${{ secrets.IS_PRE_RELEASE == 'true' }}
     - name: Upload .aab to Google Play
-      uses: r0adkll/upload-google-play@v1
+      uses: r0adkll/upload-google-play@v1.0.15
       with:
         serviceAccountJson: service_account.json
         packageName: dev.xamantra.quantz
