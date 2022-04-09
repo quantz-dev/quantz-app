@@ -7,11 +7,14 @@ class Loader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ThemeData.dark();
     return MaterialApp(
       title: 'Quantz',
-      theme: ThemeData.dark().copyWith(
+      theme: theme.copyWith(
         primaryColor: primary,
-        accentColor: primary,
+        colorScheme: theme.colorScheme.copyWith(
+          secondary: primary,
+        ),
         backgroundColor: background,
       ),
       themeMode: ThemeMode.dark,

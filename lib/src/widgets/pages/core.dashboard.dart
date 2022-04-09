@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../index.dart';
-import '../tabview.dart';
 import 'index.dart';
 import 'page.feed.dart';
 
