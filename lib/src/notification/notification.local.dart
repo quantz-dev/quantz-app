@@ -22,7 +22,7 @@ Future<void> showLocalNotification(RemoteMessage? message) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'high_importance_channel',
       'Quantz Notifications',
-      'Notifications for episode releases and news updates.',
+      channelDescription: 'Notifications for episode releases and news updates.',
       importance: Importance.max,
       priority: Priority.high,
       showWhen: true,

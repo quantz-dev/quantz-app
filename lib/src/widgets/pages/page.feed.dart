@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:quantz/src/widgets/refreshing.dart';
 
 import '../../components/feed/index.dart';
 import '../colors.dart';
@@ -25,44 +26,41 @@ class FeedPage extends StatelessWidget {
         builder: (context, snapshot) {
           final feed = snapshot<FeedModel>();
           final items = feed.feed.items;
-          return feed.loading
-              ? Center(
-                  child: SizedBox(
-                    height: 36,
-                    width: 36,
-                    child: CircularProgressIndicator(),
+          return Column(
+            children: [
+              RefreshingWidget(
+                value: feed.loading,
+                text: "Getting feed ...",
+              ),
+              Expanded(
+                child: SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: true,
+                  physics: BouncingScrollPhysics(),
+                  header: WaterDropMaterialHeader(
+                    backgroundColor: secondaryBackground,
                   ),
-                )
-              : Column(
-                  children: [
-                    Expanded(
-                      child: SmartRefresher(
-                        enablePullDown: true,
-                        enablePullUp: true,
-                        header: WaterDropMaterialHeader(
-                          backgroundColor: secondaryBackground,
-                        ),
-                        onRefresh: () async {
-                          await feed.controller.loadInitial(refresh: true);
-                          controller.refreshCompleted();
-                        },
-                        onLoading: () async {
-                          await feed.controller.loadMore();
-                          controller.loadComplete();
-                        },
-                        controller: controller,
-                        child: ListView.builder(
-                          itemCount: items.length,
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return FeedItemWidget(item: items[index]);
-                          },
-                        ),
-                      ),
-                    ),
-                    AdFeedTab(),
-                  ],
-                );
+                  onRefresh: () async {
+                    await feed.controller.loadInitial(refresh: true);
+                    controller.refreshCompleted();
+                  },
+                  onLoading: () async {
+                    await feed.controller.loadMore();
+                    controller.loadComplete();
+                  },
+                  controller: controller,
+                  child: ListView.builder(
+                    itemCount: items.length,
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return FeedItemWidget(item: items[index]);
+                    },
+                  ),
+                ),
+              ),
+              AdFeedTab(),
+            ],
+          );
         },
       ),
     );

@@ -11,10 +11,12 @@ class AnimeList extends StatelessWidget {
     Key? key,
     required this.list,
     this.showType = false,
+    required this.topicLoading,
   }) : super(key: key);
 
   final List<AnimeEntry> list;
   final bool showType;
+  final bool Function(String topic) topicLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class AnimeList extends StatelessWidget {
         ? EmptyList()
         : ListView.builder(
             itemCount: list.length,
-            // physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             itemExtent: _itemHeight,
             cacheExtent: _itemHeight * 10,
             itemBuilder: (context, index) {
@@ -32,6 +34,7 @@ class AnimeList extends StatelessWidget {
                 item: item,
                 following: item.following,
                 showType: showType,
+                topicLoading: topicLoading(item.slug),
               );
             },
           );

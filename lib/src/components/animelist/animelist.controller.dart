@@ -22,7 +22,7 @@ class AnimelistController extends MomentumController<AnimelistModel> {
       following: [],
       subList: [],
       dubList: [],
-      loadingList: false,
+      // loadingList: false,
       refreshingList: false,
       loadingUserAnimeDetails: false,
       subscriptions: {},
@@ -48,14 +48,14 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   }
 
   Future<void> loadList() async {
-    model.update(loadingList: true);
+    model.update(refreshingList: true);
     await loadAnimeList();
     await loadSubscription();
     flagEntries();
     arrangeList();
     separateList();
     sendEvent(AnimelistEvent(model.following.length));
-    model.update(loadingList: false);
+    model.update(refreshingList: false);
   }
 
   Future<void> refreshAnimeList() async {
@@ -196,9 +196,10 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   }) async {
     var original = Map<String, bool>.from(model.subscriptions);
     try {
-      model.update(loadingList: true);
       var topics = Map<String, bool>.from(model.subscriptions);
       var topic = anime.slug;
+      toggleTopicLoading(topic);
+      model.update();
       topics[topic] = status ?? !(topics[topic] ?? false);
 
       if (topics[topic]!) {
@@ -210,7 +211,8 @@ class AnimelistController extends MomentumController<AnimelistModel> {
         if (inform) showToast('Unfollowed "${anime.displayTitle}"', error: true);
         print('Unfollowed "$topic"');
       }
-      model.update(subscriptions: topics, loadingList: false);
+      toggleTopicLoading(topic);
+      model.update(subscriptions: topics);
       if (flagEntry) {
         flagEntries();
         arrangeList();
@@ -218,8 +220,23 @@ class AnimelistController extends MomentumController<AnimelistModel> {
       }
     } catch (e, trace) {
       print([e, trace]);
-      model.update(loadingList: false, subscriptions: original);
+      toggleTopicLoading(anime.slug);
+      model.update(subscriptions: original);
     }
+  }
+
+  List<String> topicsLoading = [];
+
+  void toggleTopicLoading(String topic) {
+    if (isTopicLoading(topic)) {
+      topicsLoading.remove(topic);
+    } else {
+      topicsLoading.add(topic);
+    }
+  }
+
+  bool isTopicLoading(String topic) {
+    return topicsLoading.any((element) => topic == element);
   }
 
   void syncFromMAL(AnimeEntry entry) async {}
@@ -347,7 +364,9 @@ class AnimelistController extends MomentumController<AnimelistModel> {
       var withTimestamp = result.where((x) => x.hasEpisodeSchedule && x.isOngoing).toList();
       var withoutTimestamp = result.where((x) => !x.hasEpisodeSchedule && x.isOngoing).toList();
       var upcoming = result.where((x) => x.status == 'Upcoming').toList();
-      result = withTimestamp..addAll(withoutTimestamp)..addAll(upcoming);
+      result = withTimestamp
+        ..addAll(withoutTimestamp)
+        ..addAll(upcoming);
     }
 
     if (!filter.showOngoing) {

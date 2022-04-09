@@ -175,6 +175,13 @@ class AnimeEntry {
         season: json["season"] == null ? '' : json["season"],
         livechartId: json["livechart_id"] == null ? -1 : json["livechart_id"],
         markedForDeletion: json["marked_for_deletion"] == null ? false : json["marked_for_deletion"],
+
+        // UI props
+        displayTitle: json["displayTitle"] == null ? '' : json["displayTitle"],
+        orderLabel: json["orderLabel"] == null ? '' : json["orderLabel"],
+        following: json["following"] == null ? false : json["following"],
+        episodeTime: json["episodeTime"] == null ? '' : json["episodeTime"],
+        malStatus: json["malStatus"] == null ? MalUserAnimeListStatus() : MalUserAnimeListStatus.fromJson(json["malStatus"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -196,5 +203,12 @@ class AnimeEntry {
         "season": season,
         "livechart_id": livechartId,
         "marked_for_deletion": markedForDeletion,
+
+        // UI props
+        "displayTitle": displayTitle,
+        "orderLabel": orderLabel,
+        "following": following,
+        "episodeTime": episodeTime,
+        "malStatus": malStatus?.toJson(),
       };
 }

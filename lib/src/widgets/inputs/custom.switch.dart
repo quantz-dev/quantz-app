@@ -7,33 +7,57 @@ class ButtonSwith extends StatelessWidget {
     Key? key,
     required this.value,
     required this.onChanged,
+    this.loading = false,
   }) : super(key: key);
 
   final bool value;
   final Function(bool value) onChanged;
+  final bool loading;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        onChanged(!value);
-      },
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      onPressed: loading
+          ? null
+          : () {
+              onChanged(!value);
+            },
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          Text(
-            value ? 'Following' : 'Follow',
-            style: TextStyle(
-              color: primary,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Opacity(
+                opacity: loading ? 0 : 1,
+                child: Text(
+                  value ? 'Following' : 'Follow',
+                  style: TextStyle(
+                    color: primary,
+                  ),
+                ),
+              ),
+              SizedBox(width: value ? 4 : 0),
+              !value
+                  ? SizedBox()
+                  : Opacity(
+                      opacity: loading ? 0 : 1,
+                      child: Icon(
+                        Icons.check,
+                        color: primary,
+                        size: 14,
+                      ),
+                    ),
+            ],
           ),
-          SizedBox(width: value ? 4 : 0),
-          !value
+          !loading
               ? SizedBox()
-              : Icon(
-                  Icons.check,
-                  color: primary,
-                  size: 14,
+              : Center(
+                  child: SizedBox(
+                    height: 16,
+                    width: 16,
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
         ],
       ),
