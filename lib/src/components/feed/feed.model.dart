@@ -24,4 +24,21 @@ class FeedModel extends MomentumModel<FeedController> {
       loading: loading ?? this.loading,
     ).updateMomentum();
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "feed": feed.toJson(),
+      "loading": false,
+    };
+  }
+
+  FeedModel? fromJson(Map<String, dynamic>? map) {
+    if (map == null) return null;
+
+    return FeedModel(
+      controller,
+      feed: QuantzFeed.fromJson(map['feed']),
+      loading: false,
+    );
+  }
 }

@@ -4,9 +4,11 @@ class RefreshingWidget extends StatelessWidget {
   const RefreshingWidget({
     Key? key,
     required this.value,
+    this.text,
   }) : super(key: key);
 
   final bool value;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class RefreshingWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            'Refreshing data ...',
+            text ?? 'Refreshing data ...',
             style: TextStyle(
               fontSize: value ? 14 : 0,
             ),
