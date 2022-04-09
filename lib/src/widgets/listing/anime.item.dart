@@ -20,16 +20,19 @@ class AnimeItem extends StatelessWidget {
     required this.item,
     this.following = false,
     this.showType = false,
+    this.topicLoading = false,
   }) : super(key: key);
 
   final AnimeEntry item;
   final bool following;
   final bool showType;
+  final bool topicLoading;
 
   @override
   Widget build(BuildContext context) {
     final switchWidget = ButtonSwith(
       value: following,
+      loading: topicLoading,
       onChanged: (value) {
         Momentum.controller<AnimelistController>(context).toggleTopic(
           item,

@@ -39,6 +39,7 @@ class FeedPage extends StatelessWidget {
                       child: SmartRefresher(
                         enablePullDown: true,
                         enablePullUp: true,
+                        physics: BouncingScrollPhysics(),
                         header: WaterDropMaterialHeader(
                           backgroundColor: secondaryBackground,
                         ),

@@ -225,9 +225,12 @@ class _MainContent extends StatelessWidget {
         var animeList = snapshot<AnimelistModel>();
         var import = snapshot<IntegrationModel>();
 
-        var loadingList = animeList.loadingList;
+        final topicLoading = animeList.controller.isTopicLoading;
+
+        // var loadingList = animeList.loadingList;
         var loadingImport = import.loading;
-        var loading = loadingList || loadingImport;
+        // var loading = loadingList || loadingImport;
+        var loading = loadingImport;
         return loading
             ? Center(
                 child: SizedBox(
@@ -243,9 +246,9 @@ class _MainContent extends StatelessWidget {
                       controller: tabController,
                       // physics: BouncingScrollPhysics(),
                       children: [
-                        AnimeList(list: animeList.following, showType: true),
-                        AnimeList(list: animeList.subList),
-                        AnimeList(list: animeList.dubList),
+                        AnimeList(list: animeList.following, showType: true, topicLoading: topicLoading),
+                        AnimeList(list: animeList.subList, topicLoading: topicLoading),
+                        AnimeList(list: animeList.dubList, topicLoading: topicLoading),
                       ],
                     ),
                   ),
