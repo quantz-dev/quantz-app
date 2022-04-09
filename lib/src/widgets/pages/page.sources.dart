@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 
 import '../../components/sources/index.dart';
-import '../../components/supporter-subscription/index.dart';
 import '../index.dart';
 import '../listing/index.dart';
 import '../menu_actions/news_guide/index.dart';
