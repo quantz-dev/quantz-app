@@ -241,10 +241,11 @@ class _MainContent extends StatelessWidget {
               )
             : Column(
                 children: [
+                  RefreshingWidget(value: animeList.refreshingList),
                   Expanded(
                     child: TabBarView(
                       controller: tabController,
-                      // physics: BouncingScrollPhysics(),
+                      physics: BouncingScrollPhysics(),
                       children: [
                         AnimeList(list: animeList.following, showType: true, topicLoading: topicLoading),
                         AnimeList(list: animeList.subList, topicLoading: topicLoading),
