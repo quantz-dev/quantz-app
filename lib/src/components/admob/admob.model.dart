@@ -6,7 +6,6 @@ import 'index.dart';
 class AdmobModel extends MomentumModel<AdmobController> {
   AdmobModel(
     AdmobController controller, {
-    required this.initialized,
     required this.libraryTabAd,
     required this.showLibraryTabAd,
     required this.sourcesTabAd,
@@ -15,8 +14,6 @@ class AdmobModel extends MomentumModel<AdmobController> {
     required this.showFeedTabAd,
     required this.lastTimeUserClickedAnAd,
   }) : super(controller);
-
-  final bool initialized;
 
   final BannerAd libraryTabAd;
   final bool showLibraryTabAd;
@@ -31,7 +28,6 @@ class AdmobModel extends MomentumModel<AdmobController> {
 
   @override
   void update({
-    bool? initialized,
     BannerAd? libraryTabAd,
     bool? showLibraryTabAd,
     BannerAd? sourcesTabAd,
@@ -42,7 +38,6 @@ class AdmobModel extends MomentumModel<AdmobController> {
   }) {
     AdmobModel(
       controller,
-      initialized: initialized ?? this.initialized,
       libraryTabAd: libraryTabAd ?? this.libraryTabAd,
       showLibraryTabAd: showLibraryTabAd ?? this.showLibraryTabAd,
       sourcesTabAd: sourcesTabAd ?? this.sourcesTabAd,
@@ -63,7 +58,6 @@ class AdmobModel extends MomentumModel<AdmobController> {
     if (json == null) return null;
     return AdmobModel(
       controller,
-      initialized: initialized,
       libraryTabAd: libraryTabAd,
       showLibraryTabAd: showLibraryTabAd,
       sourcesTabAd: sourcesTabAd,

@@ -3,6 +3,7 @@ import 'package:momentum/momentum.dart';
 
 import '../../components/animelist/index.dart';
 import '../../components/integration/index.dart';
+import '../../components/supporter-subscription/index.dart';
 import '../index.dart';
 import '../listing/index.dart';
 import '../menu_actions/filter_bottom_sheet/index.dart';

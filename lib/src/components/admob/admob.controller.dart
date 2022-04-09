@@ -15,7 +15,6 @@ class AdmobController extends MomentumController<AdmobModel> {
   AdmobModel init() {
     return AdmobModel(
       this,
-      initialized: false,
       libraryTabAd: generateBannerAd(AD_UNIT_LIBRARY, showLibraryTabAd),
       showLibraryTabAd: false,
       sourcesTabAd: generateBannerAd(AD_UNIT_SOURCES, showSourcesTabAd),
@@ -28,8 +27,6 @@ class AdmobController extends MomentumController<AdmobModel> {
 
   bool get subscribed => controller<SupporterSubscriptionController>().model.subscriptionActive;
 
-  bool get ready => model.initialized;
-
   /// - `0` = Library Tab
   /// - `1` = Feed Tab
   /// - `2` = Sources Tab
@@ -38,14 +35,13 @@ class AdmobController extends MomentumController<AdmobModel> {
 
   Future<void> initialize() async {
     print(['QUANTZ', 'AdmobController.initialize()', 'subscribed = $subscribed']);
-    if (subscribed) {
-      model.update(initialized: false);
-    } else {
+    if (!subscribed) {
       // initialize Ads if user is not subscribed as Supporter.
       final status = await MobileAds.instance.initialize();
       print(status.adapterStatuses);
-      model.update(initialized: true);
       loadAdForActiveTab();
+    } else {
+      hideAllAdds();
     }
   }
 
@@ -62,6 +58,16 @@ class AdmobController extends MomentumController<AdmobModel> {
         loadSourcesTabAd();
         break;
       default:
+    }
+  }
+
+  void hideAllAdds() {
+    try {
+      disposeLibraryAd();
+      disposeSourcesTabAd();
+      disposeFeedTabAd();
+    } catch (e) {
+      return;
     }
   }
 
@@ -82,40 +88,42 @@ class AdmobController extends MomentumController<AdmobModel> {
 
   void loadLibraryTabAd() async {
     lastActiveTab = 0;
-    if (!ready) return;
     model.update(showLibraryTabAd: false);
+    if (subscribed) {
+      return;
+    }
     print(['QUANTZ', 'loadLibraryTabAd()']);
     await loadAd(model.libraryTabAd);
   }
 
   void loadFeedTabAd() async {
     lastActiveTab = 1;
-    if (!ready) return;
     model.update(showFeedTabAd: false);
+    if (subscribed) return;
     print(['QUANTZ', 'loadFeedTabAd()']);
     await loadAd(model.feedTabAd);
   }
 
   void loadSourcesTabAd() async {
     lastActiveTab = 2;
-    if (!ready) return;
     model.update(showSourcesTabAd: false);
+    if (subscribed) return;
     print(['QUANTZ', 'loadSourcesTabAd()']);
     await loadAd(model.sourcesTabAd);
   }
 
   void showLibraryTabAd() {
-    if (!ready) return;
+    if (subscribed) return;
     model.update(showLibraryTabAd: true);
   }
 
   void showFeedTabAd() {
-    if (!ready) return;
+    if (subscribed) return;
     model.update(showFeedTabAd: true);
   }
 
   void showSourcesTabAd() {
-    if (!ready) return;
+    if (subscribed) return;
     model.update(showSourcesTabAd: true);
   }
 

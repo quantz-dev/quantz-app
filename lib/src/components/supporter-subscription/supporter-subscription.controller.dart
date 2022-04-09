@@ -31,6 +31,8 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   ApiInterface get api => service<ApiInterface>(runtimeType: false);
   GoogleApiInterface get google => service<GoogleApiInterface>(runtimeType: false);
 
+  GoogleFlowController get googleFlow => controller<GoogleFlowController>();
+
   CloudBackupController get cloudController => controller<CloudBackupController>();
 
   // ignore: cancel_subscriptions
@@ -128,7 +130,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
 
   void initializedAds() {
     print(['QUANTZ', 'initializedAds()']);
-    controller<GoogleFlowController>().initializeAdmob();
+    googleFlow.initializeAdmob();
   }
 
   Future<void> activateReward() async {

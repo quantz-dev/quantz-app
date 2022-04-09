@@ -1,1 +1,2 @@
 - Improved user experience.
+- Fixed an issue with ads.

@@ -68,6 +68,6 @@ jobs:
         serviceAccountJson: service_account.json
         packageName: dev.xamantra.quantz
         releaseFiles: build/app/outputs/bundle/release/app-release.aab
-        track: alpha # The owner will manually choose what to promote to production.
+        track: production
         whatsNewDirectory: release_notes/
         mappingFile: build/app/outputs/mapping/release/mapping.txt
