@@ -6,11 +6,12 @@ import 'index.dart';
 import 'version.dart';
 
 Future<void> initializer() async {
-  await initSharedPreferences();
-  await initFirebaseNotification();
-  await initLocalNotification();
-
-  await checkAppVersion();
+  await Future.wait([
+    initSharedPreferences(),
+    initFirebaseNotification(),
+    initLocalNotification(),
+    checkAppVersion(),
+  ]);
 
   // if (defaultTargetPlatform == TargetPlatform.android) {
   //   InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
