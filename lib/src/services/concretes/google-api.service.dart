@@ -42,10 +42,11 @@ class GoogleApiService extends GoogleApiInterface {
     final path = '$api/topics/$token';
     try {
       var response = await _dio.post(path);
-      return FirebaseSubscription.fromJson(response.data);
-    } catch (e) {
-      print(e);
-      print(['ERROR', path]);
+      final result = FirebaseSubscription.fromJson(response.data);
+      print(['getFirebaseSubscription()', '${result.topics.keys.length} topics']);
+      return result;
+    } on Exception {
+      print(['getFirebaseSubscription() ERROR', path]);
       return FirebaseSubscription();
     }
   }

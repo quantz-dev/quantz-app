@@ -47,8 +47,8 @@ class MalService extends MalInterface {
   }
 
   Future<void> _refreshAccessToken() async {
+    if (_accessToken.isNotEmpty) return;
     try {
-      if (_accessToken.isNotEmpty) return;
       await initSharedPreferences();
       final refreshToken = _getRefreshToken();
       final param = <String, dynamic>{
@@ -68,8 +68,8 @@ class MalService extends MalInterface {
       final malToken = MalTokenResponse.fromJson(response.data);
       _accessToken = malToken.accessToken;
       await _saveRefreshToken(malToken.refreshToken);
-    } catch (e) {
-      print(e);
+    } on Exception {
+      print(['_refreshAccessToken() ERROR']);
     }
   }
 

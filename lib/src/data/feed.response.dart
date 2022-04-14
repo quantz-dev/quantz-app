@@ -40,7 +40,7 @@ class QuantzFeed {
   Map<String, dynamic> toJson() => {
         "page": page,
         "count": count,
-        "items": List<dynamic>.from(items.map((x) => x.toJson())),
+        "feed": items.map((x) => x.toJson()).toList(),
       };
 }
 
