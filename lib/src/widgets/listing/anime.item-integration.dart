@@ -60,7 +60,7 @@ class AnimeItemIntegrationAction extends StatelessWidget {
           ),
           onPressed: () {
             Momentum.controller<AnimelistController>(context).getUserAnimeDetails(item);
-            showMalUpdater(context, item);
+            showMalUpdater(context, item.malId);
           },
         ),
       ),

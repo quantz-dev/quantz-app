@@ -5,6 +5,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../../data/index.dart';
 import '../../data/mal-user.animelist.dart';
+import '../../notification/index.dart';
 import '../../services/interface/api.interface.dart';
 import '../../services/interface/mal.interface.dart';
 import '../../widgets/index.dart';
@@ -39,11 +40,12 @@ class AnimelistController extends MomentumController<AnimelistModel> {
   MalInterface get mal => service<MalInterface>(runtimeType: false);
 
   @override
-  void onReady() {
+  void onReady() async {
+    await waitForFirebaseInit();
     _messaging = FirebaseMessaging.instance;
   }
 
-  bootstrap() {
+  bootstrap() async {
     loadList();
   }
 
@@ -84,6 +86,14 @@ class AnimelistController extends MomentumController<AnimelistModel> {
       }
     }
     model.update(loadingUserAnimeDetails: false);
+  }
+
+  AnimeEntry getAnimeItem(int malId) {
+    try {
+      return model.list.firstWhere((x) => x.malId == malId);
+    } on Exception {
+      return AnimeEntry();
+    }
   }
 
   Future<MalUserAnimeListStatus?> updateUserAnimeDetails(AnimeEntry anime, int episodeWatched) async {

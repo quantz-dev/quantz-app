@@ -1,3 +1,4 @@
+- Fixed MAL syncing bug.
 - Improve loading speed in splash screen.
 - Fixed issue with new feed not properly caching.
 - Improved user experience.
