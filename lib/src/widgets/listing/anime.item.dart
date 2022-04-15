@@ -65,7 +65,7 @@ class AnimeItem extends StatelessWidget {
             SizedBox(width: 12),
             Expanded(child: _AnimeEntryDetails(item: item, showType: showType)),
             _AnimeItemOrderLabel(item: item),
-            item.malStatus != null
+            item.malStatus != null && !topicLoading
                 ? AnimeItemIntegrationAction(
                     item: item,
                     fallbackWidget: switchWidget,
