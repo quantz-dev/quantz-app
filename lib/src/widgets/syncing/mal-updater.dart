@@ -7,14 +7,14 @@ import '../../data/mal-user.animelist.dart';
 import '../../data/response.all_anime.dart';
 import '../button.dart';
 
-showMalUpdater(BuildContext context, AnimeEntry anime) {
+showMalUpdater(BuildContext context, int malId) {
   showDialog(
     barrierDismissible: false,
     context: context,
     builder: (context) {
       return WillPopScope(
         onWillPop: () async => false,
-        child: _MalUpdater(anime: anime),
+        child: _MalUpdater(malId: malId),
       );
     },
   );
@@ -23,35 +23,35 @@ showMalUpdater(BuildContext context, AnimeEntry anime) {
 class _MalUpdater extends StatefulWidget {
   const _MalUpdater({
     Key? key,
-    required this.anime,
+    required this.malId,
   }) : super(key: key);
 
-  final AnimeEntry anime;
+  final int malId;
 
   @override
   __MalUpdaterState createState() => __MalUpdaterState();
 }
 
 class __MalUpdaterState extends State<_MalUpdater> {
-  MalUserAnimeListStatus? _status;
-
-  MalUserAnimeListStatus get status => _status!;
-
-  String statusText = '';
+  MalUserAnimeListStatus get status => anime.malStatus ?? MalUserAnimeListStatus();
 
   AnimelistController? _animelistController;
 
   AnimelistController get animelistController => _animelistController!;
 
+  AnimeEntry get anime {
+    return animelistController.getAnimeItem(widget.malId);
+  }
+
   String get latestEpisode {
-    if (widget.anime.latestEpisode > 0) {
-      return '${widget.anime.latestEpisode}';
+    if (anime.latestEpisode > 0) {
+      return '${anime.latestEpisode}';
     }
     return '?';
   }
 
   int get behindEpisodes {
-    final latest = widget.anime.latestEpisode;
+    final latest = anime.latestEpisode;
     if (latest > 0 && latest > status.numEpisodesWatched) {
       return (latest - status.numEpisodesWatched).toInt();
     }
@@ -61,9 +61,7 @@ class __MalUpdaterState extends State<_MalUpdater> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _status = widget.anime.malStatus;
     _animelistController = Momentum.controller<AnimelistController>(context);
-    updateStatusText(_status);
   }
 
   @override
@@ -92,7 +90,7 @@ class __MalUpdaterState extends State<_MalUpdater> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      widget.anime.displayTitle,
+                      anime.displayTitle,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -150,7 +148,7 @@ class __MalUpdaterState extends State<_MalUpdater> {
                             color: Colors.green,
                           )
                         : Text(
-                            statusText,
+                            getStatusText(status),
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.5),
                             ),
@@ -165,12 +163,12 @@ class __MalUpdaterState extends State<_MalUpdater> {
                 Expanded(
                   child: CustomButton(
                     textColor: Colors.blueAccent,
-                    text: widget.anime.following ? 'Unfollow' : 'Follow',
+                    text: anime.following ? 'Unfollow' : 'Follow',
                     color: Colors.transparent,
                     onPressed: () {
                       Momentum.controller<AnimelistController>(context).toggleTopic(
-                        widget.anime,
-                        status: !widget.anime.following,
+                        anime,
+                        status: !anime.following,
                         flagEntry: true,
                       );
                       Navigator.pop(context);
@@ -196,32 +194,26 @@ class __MalUpdaterState extends State<_MalUpdater> {
   }
 
   Future<void> updateEpisode(int episodeWatched) async {
-    final updated = await animelistController.updateUserAnimeDetails(widget.anime, episodeWatched);
+    final updated = await animelistController.updateUserAnimeDetails(anime, episodeWatched);
     if (updated != null) {
-      _status = updated;
-      updateStatusText(_status);
       if (mounted) {
         setState(() {});
       }
     }
   }
 
-  void updateStatusText(MalUserAnimeListStatus? statusDetails) {
+  String getStatusText(MalUserAnimeListStatus? statusDetails) {
     switch (statusDetails?.status) {
       case "plan_to_watch":
-        statusText = "You\'re still planning to watch this.";
-        break;
+        return "You\'re still planning to watch this.";
       case "completed":
-        statusText = "You already finished watching this.";
-        break;
+        return "You already finished watching this.";
       case "dropped":
-        statusText = "You've stopped watching this.";
-        break;
+        return "You've stopped watching this.";
       case null:
-        statusText = "There was an error getting details.";
-        break;
+        return "There was an error getting details.";
       default:
-        statusText = 'You\'re behind $behindEpisodes episode${behindEpisodes <= 1 ? "" : "s"}';
+        return 'You\'re behind $behindEpisodes episode${behindEpisodes <= 1 ? "" : "s"}';
     }
   }
 }

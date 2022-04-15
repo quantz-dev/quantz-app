@@ -86,6 +86,14 @@ class AnimelistController extends MomentumController<AnimelistModel> {
     model.update(loadingUserAnimeDetails: false);
   }
 
+  AnimeEntry getAnimeItem(int malId) {
+    try {
+      return model.list.firstWhere((x) => x.malId == malId);
+    } on Exception {
+      return AnimeEntry();
+    }
+  }
+
   Future<MalUserAnimeListStatus?> updateUserAnimeDetails(AnimeEntry anime, int episodeWatched) async {
     model.update(loadingUserAnimeDetails: true);
     MalUserAnimeListStatus? status;
