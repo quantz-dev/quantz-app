@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:momentum/momentum.dart';
@@ -38,7 +38,7 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
   // ignore: cancel_subscriptions
   StreamSubscription<List<PurchaseDetails>>? _subscription;
 
-  FirebaseMessaging get messaging => FirebaseMessaging.instance;
+  // FirebaseMessaging get messaging => FirebaseMessaging.instance;
 
   Future<void> initialize() async {
     await checkStore();
@@ -135,11 +135,11 @@ class SupporterSubscriptionController extends MomentumController<SupporterSubscr
 
   Future<void> activateReward() async {
     print(['QUANTZ', 'activateReward()']);
-    await messaging.subscribeToTopic('dev_supporter');
+    // await messaging.subscribeToTopic('dev_supporter'); // NO longer part of subscriber benefits.
   }
 
   Future<void> deactivateReward() async {
     print(['QUANTZ', 'deactivateReward()']);
-    await messaging.unsubscribeFromTopic('dev_supporter');
+    // await messaging.unsubscribeFromTopic('dev_supporter'); // NO longer part of subscriber benefits.
   }
 }

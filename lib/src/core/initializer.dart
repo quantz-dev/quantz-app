@@ -6,9 +6,10 @@ import 'index.dart';
 import 'version.dart';
 
 Future<void> initializer() async {
+  initFirebaseNotification();
+
   await Future.wait([
     initSharedPreferences(),
-    initFirebaseNotification(),
     initLocalNotification(),
     checkAppVersion(),
   ]);

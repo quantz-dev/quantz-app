@@ -1,5 +1,12 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+Completer firebaseInitializer = Completer();
+Future<void> waitForFirebaseInit() async {
+  await firebaseInitializer.future;
+}
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -16,6 +23,9 @@ Future<void> initFirebaseNotification() async {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    final token = await messaging.getToken();
+    print(['firebase_token', token]);
 
     NotificationSettings settings = await messaging.requestPermission(
       alert: true,
@@ -40,6 +50,8 @@ Future<void> initFirebaseNotification() async {
       badge: true,
       sound: true,
     );
+
+    if (!firebaseInitializer.isCompleted) firebaseInitializer.complete();
   } catch (e) {
     print(e);
   }

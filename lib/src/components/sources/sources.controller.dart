@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:momentum/momentum.dart';
 
 import '../../misc/index.dart';
+import '../../notification/index.dart';
 import 'index.dart';
 
 class SourcesController extends MomentumController<SourcesModel> {
@@ -24,6 +25,7 @@ class SourcesController extends MomentumController<SourcesModel> {
 
   @override
   void onReady() async {
+    await waitForFirebaseInit();
     _messaging = FirebaseMessaging.instance;
     if (!model.initialized) {
       model.update(loading: true);

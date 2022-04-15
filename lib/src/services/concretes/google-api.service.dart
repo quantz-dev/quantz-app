@@ -9,6 +9,7 @@ import '../../core/api_key.dart';
 import '../../core/config.dart';
 import '../../core/in-app-purchase.dart';
 import '../../data/firebase.topics.dart';
+import '../../notification/index.dart';
 import '../../widgets/toast.dart';
 import '../interface/google-api.interface.dart';
 
@@ -38,6 +39,7 @@ class GoogleApiService extends GoogleApiInterface {
   }
 
   Future<FirebaseSubscription> getFirebaseSubscription() async {
+    await waitForFirebaseInit();
     var token = await FirebaseMessaging.instance.getToken();
     final path = '$api/topics/$token';
     try {

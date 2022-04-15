@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:momentum/momentum.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../notification/index.dart';
 import '../../services/index.dart';
 import '../../widgets/index.dart';
 import 'index.dart';
@@ -22,6 +23,7 @@ class NotificationController extends MomentumController<NotificationModel> {
 
   @override
   void onReady() async {
+    await waitForFirebaseInit();
     _messaging = FirebaseMessaging.instance;
     var message = await _messaging!.getInitialMessage();
     if (message != null) {
