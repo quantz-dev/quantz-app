@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
 import 'package:quantz/src/widgets/icon_button.dart';
+import 'package:quantz/src/widgets/index.dart';
 import '../../components/animelist/index.dart';
 import '../../data/mal-user.animelist.dart';
 
@@ -89,14 +90,24 @@ class __MalUpdaterState extends State<_MalUpdater> {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      anime.displayTitle,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 99,
-                      textAlign: TextAlign.center,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          anime.displayTitle,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 99,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(width: 8),
+                        TextBadge(
+                          anime.type.toUpperCase(),
+                          color: anime.isSub ? Colors.green : Colors.purple,
+                        ),
+                      ],
                     ),
                     SizedBox(height: 12),
                     Row(
