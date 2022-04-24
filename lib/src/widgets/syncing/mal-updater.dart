@@ -7,14 +7,14 @@ import '../../data/mal-user.animelist.dart';
 import '../../data/response.all_anime.dart';
 import '../button.dart';
 
-showMalUpdater(BuildContext context, int malId) {
+showMalUpdater(BuildContext context, String slug) {
   showDialog(
     barrierDismissible: false,
     context: context,
     builder: (context) {
       return WillPopScope(
         onWillPop: () async => false,
-        child: _MalUpdater(malId: malId),
+        child: _MalUpdater(slug: slug),
       );
     },
   );
@@ -23,10 +23,10 @@ showMalUpdater(BuildContext context, int malId) {
 class _MalUpdater extends StatefulWidget {
   const _MalUpdater({
     Key? key,
-    required this.malId,
+    required this.slug,
   }) : super(key: key);
 
-  final int malId;
+  final String slug;
 
   @override
   __MalUpdaterState createState() => __MalUpdaterState();
@@ -40,7 +40,7 @@ class __MalUpdaterState extends State<_MalUpdater> {
   AnimelistController get animelistController => _animelistController!;
 
   AnimeEntry get anime {
-    return animelistController.getAnimeItem(widget.malId);
+    return animelistController.getAnimeItem(widget.slug);
   }
 
   String get latestEpisode {
