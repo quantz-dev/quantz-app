@@ -1,5 +1,7 @@
+- Fixed issue with MAL updater for dub entries.
+- Added sub or dub indicator in MAL updater dialog.
 - Fixed MAL syncing bug.
 - Improve loading speed in splash screen.
-- Fixed issue with new feed not properly caching.
+- Fixed issue with news feed not properly caching.
 - Improved user experience.
 - Fixed an issue with ads.

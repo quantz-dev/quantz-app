@@ -33,11 +33,9 @@ class AnimeItem extends StatelessWidget {
     final switchWidget = ButtonSwith(
       value: following,
       loading: topicLoading,
-      onChanged: (value) {
-        Momentum.controller<AnimelistController>(context).toggleTopic(
-          item,
-          flagEntry: true,
-        );
+      onChanged: (value) async {
+        final controller = Momentum.controller<AnimelistController>(context);
+        await controller.toggleTopic(item, flagEntry: true);
       },
     );
     return TextButton(
@@ -182,7 +180,7 @@ class _AnimeEntryType extends StatelessWidget {
       child: TextBadge(
         item.type.toUpperCase(),
         size: 8,
-        color: item.type == 'sub' ? Colors.green : Colors.purple,
+        color: item.isSub ? Colors.green : Colors.purple,
       ),
     );
   }

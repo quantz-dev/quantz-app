@@ -88,9 +88,9 @@ class AnimelistController extends MomentumController<AnimelistModel> {
     model.update(loadingUserAnimeDetails: false);
   }
 
-  AnimeEntry getAnimeItem(int malId) {
+  AnimeEntry getAnimeItem(String slug) {
     try {
-      return model.list.firstWhere((x) => x.malId == malId);
+      return model.list.firstWhere((x) => x.slug == slug);
     } on Exception {
       return AnimeEntry();
     }
