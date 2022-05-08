@@ -1,3 +1,4 @@
+- Fixed text overflow with anime title on MAL updater dialog.
 - Fixed issue with MAL updater for dub entries.
 - Added sub or dub indicator in MAL updater dialog.
 - Fixed MAL syncing bug.
