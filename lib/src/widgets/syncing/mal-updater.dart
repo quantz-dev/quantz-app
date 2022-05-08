@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:momentum/momentum.dart';
-import 'package:quantz/src/widgets/icon_button.dart';
 import 'package:quantz/src/widgets/index.dart';
 import '../../components/animelist/index.dart';
 import '../../data/mal-user.animelist.dart';
 
 import '../../data/response.all_anime.dart';
-import '../button.dart';
 
 showMalUpdater(BuildContext context, String slug) {
   showDialog(
@@ -93,19 +91,21 @@ class __MalUpdaterState extends State<_MalUpdater> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          anime.displayTitle,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 99,
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(width: 8),
                         TextBadge(
                           anime.type.toUpperCase(),
                           color: anime.isSub ? Colors.green : Colors.purple,
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            anime.displayTitle,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 99,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ],
                     ),
