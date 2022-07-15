@@ -1,3 +1,4 @@
+- Fixed infinite loading issue when the app is opened for the first time.
 - Fixed text overflow with anime title on MAL updater dialog.
 - Fixed issue with MAL updater for dub entries.
 - Added sub or dub indicator in MAL updater dialog.

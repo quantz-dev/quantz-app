@@ -47,7 +47,7 @@ class GoogleApiService extends GoogleApiInterface {
       final result = FirebaseSubscription.fromJson(response.data);
       print(['getFirebaseSubscription()', '${result.topics.keys.length} topics']);
       return result;
-    } on Exception {
+    } catch (e) {
       print(['getFirebaseSubscription() ERROR', path]);
       return FirebaseSubscription();
     }
